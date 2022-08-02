@@ -52,25 +52,30 @@ def validate(chain, source_pairs):
 
 def growReproduce(map_or_step):
 	#print('map_or_step:',map_or_step)
+	cid, chain, next_steps =  None, None, None
 	chain_key = map_or_step[0]
 	successors = map_or_step[1]
 	growth_node = successors[0]
 	pointers = successors[1:]
-	previous_step_chain = redisClient.hget("build_chains", chain_key)
-	previous_step_chain = previous_step_chain.split(node_delimiter)
-	chain = previous_step_chain + [growth_node]
+	previous_step_chain = redisClient.hget("scaffolds", chain_key)
+	if previous_step_chain:
+		try:
+			previous_step_chain = previous_step_chain.split(node_delimiter)
+		except AttributeError:
+			print(map_or_step)
+		chain = previous_step_chain + [growth_node]
 
-	chain = node_delimiter.join(chain)
-	# todo add division to decimal to reduce memory load and increase hash diversity
-	#div = 10 ** random.sample(list(np.arange(1, 7)), 1)[0]
-	cid = hash(chain)#/div # % 10 ** 9
+		chain = node_delimiter.join(chain)
+		# todo add division to decimal to reduce memory load and increase hash diversity
+		#div = 10 ** random.sample(list(np.arange(1, 7)), 1)[0]
+		cid = hash(chain)#/div # % 10 ** 9
 
-	# Next steps
-	next_steps = []
-	for pointer in pointers:
-		pointer = (pointer,)
-		next_step = (chain_key, pointer)
-		next_steps.append(next_step)
-	next_steps = tuple(next_steps)
+		# Next steps
+		next_steps = []
+		for pointer in pointers:
+			pointer = (pointer,)
+			next_step = (chain_key, pointer)
+			next_steps.append(next_step)
+		next_steps = tuple(next_steps)
 
 	return cid, chain, next_steps

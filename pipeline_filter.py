@@ -19,6 +19,8 @@ c.execute(statement)
 
 G = build_graph(file_path)
 Gnodes, Gedges = list(G.nodes()), G.edges()
+terminal_nodes = get_terminal_nodes(G)
+with open('terminal_nodes.txt', 'w') as f: f.write('\n'.join(terminal_nodes))
 # Encode nodes
 nodes_encoder = objects_encoder(Gnodes)
 nodes_decoder = build_decoder(nodes_encoder)
@@ -27,8 +29,19 @@ np.save('nodes_decoder.npy', nodes_decoder)
 G = nx.relabel_nodes(G, nodes_encoder)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 
+# for Gnode in Gnodes:
+# 	successorsDB.set(Gnode, ','.join(list(G.successors(Gnode))))
+
+isolates = graph_isolates(G)
+saturation_successors, saturation_predecessors = {}, {}
 for Gnode in Gnodes:
-	successorsDB.set(Gnode, ','.join(list(G.successors(Gnode))))
+	if Gnode not in isolates:
+		node_successors, node_predecessors = list(G.successors(Gnode)), list(G.predecessors(Gnode))
+		successorsDB.set(Gnode, ','.join(node_successors))
+		predecessorsDB.set(Gnode, ','.join(node_predecessors))
+		saturation_successors[Gnode] = node_successors
+		saturation_predecessors[Gnode] = node_predecessors
+
 
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 isolates = graph_isolates(G)
@@ -43,45 +56,49 @@ c.execute(statement)
 
 # Initialized the next journey steps
 root_successors = tuple(G.successors(root_node))
-redisClient.hset('build_chains', 1, root_node)
+redisClient.hset('scaffolds', 1, root_node)
 next_journeys_steps = [(1, root_successors)]
 
-rkeys = redisClient.hkeys('build_chains')
-rkeys_vals = redisClient.hgetall('build_chains')
+rkeys = redisClient.hkeys('scaffolds')
+rkeys_vals = redisClient.hgetall('scaffolds')
 journey = 0
 growth_tip = ['no tip']
 steps_walked = []
 # todo delete next_journeys_maps following debug
 next_journeys_maps = []
 chains_results_rows = []
-chunk_size = 50000
+chunk_size = 20000
 chains_written_count = 0
+tracker_rows = []
 while next_journeys_steps:
+	journey_start = time.time()
 	journey_chains_count = 0
 	steps_chunk = next_journeys_steps[:chunk_size]
 	next_journeys_steps = next_journeys_steps[chunk_size:]
-	journey_start = time.time()
 	steps_produced, maps_produced = [], []
 	journey += 1
 	next_count = len(steps_chunk)
 	print(60*'*')
 	print('***** journey {g}: {n} steps *****'.format(g=journey, n=next_count))
 	step = 0
-
+	tracker_rows.append([journey, next_count])
 	executor = ProcessPoolExecutor(available_executors)
 	if next_count <= available_executors:
 		executor = ProcessPoolExecutor(next_count)
 
 	# Build chains
+	start = time.time()
 	ids_chains = []
 	for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
-		#print(cid, chain)
-		ids_chains.append((cid, chain))
-		steps_produced += next_steps
+		if cid:
+			ids_chains.append((cid, chain))
+			steps_produced += next_steps
+	grow_reproduceD = round(time.time()-start, 2)
 
+	start = time.time()
 	# Identify none-unique IDs
 	ids = list(set([i[0] for i in ids_chains]))
-	db_keys = [float(k) for k in list(redisClient.hkeys('build_chains'))]
+	db_keys = [float(k) for k in list(redisClient.hkeys('scaffolds'))]
 	overlap = set(ids).intersection(set(db_keys))
 
 	q = 0
@@ -102,22 +119,47 @@ while next_journeys_steps:
 		#overlap = list(set(binarySearchFilter(ids, db_keys)))
 		mm = 99
 	del db_keys
+	print('unique_idsD=', time.time()-start)
+	unique_idsD = round(time.time() - start, 2)
 
 	# Write chain scaffolds
+	start = time.time()
 	for cid_chain in ids_chains:
 		cid, chain = cid_chain
 		# Update built results
 		growth_tip = chain.split(node_delimiter)[-1]
 		if growth_tip in terminal_nodes:
-			# todo assert: built chain written to 'built chain'
 			chains_results_rows.append((chain, ))
 		else:
 			chain_split = chain.split(node_delimiter)
 			if len(chain_split) > 2:
 				chain = [str(cid)] + chain_split[-2:]
 				chain = node_delimiter.join(chain)
-			redisClient.hset('build_chains', cid, chain)
+			redisClient.hset('scaffolds', cid, chain)
+	write_scaffoldsD = round(time.time() - start, 2)
 
+	# filter saturated scaffolds
+	scaffolds_count = redisClient.hlen('scaffolds')
+	print('{n} scaffolds written'.format(n=scaffolds_count))
+	cids = list(redisClient.hkeys('scaffolds'))
+	# todo: condition to explore scaffolds from certain size
+	scaffolds = list(redisClient.hgetall('scaffolds').values())
+	start = time.time()
+	filter_cids = filter_scaffolds(cids, scaffolds, saturation_successors, saturation_predecessors)
+	filter_saturatedD = round(time.time() - start, 2)
+
+	print('{n} filter_cids'.format(n=len(filter_cids)))
+	start = time.time()
+	for cid in filter_cids: redisClient.hdel('scaffolds', cid)
+	filtered_scaffolds_count = redisClient.hlen('scaffolds')
+	print('{n} filtered scaffolds'.format(n=scaffolds_count))
+	print('delete saturated scaffolds=', time.time() - start)
+	del_saturatedD = round(time.time() - start, 2)
+	tracker_rows.append([journey, next_count, scaffolds_count, filtered_scaffolds_count,\
+	                     grow_reproduceD, overlap, unique_idsD, \
+	                     write_scaffoldsD, filter_saturatedD], del_saturatedD)
+
+	start = time.time()
 	# Update maps
 	ids = [i[0] for i in ids_chains]
 	chains = [i[1] for i in ids_chains]
@@ -129,32 +171,43 @@ while next_journeys_steps:
 			growth_tip_successors = tuple(growth_tip_successors.split(','))
 			maps_produced.append((ids[index], growth_tip_successors))
 	del ids
-
-	#print(chains_results_rows)
-	# todo validate write results to sql db
-	if len(chains_results_rows) >= 1000:
+	update_mapsD = round(time.time() - start, 2)
+	
+	start = time.time()
+	# Write chains
+	if len(chains_results_rows) >= 10000:
 		statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
 		c.execute(statement)
 		conn.commit()
 		journey_chains_count = len(chains_results_rows)
 		chains_written_count += journey_chains_count
 		chains_results_rows = []
-
+	print('Write chains=', time.time() - start)
+	write_chainsD = round(time.time() - start, 2)
+	# Collect and prepare next journey steps
+	start = time.time()
 	next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
 	next_journeys_steps = [tuple(c) for c in next_journeys_steps]
 	next_journeys_steps = tuple(next_journeys_steps)
 	next_journeys_steps = list(set(next_journeys_steps))
-
-	# filter
 	next_journeys_steps = [list(c) for c in next_journeys_steps if len(c) > 0]
-	print('duration=', time.time() - journey_start)
+	# next_journeys_steps = [c for c in next_journeys_steps if str(c[0]) not in filter_cids]
+	next_stepsD = round(time.time() - start, 2)
 
-	# todo: remove following validation
-	scaffolds_count = redisClient.hlen('build_chains')
+	print('journey=', time.time() - journey_start)
 	print('{n1} scaffold | {n2} journey chains | {n3} chains'
 	      .format(n1=scaffolds_count, n2=journey_chains_count, n3=chains_written_count))
 
-# # Write the remaning results
-# statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
-# c.execute(statement)
-# conn.commit()
+	journeyD = round(time.time() - start, 2)
+	tracker_rows.append([journey, next_count, scaffolds_count, filtered_scaffolds_count, \
+	                     journey_chains_count, chains_written_count,\
+	                     grow_reproduceD, overlap, unique_idsD, \
+	                     write_scaffoldsD, filter_saturatedD, del_saturatedD, update_mapsD, \
+	                     write_chainsD, next_stepsD, journeyD])
+
+	
+
+# Write the remaning results
+statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
+c.execute(statement)
+conn.commit()

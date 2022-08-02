@@ -46,9 +46,11 @@ c.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 # Redis
 redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
 successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)
+predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses=True)
 if new_experiment:
     redisClient.flushdb()
     successorsDB.flushdb()
+    predecessorsDB.flushdb()
 
 # Tables
 tracker_cols_types = {'step': 'INTEGER', 'chain_built': 'INTEGER', 'new_chain': 'INTEGER', 'applied_certificates': 'INTEGER', \

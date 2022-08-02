@@ -62,16 +62,15 @@ steps_walked = []
 chains_results_rows = []
 chains_written_count = 0
 #while next_journeys_steps:
-scaffolds_count = chains_written_count = 0
+journey = scaffolds_count = chains_written_count = 0
 filter_round = 1
 chars = list('abcdefghijklmnopqrstuvwxyz')
-while scaffolds_count < 1000000:
+while next_journeys_steps:
 	# Journey tracker values initiation
-	journey = next_count = scaffolds_count = filtered_scaffolds_count = \
+	next_count = scaffolds_count = filtered_scaffolds_count = \
 		journey_chains_count =  grow_reproduceD =\
 		overlap_count = unique_idsD = write_scaffoldsD = filter_saturatedD = \
 		del_saturatedD = update_mapsD = write_chainsD = next_stepsD = journeyD = 0
-
 	journey_start = time.time()
 	journey_chains_count = 0
 	steps_chunk = next_journeys_steps[:journey_chunk]
@@ -120,8 +119,7 @@ while scaffolds_count < 1000000:
 		ids = list(set([i[0] for i in ids_chains]))
 		overlap = set(ids).intersection((db_keys))
 		overlap_count = len(overlap)
-		#overlap = list(set(binarySearchFilter(ids, db_keys)))
-		mm = 99
+
 	del db_keys
 	print('unique_idsD=', time.time()-start)
 	unique_idsD = round(time.time() - start, 2)
@@ -133,7 +131,6 @@ while scaffolds_count < 1000000:
 		# Update chains
 		growth_tip = chain.split(node_delimiter)[-1]
 		if growth_tip in terminal_nodes:
-			#chain = scaffold_to_chain(chain)
 			chains_results_rows.append((cid, chain))
 			mm = 9
 		# Update scaffolds

@@ -8,30 +8,34 @@ if mp not in sys.path: sys.path.append(mp)
 from plots import *
 from modules.config import *
 
-tracker = pd.read_excel(os.path.join(experiment_path, 'tracker.xlsx'))
-no_chain_steps = tracker[tracker['chain_built'] == 0]
-built_chain_steps = tracker[(tracker['chain_built'] == 1) & (tracker['new_chain'] == 0)]
-new_chain_steps = tracker[tracker['new_chain'] == 1]
+tracker = pd.read_sql('SELECT * FROM {t}'.format(t=tracker_table), con=conn)
+tracker['scaffolds_diff'] = tracker['scaffolds_count'] - tracker['filtered_scaffolds_count']
+#tracker = tracker[tracker['scaffolds_diff'] > 0]
+a = 0
+tracker.to_excel(os.path.join(experiment_path, 'tracker.xlsx'))
 
-group_data = {'steps': tracker, 'noChain': no_chain_steps,\
-            'builtChain': built_chain_steps, 'newChain': new_chain_steps}
-
+# no_chain_steps = tracker[tracker['chain_built'] == 0]
+# built_chain_steps = tracker[(tracker['chain_built'] == 1) & (tracker['new_chain'] == 0)]
+# new_chain_steps = tracker[tracker['new_chain'] == 1]
+# group_data = {'steps': tracker, 'noChain': no_chain_steps,\
+#             'builtChain': built_chain_steps, 'newChain': new_chain_steps}
+group_data = {'journeys': tracker}
 #print(tracker.columns)
 #val_cols = [c for c in df.columns if c != 'step']
 
 def plot_df(df, name, xy_pairs):
 	for x_col, y_col in xy_pairs:
 		x, y = list(df[x_col]), list(df[y_col])
-		plt.scatter(x, y, marker='.', s=1)
+		plt.scatter(x, y, s=4)  # marker='.'
 		plt.xlabel(x_col)
 		plt.ylabel(y_col)
 		figname = '{n}_{a}_vs_{b}.png'.format(n=name, a=y_col, b=x_col)
 		plt.savefig(os.path.join(plots_path, figname))
 		plt.close()
 
-xy_pairs = [('writed', 'stepd'), ('chains', 'assertd'), ('chains', 'writed'), ('chains', 'growthd'),
-            ('chains', 'reproduced'), \
-            ('chains', 'updated'), ('updated', 'stepd')]
+xy_pairs = [('scaffolds_count', 'journeyd'), ('scaffolds_count', 'write_scaffoldsd'), ('scaffolds_count', 'filter_saturatedd'),
+            ('scaffolds_count', 'update_mapsd'), ('scaffolds_count', 'next_stepsd'), ('scaffolds_count', 'del_saturatedd'),
+            ('scaffolds_count', 'scaffolds_diff')]
 ratio_pairs = [('chains', col) for col in tracker.columns if 'ratio' in col]
 xy_pairs += ratio_pairs
 print(xy_pairs)

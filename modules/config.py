@@ -1,6 +1,8 @@
-experiment = 'distributed_pipeline_hashed_chains'
+experiment = 'scaffolds_deleted'
 new_experiment = True
-available_executors = 10
+journey_chunk = 25000
+filter_chunk = 100000
+available_executors = 46
 import os
 import sys
 import redis
@@ -47,19 +49,28 @@ c.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
 successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)
 predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses=True)
+
+# Tables
+tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER', 'filtered_scaffolds_count': 'INTEGER',\
+ 			     'journey_chains_count': 'INTEGER', 'chains_written_count': 'INTEGER',\
+	                     'overlap_count': 'INTEGER', 'grow_reproduceD': 'DOUBLE', 'unique_idsD': 'DOUBLE',\
+	                     'write_scaffoldsD': 'DOUBLE', 'filter_saturatedD': 'DOUBLE', 'del_saturatedD': 'DOUBLE', 'update_mapsD': 'DOUBLE',\
+	                     'write_chainsD': 'DOUBLE', 'next_stepsD': 'DOUBLE', 'journeyD': 'DOUBLE'}
+chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
+chains_cols = list(chains_cols_types.keys())
+tracker_table, chains_table = 'tracker', 'chains'
+
+# Build databases and tables
 if new_experiment:
     redisClient.flushdb()
     successorsDB.flushdb()
     predecessorsDB.flushdb()
-
-# Tables
-tracker_cols_types = {'step': 'INTEGER', 'chain_built': 'INTEGER', 'new_chain': 'INTEGER', 'applied_certificates': 'INTEGER', \
-                   'chains': 'INTEGER', 'growthD': 'DOUBLE', 'prepD': 'DOUBLE',\
-                    'writeD': 'DOUBLE', 'assertD': 'DOUBLE', 'reproduceD': 'DOUBLE', 'updateD': 'DOUBLE', \
-                      'processesD': 'DOUBLE', 'stepD': 'DOUBLE', 'step_processes_diff': 'DOUBLE'}
-chains_cols_types = {'chain': 'TEXT'}
-chains_cols = ['chain']
-tracker_table, chains_table = 'tracker_redis', 'chains'
+    c.execute("DROP TABLE IF EXISTS {t}".format(t=chains_table))
+    statement = build_create_table_statement('{t}'.format(t=chains_table), chains_cols_types)
+    c.execute(statement)
+    c.execute("DROP TABLE IF EXISTS {t}".format(t=tracker_table))
+    statement = build_create_table_statement('{t}'.format(t=tracker_table), tracker_cols_types)
+    c.execute(statement)
 
 # Directories
 working_dir = os.getcwd()

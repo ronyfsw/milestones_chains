@@ -43,26 +43,24 @@ def validate(chain, source_pairs):
 		error_pairs = []
 	return error_pairs
 
-	# todo node pairs validation
-	# source = pd.read_excel(source_path)
-	# source_pairs = list(zip(source['Predecessor'], source['Successor']))
-	# error_pairs = validate(chain, source_pairs)
-	# if error_pairs:
-	#	record['error_pairs'] = error_pairs
 
 def growReproduce(map_or_step):
 	#print('map_or_step:',map_or_step)
-	cid, chain, next_steps =  None, None, None
+	cid, chain, next_steps = None, None, None
 	chain_key = map_or_step[0]
 	successors = map_or_step[1]
 	growth_node = successors[0]
 	pointers = successors[1:]
-	previous_step_chain = redisClient.hget("scaffolds", chain_key)
+	previous_step_chain = redisClient.hget('scaffolds', chain_key)
 	if previous_step_chain:
-		try:
-			previous_step_chain = previous_step_chain.split(node_delimiter)
-		except AttributeError:
-			print(map_or_step)
+		# try:
+		# 	previous_step_chain = previous_step_chain.split(node_delimiter)
+		# except AttributeError:
+		# 	print(map_or_step)
+		previous_step_chain = previous_step_chain.split(node_delimiter)
+		# If the first element in the chain is a chain id rather than a chain node
+		# if re.findall('\D{1,}', previous_step_chain[0]):
+		# 	previous_step_chain = previous_step_chain[1:]
 		chain = previous_step_chain + [growth_node]
 
 		chain = node_delimiter.join(chain)

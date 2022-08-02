@@ -41,8 +41,8 @@ Gnodes, Gedges = list(G.nodes()), G.edges()
 terminal_nodes = get_terminal_nodes(G)
 
 # Chains scaffold
-build_chains = redisClient.hgetall('build_chains')
-scaffolds = chains_from_redis('build_chains')
+#scaffolds = redisClient.hgetall('scaffolds')
+scaffolds = chains_from_redis('scaffolds')
 n1, n2 = len(scaffolds), len(set(scaffolds))
 print('{n1} chains built ({n2} are unique)'.format(n1=n1, n2=n2))
 chains_printout_path = os.path.join(experiment_path, 'scaffolds.txt')
@@ -52,14 +52,14 @@ with open(chains_printout_path, 'w') as f: f.write(chains_str)
 scaffolds = list(set(scaffolds))
 
 # Chains built
-chains_df = pd.read_sql('SELECT * FROM MCdb.chains', con=conn)
+chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
 print(chains_df.head())
 built_chains_col = list(chains_df['chain'])
 built_chains = list(set(built_chains_col))
 n1, n2 = len(built_chains_col), len(built_chains)
 print('{n1} completed chains written to MySQL DB ({n2} are unique)'.format(n1=n1, n2=n2))
 
-chains_printout_path = os.path.join(experiment_path, 'built_chains.txt')
+chains_printout_path = os.path.join(experiment_path, 'chains.txt')
 chains_str = '\n'.join(built_chains)
 with open(chains_printout_path, 'w') as f: f.write(chains_str)
 
@@ -83,7 +83,7 @@ for terminal in tp_df['terminal']:
 	terminal_predecessors = list(G.predecessors(terminal))
 	terminals_predecessors.append(len(terminal_predecessors))
 tp_df['predecessors'] = terminals_predecessors
-print(tp_df)
+#print(tp_df)
 tp_df.to_excel(os.path.join(experiment_path, 'terminals_predecessors.xlsx'), index=False)
 
 chains_with_terminals = list(set(chains_with_terminals))

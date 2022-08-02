@@ -64,3 +64,43 @@ def filter_scaffolds(cids, scaffolds, saturation_successors, saturation_predeces
 		# print(cid, saturation)
 		if saturation == 0: filter_cids.append(cid)
 	return filter_cids
+
+def filter_scaffolds(cids, scaffolds, saturation_successors, saturation_predecessors):
+	'''
+	Adapted to examine all scaffold nodes
+	'''
+	scaffolds = [scaffold.split(node_delimiter) for scaffold in scaffolds]
+	scaffolds = [scaffold[1:] for scaffold in scaffolds if len(scaffold) > 2]
+	ids_scaffolds = list(zip(cids, scaffolds))
+	filter_cids = []
+	for cid, scaffold in ids_scaffolds:
+		saturation = 0
+		# Update node saturation
+		for index, node in enumerate(scaffold):
+			if index <= len(scaffold)-1:
+				if index == 0:
+					node1 = node
+					node_successor = scaffold[index + 1]
+					a1 = saturation_successors[node]
+					saturation_successors[node] = [n for n in saturation_successors[node] if n != node_successor]
+					a2 = saturation_successors[node]
+					a = 0
+				elif index == len(scaffold)-1:
+					node2 = node
+					node_predecessor = scaffold[index - 1]
+					b1 = saturation_predecessors[node]
+					saturation_predecessors[node] = [n for n in saturation_predecessors[node] if n != node_predecessor]
+					b2 = saturation_predecessors[node]
+					b = 0
+				else:
+					node_predecessor = scaffold[index - 1]
+					saturation_predecessors[node] = [n for n in saturation_predecessors[node] if n != node_predecessor]
+					node_successor = scaffold[index + 1]
+					saturation_successors[node] = [n for n in saturation_successors[node] if n != node_successor]
+			node_saturation = len(saturation_successors[node]) + len(saturation_predecessors[node])
+			saturation += node_saturation
+			d = 0
+		# print(cid, saturation)
+		if saturation == 0: filter_cids.append(cid)
+	return filter_cids
+

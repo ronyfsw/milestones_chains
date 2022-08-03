@@ -1,4 +1,4 @@
-experiment = 'scaffolds_deleted'
+experiment = 'scaffolds_deleted_remote'
 new_experiment = True
 journey_chunk = 25000
 filter_chunk = 100000
@@ -85,3 +85,7 @@ if experiment not in os.listdir(results_path):
 plots_path = os.path.join(experiment_path, 'plots')
 if 'plots' not in os.listdir(experiment_path):
     os.mkdir(plots_path)
+
+chunks_path = os.path.join(experiment_path, 'chunks')
+if 'chunks' not in os.listdir(experiment_path):
+	os.mkdir(chunks_path)

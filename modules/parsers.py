@@ -1,5 +1,5 @@
 from modules.libraries import *
-from modules.config import *
+#from modules.config import *
 import re
 
 def parse_graphml(file_name, graphml_str, headers):

@@ -200,7 +200,7 @@ while next_journeys_steps:
 	journeyD = round(time.time() - journey_start, 2)
 	print('journey=', journeyD)
 
-	if filtered_scaffolds_count>0:
+	if filtered_scaffolds_count > 0:
 		next_journey_scaffolds = filtered_scaffolds_count
 	else:
 		next_journey_scaffolds = redisClient.hlen('scaffolds')

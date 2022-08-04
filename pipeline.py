@@ -64,13 +64,12 @@ chains_written_count = 0
 #while next_journeys_steps:
 journey = scaffolds_count = chains_written_count = 0
 filter_round = 1
-chars = list('abcdefghijklmnopqrstuvwxyz')
-while next_journeys_steps:
+
+#while next_journeys_steps:
+while scaffolds_count < 800000:
 	# Journey tracker values initiation
-	next_count = scaffolds_count = filtered_scaffolds_count = \
-		journey_chains_count =  grow_reproduceD =\
-		overlap_count = unique_idsD = write_scaffoldsD = filter_saturatedD = \
-		del_saturatedD = update_mapsD = write_chainsD = next_stepsD = journeyD = 0
+	next_count = scaffolds_count = journey_chains_count =  grow_reproduceD =\
+		overlap_count = unique_idsD = write_scaffoldsD = update_mapsD = write_chainsD = next_stepsD = journeyD = 0
 	journey_start = time.time()
 	journey_chains_count = 0
 	steps_chunk = next_journeys_steps[:journey_chunk]
@@ -90,37 +89,14 @@ while next_journeys_steps:
 	ids_chains = []
 	for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
 		if cid:
-			random_letters = '{a}{b}{c}'.format(a=random.choice(chars), b=random.choice(chars), c=random.choice(chars))
-			cid = random_letters+str(cid)
 			ids_chains.append((cid, chain))
 			steps_produced += next_steps
 	grow_reproduceD = round(time.time()-start, 2)
 
 	start = time.time()
 	# Identify none-unique IDs
-	ids = list(set([i[0] for i in ids_chains]))
-	#db_keys = [float(k) for k in list(redisClient.hkeys('scaffolds'))]
 	db_keys = list(redisClient.hkeys('scaffolds'))
-	overlap = set(ids).intersection(set(db_keys))
-
-	q = 0
-	while overlap:
-		q += 1
-		print(q)
-		# Revise the hash encoding for the chains with none-unique IDS
-		overlap_chains = [i[1] for i in ids_chains if i[0] in overlap]
-		revised_ids_chains = [(hash(chain), chain) for chain in overlap_chains]
-		# Remove the chains with none-unique IDs from the chains collection
-		ids_chains = [i for i in ids_chains if i not in overlap_chains]
-		# Join the cleaned ids_chains list to the list of the revised ids_chains
-		ids_chains = ids_chains + revised_ids_chains
-
-		# Check overlap for the concatenated list
-		ids = list(set([i[0] for i in ids_chains]))
-		overlap = set(ids).intersection((db_keys))
-		overlap_count = len(overlap)
-
-	del db_keys
+	ids_chains = checkReviseKeysOverlap(ids_chains, db_keys)
 	print('unique_idsD=', time.time()-start)
 	unique_idsD = round(time.time() - start, 2)
 
@@ -135,10 +111,6 @@ while next_journeys_steps:
 			mm = 9
 		# Update scaffolds
 		else:
-			# chain_split = chain.split(node_delimiter)
-			# if len(chain_split) > 2:
-			# 	chain = [str(cid)] + chain_split[-2:]
-			# 	chain = node_delimiter.join(chain)
 			redisClient.hset('scaffolds', cid, chain)
 	write_scaffoldsD = round(time.time() - start, 2)
 
@@ -169,49 +141,28 @@ while next_journeys_steps:
 	print('Write chains=', time.time() - start)
 	write_chainsD = round(time.time() - start, 2)
 	# Collect and prepare next journey steps
+
 	start = time.time()
 	next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
-	next_journeys_steps = [tuple(c) for c in next_journeys_steps]
-	next_journeys_steps = tuple(next_journeys_steps)
-	next_journeys_steps = list(set(next_journeys_steps))
-	next_journeys_steps = [list(c) for c in next_journeys_steps if len(c) > 0]
+	# next_journeys_steps = [tuple(c) for c in next_journeys_steps]
+	# next_journeys_steps = tuple(next_journeys_steps)
+	# next_journeys_steps = list(set(next_journeys_steps))
+	# next_journeys_steps = [list(c) for c in next_journeys_steps if len(c) > 0]
 	next_stepsD = round(time.time() - start, 2)
 
 	# filter saturated scaffolds
 	scaffolds_count = redisClient.hlen('scaffolds')
-	print('{n} scaffolds written'.format(n=scaffolds_count))
-	# todo: condition to filters scaffolds from certain size
-	if int(scaffolds_count/filter_chunk) == filter_round:
-		filter_round += 1
-		cids = list(redisClient.hkeys('scaffolds'))
-		scaffolds = list(redisClient.hgetall('scaffolds').values())
-		start = time.time()
-		filter_cids = filter_scaffolds(cids, scaffolds, saturation_successors, saturation_predecessors)
-		filter_saturatedD = round(time.time() - start, 2)
-		print('{n} filter_cids'.format(n=len(filter_cids)))
-		start = time.time()
-		for cid in filter_cids: redisClient.hdel('scaffolds', cid)
-		filtered_scaffolds_count = redisClient.hlen('scaffolds')
-		print('{n} filtered scaffolds'.format(n=filtered_scaffolds_count))
-		print('delete saturated scaffolds=', time.time() - start)
-		del_saturatedD = round(time.time() - start, 2)
-		#next_journeys_steps = [c for c in next_journeys_steps if str(c[0]) not in filter_cids]
-
 	journeyD = round(time.time() - journey_start, 2)
 	print('journey=', journeyD)
 
-	if filtered_scaffolds_count > 0:
-		next_journey_scaffolds = filtered_scaffolds_count
-	else:
-		next_journey_scaffolds = redisClient.hlen('scaffolds')
 	print('{n1} next journey scaffolds | {n2} journey chains | {n3} chains'
-	      .format(n1=next_journey_scaffolds, n2=journey_chains_count, n3=chains_written_count))
+	      .format(n1=scaffolds_count, n2=journey_chains_count, n3=chains_written_count))
 
 	# Write tracker values
-	tracker_row = [journey, next_count, scaffolds_count, filtered_scaffolds_count, \
+	tracker_row = [journey, next_count, scaffolds_count, \
 	                     journey_chains_count, chains_written_count,\
 	                     overlap_count, grow_reproduceD, unique_idsD, \
-	                     write_scaffoldsD, filter_saturatedD, del_saturatedD, update_mapsD, \
+	                     write_scaffoldsD, update_mapsD, \
 	                     write_chainsD, next_stepsD, journeyD]
 	print(tracker_row)
 	statement = insert_row('{db}.{tt}'.format(db=db_name, tt=tracker_table), list(tracker_cols_types.keys()), tracker_row)

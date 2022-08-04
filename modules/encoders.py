@@ -1,5 +1,6 @@
 from decimal import Decimal
-
+import numpy as np
+import random
 def objects_encoder(objectsToEncode, use_floats=True):
 	'''
 	Encode strings as a floating point number
@@ -103,3 +104,47 @@ def assert_unique_key(dict_keys, key):
 	return key
 
 
+def encode_string(text_string):
+	'''
+	Encode a string to produce a key
+	:param text_string(str): A text string to encode
+	return (str): A key for the text
+	'''
+	# Retrieve a numeric hash
+	key = hash(text_string)
+	# Add division to decimal to reduce increase hash diversity
+	div = 10 ** random.sample(list(np.arange(1, 7)), 1)[0]
+	key = key/div
+	# Add letters to reduce increase hash diversity
+	chars = list('abcdefghijklmnopqrstuvwxyz')
+	random_letters = '{a}{b}{c}'.format(a=random.choice(chars), b=random.choice(chars), c=random.choice(chars))
+	key = random_letters + str(key)
+	return key
+
+def checkReviseKeysOverlap(ids_chains, db_keys):
+	'''
+	Check an overlap between the keys of a dictionary and new keys introduced. The goal is to
+	prevent the replacement of old by new data in case where the new key is already represented in the collection.
+	'''
+	print('checking overlaps')
+	ids = list(set([i[0] for i in ids_chains]))
+	overlap = set(ids).intersection(set(db_keys))
+	cycles, counts = 0, 0
+	if overlap: print('overlaps found')
+	while overlap:
+		cycles += 1
+		counts += len(overlap)
+		# Revise the hash encoding for the chains with none-unique IDS
+		overlap_chains = [i[1] for i in ids_chains if i[0] in overlap]
+		revised_ids_chains = [(hash(chain), chain) for chain in overlap_chains]
+		# Remove the chains with none-unique IDs from the chains collection
+		ids_chains = [i for i in ids_chains if i not in overlap_chains]
+		# Join the cleaned ids_chains list to the list of the revised ids_chains
+		ids_chains = ids_chains + revised_ids_chains
+
+		# Check overlap for the concatenated list
+		ids = list(set([i[0] for i in ids_chains]))
+		overlap = set(ids).intersection((db_keys))
+
+	print('ran {n} overlap cycles of the following lengths:'.format(n=cycles), counts)
+	return ids_chains

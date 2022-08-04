@@ -43,7 +43,6 @@ def validate(chain, source_pairs):
 		error_pairs = []
 	return error_pairs
 
-
 def growReproduce(map_or_step):
 	#print('map_or_step:',map_or_step)
 	cid, chain, next_steps = None, None, None
@@ -53,20 +52,10 @@ def growReproduce(map_or_step):
 	pointers = successors[1:]
 	previous_step_chain = redisClient.hget('scaffolds', chain_key)
 	if previous_step_chain:
-		# try:
-		# 	previous_step_chain = previous_step_chain.split(node_delimiter)
-		# except AttributeError:
-		# 	print(map_or_step)
 		previous_step_chain = previous_step_chain.split(node_delimiter)
-		# If the first element in the chain is a chain id rather than a chain node
-		# if re.findall('\D{1,}', previous_step_chain[0]):
-		# 	previous_step_chain = previous_step_chain[1:]
 		chain = previous_step_chain + [growth_node]
-
 		chain = node_delimiter.join(chain)
-		# todo add division to decimal to reduce memory load and increase hash diversity
-		#div = 10 ** random.sample(list(np.arange(1, 7)), 1)[0]
-		cid = hash(chain)#/div # % 10 ** 9
+		cid = encode_string(chain)
 
 		# Next steps
 		next_steps = []

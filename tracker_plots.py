@@ -9,9 +9,6 @@ from plots import *
 from modules.config import *
 
 tracker = pd.read_sql('SELECT * FROM {t}'.format(t=tracker_table), con=conn)
-tracker['scaffolds_diff'] = tracker['scaffolds_count'] - tracker['filtered_scaffolds_count']
-#tracker = tracker[tracker['scaffolds_diff'] > 0]
-a = 0
 tracker.to_excel(os.path.join(experiment_path, 'tracker.xlsx'))
 
 # no_chain_steps = tracker[tracker['chain_built'] == 0]
@@ -33,9 +30,10 @@ def plot_df(df, name, xy_pairs):
 		plt.savefig(os.path.join(plots_path, figname))
 		plt.close()
 
-xy_pairs = [('scaffolds_count', 'journeyd'), ('scaffolds_count', 'write_scaffoldsd'), ('scaffolds_count', 'filter_saturatedd'),
-            ('scaffolds_count', 'update_mapsd'), ('scaffolds_count', 'next_stepsd'), ('scaffolds_count', 'del_saturatedd'),
-            ('scaffolds_count', 'scaffolds_diff')]
+xy_pairs = [('scaffolds_count', 'journeyd'), ('scaffolds_count', 'unique_idsd'),
+            ('scaffolds_count', 'next_stepsd'), ('scaffolds_count', 'write_scaffoldsd'),
+            ('scaffolds_count', 'update_mapsd')]
+
 ratio_pairs = [('chains', col) for col in tracker.columns if 'ratio' in col]
 xy_pairs += ratio_pairs
 print(xy_pairs)

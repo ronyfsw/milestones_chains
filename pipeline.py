@@ -3,23 +3,23 @@ from modules.encoders import *
 from modules.nodes import *
 from modules.filters import *
 from modules.worm_modules import *
+parser = argparse.ArgumentParser()
+parser.add_argument('path')
+args = parser.parse_args()
+graph_path = args.path
+# graph_path = '/home/rony/Projects_Code/Milestones_Chains/data/sub_graphs/sub_graph_1.edgelist'
+file = graph_path.split('/')[-1]
 pid = os.getpid()
-print('{p} started'.format(p=pid))
-# parser = argparse.ArgumentParser()
-# parser.add_argument('path')
-# args = parser.parse_args()
-# graph_path = args.path
-graph_path = '/home/rony/Projects_Code/Milestones_Chains/data/sub_graphs/graph.graphml'
 
 # Initialized the next journey steps
 terminal_nodes = open('terminal_nodes.txt').read().split('\n')
-G = nx.read_adjlist(graph_path, create_using=nx.DiGraph)
+G = nx.read_edgelist(graph_path, create_using=nx.DiGraph)
 subG_terminal_nodes = get_terminal_nodes(G)
 a = set(terminal_nodes).difference((set(subG_terminal_nodes)))
-print('graph:', G)
 Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]
-print('root_node:', root_node)
+print('process: {p} | file: {f} | graph: {g} | root: {r}'\
+      .format(p=pid, f=file, g=G, r=root_node))
 root_edges = [e for e in G.edges() if root_node in e]
 print('root_edges:', root_edges)
 root_successors = tuple(G.successors(root_node))
@@ -51,7 +51,7 @@ while next_journeys_steps:
     # Build chains
     start = time.time()
     ids_chains = []
-    for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
+    for cid, chain, next_steps in map(growReproduce, steps_chunk):
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
@@ -92,7 +92,7 @@ while next_journeys_steps:
 
     start = time.time()
     # Write chains
-    if len(chains_results_rows) >= 100:
+    if len(chains_results_rows) > 0:
         statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
         cur.execute(statement)
         conn.commit()

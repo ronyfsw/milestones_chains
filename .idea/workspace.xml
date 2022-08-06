@@ -5,14 +5,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/dev/argparse1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sort_based.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/config_steps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/encoders.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/encoders.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/filters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/libraries.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/libraries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/graph.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_1.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_10.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_11.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_12.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_13.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_14.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_15.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_16.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_17.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_18.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_19.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_2.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_20.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_21.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_22.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_23.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_24.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_25.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_26.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_27.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_28.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_29.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_3.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_30.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_31.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_32.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_33.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_34.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_35.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_36.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_4.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_5.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_6.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_7.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_8.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_9.graphml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_pipelines.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +104,7 @@
       <recent name="$PROJECT_DIR$/dev/degrees" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.pipeline">
+  <component name="RunManager" selected="Python.run_pipelines">
     <configuration name="pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Milestones_Duration" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,27 +168,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sort_based" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Milestones_Duration" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sort_based.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="tracker_plots" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Milestones_Duration" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -178,13 +189,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="validate" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Milestones_Duration" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/validate.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.pipeline" />
         <item itemvalue="Python.run_pipelines" />
+        <item itemvalue="Python.validate" />
+        <item itemvalue="Python.pipeline" />
         <item itemvalue="Python.pipeline_subg" />
         <item itemvalue="Python.tracker_plots" />
-        <item itemvalue="Python.sort_based" />
       </list>
     </recent_temporary>
   </component>
@@ -203,29 +235,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/modules/chains.py</url>
-          <line>7</line>
-          <option name="timeStamp" value="519" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/build_result.py</url>
-          <line>68</line>
-          <option name="timeStamp" value="534" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/split_graph2.py</url>
-          <line>27</line>
-          <option name="timeStamp" value="535" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run_pipelines.py</url>
-          <line>77</line>
-          <option name="timeStamp" value="536" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pipeline.py</url>
-          <line>54</line>
-          <option name="timeStamp" value="547" />
+          <line>81</line>
+          <option name="timeStamp" value="561" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -238,10 +250,10 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="steps_chunk" />
-        <watch expression="next_steps" />
-        <watch expression="chain" />
-        <watch expression="cid" />
+        <watch expression="root_successor" />
+        <watch expression="root_node" />
+        <watch expression="root_successors" />
+        <watch expression="no_preds" />
       </configuration>
     </watches-manager>
   </component>

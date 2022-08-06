@@ -9,6 +9,7 @@ from modules.encoders import *
 from modules.nodes import *
 from modules.filters import *
 from modules.worm_modules import *
+from pipeline1 import *
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -34,11 +35,13 @@ nodes_decoder = build_decoder(nodes_encoder)
 np.save('nodes_encoder.npy', nodes_encoder)
 np.save('nodes_decoder.npy', nodes_decoder)
 G = nx.relabel_nodes(G, nodes_encoder)
-graph_path = os.path.join(sub_graphs_path, 'graph.graphml')
-nx.write_graphml(G, graph_path)
+graph_path = os.path.join(sub_graphs_path, 'graph.edgelist')
+nx.write_edgelist(G, graph_path)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 root_node = list(nx.topological_sort(G))[0]
 root_successors = list(G.successors(root_node))
+for s in root_successors:
+    print(s, list(G.successors(s)))
 isolates = graph_isolates(G)
 Gnodes, Gedges = list(G.nodes()), list(G.edges())
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
@@ -62,21 +65,32 @@ cur.execute(statement)
 # Partitions
 # Sub graphs of the source program graph
 run_paths = ''
+chains = []
 for index, root_successor in enumerate(root_successors):
-    subGnodes = [n for n in Gnodes if n not in (root_node, root_successor)]
-    subGnodes = [n for n in subGnodes if n not in isolates]
+    nodes_to_drop = [root_node] + [s for s in root_successors if s != root_successor] + isolates
+    subGnodes = [n for n in Gnodes if n not in nodes_to_drop]
     subG = G.subgraph(subGnodes)
     is_dag = nx.is_directed_acyclic_graph(subG)
     if is_dag:
-        subG = nx.DiGraph(subG)
-        graph_path = os.path.join(sub_graphs_path, 'sub_graph_{i}.graphml'.format(i=index+1))
-        nx.write_adjlist(subG, graph_path)
-        run_paths += "python3 pipeline.py {gp} & ".format(gp=graph_path)
+        #subG = nx.DiGraph(subG)
+        print(50*'#')
+        print(root_successor, subG)
+        root_node = list(nx.topological_sort(subG))[0]
+        roots = G.successors(root_node)
+        no_preds = [n for n in subG.nodes() if G.predecessors(n) == 0]
+        subG_chains = run_pipeline(index, subG, root_successor)
+        chains += subG_chains
+        print(root_successor, root_node, subG, '{n} chains produced'.format(n=len(subG_chains)))
+        # graph_path = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
+        # nx.write_edgelist(subG, graph_path)
+        # run_paths += "python3 pipeline.py {gp} & ".format(gp=graph_path)
+        # run_path = "python3 pipeline.py {gp} ".format(gp=graph_path)
+        # subprocess.run(run_paths, shell=True)
     else:
         print('graph {i} is not dag'.format(i=index+1))
-run_paths = run_paths.rstrip(' &')
+#run_paths = run_paths.rstrip(' &')
 #subprocess.run(run_paths, shell=True)
-
+with open('chains.txt', 'w') as f: f.write('\n'.join(chains))
 
 
 

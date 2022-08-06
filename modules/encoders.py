@@ -1,6 +1,7 @@
 from decimal import Decimal
 import numpy as np
 import random
+from modules.filters import *
 def objects_encoder(objectsToEncode, use_floats=True):
 	'''
 	Encode strings as a floating point number
@@ -128,9 +129,14 @@ def checkReviseKeysOverlap(ids_chains, db_keys):
 	'''
 	print('checking overlaps')
 	ids = list(set([i[0] for i in ids_chains]))
-	overlap = set(ids).intersection(set(db_keys))
+	# print('set method')
+	# overlap = set(ids).intersection(set(db_keys))
+	# if overlap: print('overlaps found:\n', overlap)
+	# print('binary sort method')
+	overlap = binarySearchIntersect(ids, db_keys)
+	if overlap: print('overlaps found:\n', overlap)
+
 	cycles, counts = 0, 0
-	if overlap: print('overlaps found')
 	while overlap:
 		cycles += 1
 		counts += len(overlap)

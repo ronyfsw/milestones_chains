@@ -18,6 +18,15 @@ def binarySearchFilter(queries, target):
 			filtered.append(q)
 	return filtered
 
+def binarySearchIntersect(queries, target):
+	in_both = []
+	target = sorted(target)
+	for q in queries:
+		i = bisect_left(target,  q)
+		if i <len(target) and target[i] == q:
+			in_both.append(q)
+	return in_both
+
 def lists_filter(queries, target):
 	objects = target + queries
 	object_is_list = False

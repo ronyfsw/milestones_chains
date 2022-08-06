@@ -5,7 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/chains.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/predecessors_successors.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nodes_decoder.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nodes_encoder.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_grow_reproduced_vs_scaffolds_count.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_journeyd_vs_scaffolds_count.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_next_stepsd_vs_scaffolds_count.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_unique_idsd_vs_scaffolds_count.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_update_mapsd_vs_scaffolds_count.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_write_scaffoldsd_vs_scaffolds_count.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/tracker.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/terminal_nodes.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/results/chains.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/results/list_connected_nodes.adjlist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/results/list_shortest_paths.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/results/milestones_graph.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/results/neighbors_graph.edgelist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/results/neighbors_graph.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tracker_plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/tracker_plots.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,9 +86,9 @@
       <recent name="$PROJECT_DIR$/dev/degrees" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.pipeline">
+  <component name="RunManager" selected="Python.tracker_plots">
     <configuration name="pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Milestones_Duration" />
+      <module name="Milestones_Chains" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -151,7 +172,7 @@
       <method v="2" />
     </configuration>
     <configuration name="tracker_plots" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Milestones_Duration" />
+      <module name="Milestones_Chains" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -174,9 +195,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.pipeline" />
+        <item itemvalue="Python.tracker_plots" />
         <item itemvalue="Python.run_pipelines" />
         <item itemvalue="Python.pipeline_subg" />
-        <item itemvalue="Python.tracker_plots" />
         <item itemvalue="Python.sort_based" />
       </list>
     </recent_temporary>
@@ -191,6 +212,17 @@
       <updated>1649699721313</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -226,10 +258,10 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="steps_chunk" />
-        <watch expression="next_steps" />
-        <watch expression="chain" />
-        <watch expression="cid" />
+        <watch expression="root_successor" />
+        <watch expression="root_node" />
+        <watch expression="root_successors" />
+        <watch expression="no_preds" />
       </configuration>
     </watches-manager>
   </component>

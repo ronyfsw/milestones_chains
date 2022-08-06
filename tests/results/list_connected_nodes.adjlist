@@ -1,0 +1,7 @@
+#/snap/pycharm-community/276/plugins/python-ce/helpers/pycharm/_jb_pytest_runner.py test_paths.py::test_list_connected_nodes
+# GMT Sun Apr 24 06:57:57 2022
+# 
+a c
+c f d
+f
+d

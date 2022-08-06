@@ -1,7 +1,7 @@
-experiment = 'next_step_filter'
-new_experiment = False
+experiment = 'ids_checkpoint_removed'
+new_experiment = True
 journey_chunk = 25000
-available_executors = 10
+available_executors = 46
 import os
 import sys
 import redis

@@ -69,8 +69,8 @@ chains_written_count = 0
 journey = scaffolds_count = chains_written_count = 0
 filter_round = 1
 
-#while next_journeys_steps:
-while scaffolds_count < 800000:
+while next_journeys_steps:
+#while scaffolds_count < 800000:
 	# Journey tracker values initiation
 	next_count = scaffolds_count = journey_chains_count =  grow_reproduceD =\
 		overlap_count = unique_idsD = write_scaffoldsD = update_mapsD = write_chainsD = next_stepsD = journeyD = 0
@@ -99,9 +99,9 @@ while scaffolds_count < 800000:
 
 	start = time.time()
 	# Identify none-unique IDs
-	db_keys = list(redisClient.hkeys('scaffolds'))
-	ids_chains = checkReviseKeysOverlap(ids_chains, db_keys)
-	print('unique_idsD=', time.time()-start)
+	#db_keys = list(redisClient.hkeys('scaffolds'))
+	#ids_chains = checkReviseKeysOverlap(ids_chains, db_keys)
+	#print('unique_idsD=', time.time()-start)
 	unique_idsD = round(time.time() - start, 2)
 
 	# Write chain scaffolds
@@ -134,7 +134,7 @@ while scaffolds_count < 800000:
 	
 	start = time.time()
 	# Write chains
-	if len(chains_results_rows) >= 100:
+	if len(chains_results_rows) >= 10000:
 		statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
 		c.execute(statement)
 		conn.commit()
@@ -170,6 +170,7 @@ while scaffolds_count < 800000:
 	conn.commit()
 
 # Write the remaning results
-statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
-c.execute(statement)
-conn.commit()
+if chains_results_rows:
+	statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
+	c.execute(statement)
+	conn.commit()

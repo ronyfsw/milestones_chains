@@ -15,6 +15,10 @@ warnings.filterwarnings("ignore")
 # Data
 G = build_graph(file_path)
 Gnodes, Gedges = list(G.nodes()), G.edges()
+graph_path = os.path.join(data_path, 'graph.graphml')
+nx.write_graphml(G, graph_path)
+
+
 terminal_nodes = get_terminal_nodes(G)
 with open('terminal_nodes.txt', 'w') as f: f.write('\n'.join(terminal_nodes))
 # Encode nodes
@@ -144,10 +148,6 @@ while scaffolds_count < 800000:
 
 	start = time.time()
 	next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
-	# next_journeys_steps = [tuple(c) for c in next_journeys_steps]
-	# next_journeys_steps = tuple(next_journeys_steps)
-	# next_journeys_steps = list(set(next_journeys_steps))
-	# next_journeys_steps = [list(c) for c in next_journeys_steps if len(c) > 0]
 	next_stepsD = round(time.time() - start, 2)
 
 	# filter saturated scaffolds

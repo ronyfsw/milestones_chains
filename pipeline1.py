@@ -3,14 +3,14 @@ from modules.encoders import *
 from modules.nodes import *
 from modules.filters import *
 from modules.worm_modules import *
-def run_pipeline(Gindex, G, root_node):
+def run_pipeline(Gindex, G):
     pid = os.getpid()
     # Initialized the next journey steps
     terminal_nodes = open('terminal_nodes.txt').read().split('\n')
     # subG_terminal_nodes = get_terminal_nodes(G)
     # a = set(terminal_nodes).difference((set(subG_terminal_nodes)))
-    # Gsort = list(nx.topological_sort(G))
-    # root_node = Gsort[0]
+    Gsort = list(nx.topological_sort(G))
+    root_node = Gsort[0]
     print('process: {p} | graph: {g} | root: {r}'\
           .format(p=pid,  g=G, r=root_node))
     root_edges = [e for e in G.edges() if root_node in e]
@@ -43,7 +43,7 @@ def run_pipeline(Gindex, G, root_node):
         # Build chains
         start = time.time()
         ids_chains = []
-        for cid, chain, next_steps in map(growReproduce, next_journeys_steps):
+        for cid, chain, next_steps in executor.map(growReproduce, next_journeys_steps):
             if cid:
                 ids_chains.append((cid, chain))
                 steps_produced += next_steps
@@ -51,8 +51,9 @@ def run_pipeline(Gindex, G, root_node):
 
         # Identify none-unique IDs
         start = time.time()
-        db_keys = list(redisClient.hkeys('scaffolds'))
-        ids_chains = checkReviseKeysOverlap(ids_chains, db_keys)
+        # todo: replace overlap checkpoint by extending id to include pid
+        # db_keys = list(redisClient.hkeys('scaffolds'))
+        # ids_chains = checkReviseKeysOverlap(ids_chains, db_keys)
         unique_idsD = round(time.time() - start, 2)
 
         # Write chain scaffolds
@@ -73,7 +74,8 @@ def run_pipeline(Gindex, G, root_node):
         ids = [i[0] for i in ids_chains]
         chains = [i[1] for i in ids_chains]
         growth_tips = [chain.split(node_delimiter)[-1] for chain in chains]
-        #del ids_chains
+        journey_chains_count = len(ids_chains)
+        del ids_chains
         for index, tip in enumerate(growth_tips):
             growth_tip_successors = successorsDB.get(tip)
             if growth_tip_successors:
@@ -84,7 +86,6 @@ def run_pipeline(Gindex, G, root_node):
 
         start = time.time()
         # Write chains
-        print('Write chains=', time.time() - start)
         write_chainsD = round(time.time() - start, 2)
         # Collect and prepare next journey steps
 
@@ -96,8 +97,8 @@ def run_pipeline(Gindex, G, root_node):
         scaffolds_count = redisClient.hlen('scaffolds')
         journeyD = round(time.time() - journey_start, 2)
         print('journey=', journeyD)
-
-        print('{n1} next journey scaffolds | {n2} journey chains | {n3} chains'
+        chains_written_count = len(chains_results_rows)
+        print('{n1} next journey scaffolds | {n2} journey chains | {n3} sub graph chains'
               .format(n1=scaffolds_count, n2=journey_chains_count, n3=chains_written_count))
 
         # Write tracker values
@@ -106,10 +107,9 @@ def run_pipeline(Gindex, G, root_node):
                        overlap_count, grow_reproduceD, unique_idsD, \
                        write_scaffoldsD, update_mapsD, \
                        write_chainsD, next_stepsD, journeyD]
-        print(tracker_row)
+        #print(tracker_row)
         statement = insert_row('{db}.{tt}'.format(db=db_name, tt=tracker_table), list(tracker_cols_types.keys()),
                                tracker_row)
         cur.execute(statement)
         conn.commit()
-
-        return chains_results_rows
+    return chains_results_rows

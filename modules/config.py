@@ -1,5 +1,5 @@
-experiment = 'binary_sort_overlap_filter'
-journey_chunk = 25000
+experiment = 'parallel_subgraphs'
+journey_chunk = 50000
 available_executors = 10
 import os
 import sys

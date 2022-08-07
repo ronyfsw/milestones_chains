@@ -6,45 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/graph.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_1.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_10.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_11.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_12.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_13.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_14.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_15.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_16.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_17.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_18.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_19.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_2.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_20.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_21.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_22.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_23.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_24.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_25.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_26.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_27.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_28.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_29.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_3.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_30.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_31.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_32.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_33.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_34.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_35.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_36.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_4.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_5.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_6.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_7.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_8.graphml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sub_graphs/sub_graph_9.graphml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline1.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run_pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_pipelines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/validate.py" beforeDir="false" afterPath="$PROJECT_DIR$/validate.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,13 +28,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../aws/s3/download_file.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/modules/config.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/modules/encoders.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/modules/worm_modules.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/pipeline.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/split_graph2.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tracker_plots.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../aws/s3/download_file.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -235,9 +201,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run_pipelines.py</url>
-          <line>81</line>
-          <option name="timeStamp" value="561" />
+          <url>file://$PROJECT_DIR$/pipeline.py</url>
+          <line>33</line>
+          <option name="timeStamp" value="563" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -250,10 +216,11 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="root_successor" />
         <watch expression="root_node" />
         <watch expression="root_successors" />
         <watch expression="no_preds" />
+        <watch expression="subGroot_successors" />
+        <watch expression="run_path" />
       </configuration>
     </watches-manager>
   </component>

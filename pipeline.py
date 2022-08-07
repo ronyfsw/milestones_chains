@@ -1,3 +1,4 @@
+from datetime import datetime
 from modules.config import *
 from modules.encoders import *
 from modules.nodes import *
@@ -7,8 +8,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('path')
 args = parser.parse_args()
 graph_path = args.path
-# graph_path = '/home/rony/Projects_Code/Milestones_Chains/data/sub_graphs/sub_graph_1.edgelist'
-file = graph_path.split('/')[-1]
+#graph_path = '/home/rony/Projects_Code/milestones_chains/data/sub_graphs/sub_graph_1.edgelist'
+file = graph_path.split('/')[-1].replace('.edgelist', '')
 pid = os.getpid()
 
 # Initialized the next journey steps
@@ -31,18 +32,20 @@ print('next_journeys_steps:', next_journeys_steps)
 growth_tip = ['no tip']
 chains_results_rows = []
 journey = chains_written_count = 0
-
 while next_journeys_steps:
     # Journey tracker values initiation
     journey_chains_count = overlap_count = 0
-    journey_start = time.time()
+
     steps_chunk = next_journeys_steps[:journey_chunk]
     next_journeys_steps = next_journeys_steps[journey_chunk:]
     steps_produced, maps_produced = [], []
     journey += 1
     next_count = len(steps_chunk)
     print(60 * '*')
-    print('***** journey {g}: {n} steps | pid: {p}*****'.format(g=journey, n=next_count, p=pid))
+    print('*****  file:{f}, pid:{p}, journey {g}, {n} steps *****'
+          .format(f=file, p=pid, g=journey, n=next_count))
+    journey_start = time.time()
+    print("Journey started on", datetime.now().strftime("%H:%M:%S"))
 
     executor = ProcessPoolExecutor(available_executors)
     if next_count <= available_executors:
@@ -51,7 +54,7 @@ while next_journeys_steps:
     # Build chains
     start = time.time()
     ids_chains = []
-    for cid, chain, next_steps in map(growReproduce, steps_chunk):
+    for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
@@ -59,8 +62,9 @@ while next_journeys_steps:
 
     # Identify none-unique IDs
     start = time.time()
-    db_keys = list(redisClient.hkeys('scaffolds'))
-    ids_chains = checkReviseKeysOverlap(ids_chains, db_keys)
+    # todo: replace overlap checkpoint by extending id to include pid
+    #db_keys = list(redisClient.hkeys('scaffolds'))
+    #ids_chains = checkReviseKeysOverlap(ids_chains, db_keys)
     unique_idsD = round(time.time() - start, 2)
 
     # Write chain scaffolds
@@ -110,11 +114,13 @@ while next_journeys_steps:
 
     # filter saturated scaffolds
     scaffolds_count = redisClient.hlen('scaffolds')
+    print("Journey ended on", datetime.now().strftime("%H:%M:%S"))
     journeyD = round(time.time() - journey_start, 2)
-    print('journey=', journeyD)
-
-    print('{n1} next journey scaffolds | {n2} journey chains | {n3} chains'
-          .format(n1=scaffolds_count, n2=journey_chains_count, n3=chains_written_count))
+    print('journey duration measured=', journeyD)
+    next_journeys_steps_count = len(next_journeys_steps)
+    print('{n1} scaffolds, {n2} next journeys steps, {n3} journey chains, {n4} chains'
+          .format(n1=scaffolds_count, n2=next_journeys_steps_count,\
+                  n3=journey_chains_count, n4=chains_written_count))
 
     # Write tracker values
     tracker_row = [journey, next_count, scaffolds_count, \

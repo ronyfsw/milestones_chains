@@ -1,7 +1,7 @@
-experiment = 'reproduction_duration'
+experiment = 'map_1_exec'
 new_experiment = True
 journey_chunk = 50000
-available_executors = 14
+available_executors = 46
 import os
 import sys
 import redis
@@ -52,10 +52,11 @@ predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses
 # Tables
 tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER',\
  			     'journey_chains_count': 'INTEGER', 'chains_written_count': 'INTEGER',\
-	                     'overlap_count': 'INTEGER', 'grow_reproduced': 'DOUBLE', 'gr_processd':'DOUBLE',\
+	                     'overlap_count': 'INTEGER', 'grow_reproduced': 'DOUBLE', 'gr_processesd':'DOUBLE',\
                         'unique_idsd': 'DOUBLE',\
 	                     'write_scaffoldsd': 'DOUBLE', 'update_mapsd': 'DOUBLE',\
 	                     'write_chainsd': 'DOUBLE', 'next_stepsd': 'DOUBLE', 'journeyd': 'DOUBLE'}
+
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 chains_cols = list(chains_cols_types.keys())
 tracker_table, chains_table = 'tracker', 'chains'

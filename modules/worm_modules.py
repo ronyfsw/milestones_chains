@@ -54,19 +54,20 @@ def growReproduce(map_or_step):
 	previous_step_chain = redisClient.hget('scaffolds', chain_key)
 
 	if previous_step_chain:
+		# Growth
+		start = time.time()
 		previous_step_chain = previous_step_chain.split(node_delimiter)
 		chain = previous_step_chain + [growth_node]
 		chain = node_delimiter.join(chain)
 		cid = encode_string(chain)
 
-		# Next steps
-		start = time.time()
+		# Reproduction
 		next_steps = []
 		for pointer in pointers:
 			pointer = (pointer,)
 			next_step = (chain_key, pointer)
 			next_steps.append(next_step)
-		gr_process_dur = round(time.time() - start, 2)
 		next_steps = tuple(next_steps)
+		gr_process_dur = round(time.time() - start, 2)
 
 	return cid, chain, next_steps, gr_process_dur

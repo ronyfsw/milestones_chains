@@ -32,7 +32,7 @@ def plot_df(df, name, xy_pairs):
 
 xy_pairs = [('scaffolds_count', 'journeyd'), ('scaffolds_count', 'unique_idsd'),
             ('scaffolds_count', 'next_stepsd'), ('scaffolds_count', 'write_scaffoldsd'),
-            ('scaffolds_count', 'update_mapsd'), ('scaffolds_count', 'grow_reproduced')]
+            ('scaffolds_count', 'update_mapsd'), ('scaffolds_count', 'grow_reproduced'), ('scaffolds_count', 'gr_processd')]
 
 ratio_pairs = [('chains', col) for col in tracker.columns if 'ratio' in col]
 xy_pairs += ratio_pairs

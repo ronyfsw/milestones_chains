@@ -73,7 +73,7 @@ while next_journeys_steps:
 #while scaffolds_count < 800000:
 	# Journey tracker values initiation
 	next_count = scaffolds_count = journey_chains_count =  grow_reproduceD =\
-		scaffolds_queriesd = overlap_count = unique_idsD = write_scaffoldsD =\
+		gr_processesd = overlap_count = unique_idsD = write_scaffoldsD =\
 		update_mapsD = write_chainsD = next_stepsD = journeyD = 0
 	journey_start = time.time()
 	journey_chains_count = 0
@@ -92,8 +92,8 @@ while next_journeys_steps:
 	# Build chains
 	start = time.time()
 	ids_chains = []
-	for cid, chain, next_steps, scaffolds_queryd in executor.map(growReproduce, steps_chunk):
-		scaffolds_queriesd += scaffolds_queryd
+	for cid, chain, next_steps, gr_processd in executor.map(growReproduce, steps_chunk):
+		gr_processesd += gr_processd
 		if cid:
 			ids_chains.append((cid, chain))
 			steps_produced += next_steps
@@ -162,7 +162,7 @@ while next_journeys_steps:
 	# Write tracker values
 	tracker_row = [journey, next_count, scaffolds_count, \
 	                     journey_chains_count, chains_written_count,\
-	                     overlap_count, grow_reproduceD, scaffolds_queriesd, unique_idsD, \
+	                     overlap_count, grow_reproduceD, gr_processesd, unique_idsD, \
 	                     write_scaffoldsD, update_mapsD, \
 	                     write_chainsD, next_stepsD, journeyD]
 	print(tracker_row)

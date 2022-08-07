@@ -5,26 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/chains.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/predecessors_successors.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nodes_decoder.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nodes_encoder.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_grow_reproduced_vs_scaffolds_count.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_journeyd_vs_scaffolds_count.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_next_stepsd_vs_scaffolds_count.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_unique_idsd_vs_scaffolds_count.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_update_mapsd_vs_scaffolds_count.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/plots/journeys_write_scaffoldsd_vs_scaffolds_count.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/saturation_filter_removed/tracker.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/terminal_nodes.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/results/chains.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/results/list_connected_nodes.adjlist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/results/list_shortest_paths.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/results/milestones_graph.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/results/neighbors_graph.edgelist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/results/neighbors_graph.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/worm_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/worm_modules.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tracker_plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/tracker_plots.py" afterDir="false" />
     </list>
@@ -44,13 +27,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../aws/s3/download_file.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/modules/config.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/modules/encoders.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/modules/worm_modules.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/pipeline.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/split_graph2.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tracker_plots.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../aws/s3/download_file.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -61,15 +44,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/rony/Projects_Code/Milestones_Chains&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/home/rony/Projects_Code/milestones_chains",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -88,7 +71,7 @@
   </component>
   <component name="RunManager" selected="Python.tracker_plots">
     <configuration name="pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Milestones_Chains" />
+      <module name="milestones_chains" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -172,7 +155,7 @@
       <method v="2" />
     </configuration>
     <configuration name="tracker_plots" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Milestones_Chains" />
+      <module name="milestones_chains" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>

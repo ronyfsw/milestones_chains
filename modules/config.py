@@ -1,7 +1,7 @@
-experiment = 'ids_checkpoint_removed'
-new_experiment = True
-journey_chunk = 25000
-available_executors = 46
+experiment = 'scaffolds_query'
+new_experiment = False
+journey_chunk = 50000
+available_executors = 14
 import os
 import sys
 import redis
@@ -52,7 +52,8 @@ predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses
 # Tables
 tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER',\
  			     'journey_chains_count': 'INTEGER', 'chains_written_count': 'INTEGER',\
-	                     'overlap_count': 'INTEGER', 'grow_reproduced': 'DOUBLE', 'unique_idsd': 'DOUBLE',\
+	                     'overlap_count': 'INTEGER', 'grow_reproduced': 'DOUBLE', 'scaffolds_queriesd':'DOUBLE',\
+                        'unique_idsd': 'DOUBLE',\
 	                     'write_scaffoldsd': 'DOUBLE', 'update_mapsd': 'DOUBLE',\
 	                     'write_chainsd': 'DOUBLE', 'next_stepsd': 'DOUBLE', 'journeyd': 'DOUBLE'}
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}

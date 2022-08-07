@@ -50,7 +50,9 @@ def growReproduce(map_or_step):
 	successors = map_or_step[1]
 	growth_node = successors[0]
 	pointers = successors[1:]
+	start = time.time()
 	previous_step_chain = redisClient.hget('scaffolds', chain_key)
+	scaffolds_queryd = round(time.time() - start, 2)
 	if previous_step_chain:
 		previous_step_chain = previous_step_chain.split(node_delimiter)
 		chain = previous_step_chain + [growth_node]
@@ -65,4 +67,4 @@ def growReproduce(map_or_step):
 			next_steps.append(next_step)
 		next_steps = tuple(next_steps)
 
-	return cid, chain, next_steps
+	return cid, chain, next_steps, scaffolds_queryd

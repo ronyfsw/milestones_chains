@@ -128,7 +128,6 @@ while next_journeys_steps:
     cur.execute(statement)
     conn.commit()
 
-start_time = datetime.now().strftime("%H:%M:%S")
 print('pipeline started on', start_time)
 print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))
 
@@ -139,6 +138,5 @@ if chains_results_rows:
     conn.commit()
     print ('{p} finished'.format(p=pid))
 
-start_time = datetime.now().strftime("%H:%M:%S")
 print('pipeline started on', start_time)
 print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))

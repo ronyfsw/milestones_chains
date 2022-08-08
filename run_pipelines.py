@@ -80,6 +80,5 @@ print('run_paths:', run_paths)
 subprocess.run(run_paths, shell=True)
 #with open('chains.txt', 'w') as f: f.write('\n'.join(chains))
 
-start_time = datetime.now().strftime("%H:%M:%S")
 print('pipelines started on', start_time)
 print('pipelines ended on', datetime.now().strftime("%H:%M:%S"))

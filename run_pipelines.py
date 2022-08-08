@@ -1,6 +1,3 @@
-import time
-import subprocess
-
 from modules.config import *
 from modules.libraries import *
 from modules.graphs import *
@@ -9,9 +6,9 @@ from modules.encoders import *
 from modules.nodes import *
 from modules.filters import *
 from modules.worm_modules import *
-from pipeline1 import *
-import warnings
-warnings.filterwarnings("ignore")
+
+start_time = datetime.now().strftime("%H:%M:%S")
+print('pipeline started on', start_time)
 
 # Refresh results tables and databases
 redisClient.flushdb()
@@ -23,7 +20,6 @@ cur.execute(statement)
 cur.execute("DROP TABLE IF EXISTS {t}".format(t=tracker_table))
 statement = build_create_table_statement('{t}'.format(t=tracker_table), tracker_cols_types)
 cur.execute(statement)
-
 
 # Data
 G = build_graph(file_path)
@@ -73,17 +69,17 @@ for index, root_successor in enumerate(root_successors):
         #subG = nx.DiGraph(subG)
         print(50*'#')
         print(root_successor, subG)
-        #subG_chains = run_pipeline(index, subG)
-        #chains += subG_chains
-        #print(root_successor, root_node, subG, '{n} chains produced'.format(n=len(subG_chains)))
         graph_path = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, graph_path)
         run_paths += "python3 pipeline.py {gp} & ".format(gp=graph_path)
-        # run_path = "python3 pipeline.py {gp} ".format(gp=graph_path)
-        # subprocess.run(run_path, shell=True)
+
     else:
         print('graph {i} is not dag'.format(i=index+1))
 run_paths = run_paths.rstrip(' &')
 print('run_paths:', run_paths)
 subprocess.run(run_paths, shell=True)
 #with open('chains.txt', 'w') as f: f.write('\n'.join(chains))
+
+start_time = datetime.now().strftime("%H:%M:%S")
+print('pipelines started on', start_time)
+print('pipelines ended on', datetime.now().strftime("%H:%M:%S"))

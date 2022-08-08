@@ -102,8 +102,10 @@ for index, chain in enumerate(built_chains):
 				pair = (id, chain[index+1])
 				if pair not in pairs: pairs.append(pair)
 pairs = list(set(pairs))
-pairs_in_source = list(set([p for p in pairs if p in source_pairs]))
-pairs_not_in_source = list(set([p for p in pairs if p not in source_pairs]))
+#pairs_in_source = list(set([p for p in pairs if p in source_pairs]))
+pairs_in_source = list(set(pairs).intersection(set(source_pairs)))
+#pairs_not_in_source = list(set([p for p in pairs if p not in source_pairs]))
+pairs_not_in_source = list(set(pairs).difference(set(source_pairs)))
 n1, n2 = len(pairs), len(pairs_in_source)
 error_pairs_count = n1 - n2
 error_pairs_perc = round(100*error_pairs_count/n1, 2)

@@ -39,6 +39,7 @@ print('{n1} chains | {n2} unique chains'.format(n1=n1, n2=n2))
 a = 0
 
 # Tasks to Rows
+print('Tasks to Rows split')
 tasks_chains = []
 for index, chain in enumerate(chains):
 	chain_id = 'C{i}'.format(i=str(index+1))
@@ -62,8 +63,9 @@ tasks_chains = pd.DataFrame(tasks_chains, columns=['ID', 'ChainID', 'NeighbourID
 # Tasks, Metadata and Duration
 data_chains_duration = pd.merge(tasks_chains, tasks_duration, how='left')
 
+print('Write chains tasks with metadata')
 # Chunk the results to enable their writing and analysis to a spreadsheet
-chunk_size = 50
+chunk_size = 70
 chains_ids = list(tasks_chains['ChainID'].unique())
 ids_chunks = [list(c) for c in np.array_split(chains_ids, chunk_size)]
 chunks_sizes = []

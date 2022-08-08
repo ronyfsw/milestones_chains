@@ -1,4 +1,4 @@
-experiment = 'parallel_subgraphs'
+experiment = 'parallel_subgraphs_remote_50k'
 journey_chunk = 50000
 available_executors = 10
 import os
@@ -51,7 +51,7 @@ tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_c
 	                     'write_chainsd': 'DOUBLE', 'next_stepsd': 'DOUBLE', 'journeyd': 'DOUBLE'}
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 chains_cols = list(chains_cols_types.keys())
-tracker_table, chains_table = 'tracker', 'chains'
+tracker_table, chains_table = 'tracker', '{e}_chains'.format(e=experiment)
 
 # Directories
 working_dir = os.getcwd()

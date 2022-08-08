@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/build_result.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/evaluate.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/evaluate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/libraries.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/libraries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_pipelines.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +70,7 @@
       <recent name="$PROJECT_DIR$/dev/degrees" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.validate">
+  <component name="RunManager" selected="Python.build_result">
     <configuration name="build_result" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Milestones_Duration" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -174,9 +178,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.validate" />
-        <item itemvalue="Python.run_pipelines" />
         <item itemvalue="Python.build_result" />
+        <item itemvalue="Python.run_pipelines" />
+        <item itemvalue="Python.validate" />
         <item itemvalue="Python.pipeline" />
         <item itemvalue="Python.pipeline_subg" />
       </list>
@@ -195,6 +199,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run_pipelines.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

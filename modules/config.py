@@ -1,4 +1,4 @@
-experiment = 'parallel_subgraphs_remote_50k'
+experiment = 'build_metadata'
 journey_chunk = 50000
 available_executors = 10
 import os
@@ -27,15 +27,25 @@ serviceIP = locationIP[serviceLocation]
 servicePort = locationPort[serviceLocation]
 url = 'http://{ip}:{port}/cluster_analysis/api/v0.1/milestones'.format(ip=serviceIP, port=servicePort)
 
-# Database connection
+## Database connection
+# Compute service
 import mysql.connector as mysql
-private_serviceIP = '172.31.15.123'
 user, password, db_name = 'rony', 'exp8546$fs', 'MCdb'
 server_db_params = {'Local': {'host': 'localhost', 'user': user, 'password': password, 'database': db_name},\
-                    'Remote': {'host': private_serviceIP, 'user': user, 'password': password, 'database': db_name}}
+                    'Remote': {'host': serviceIP, 'user': user, 'password': password, 'database': db_name}}
 conn_params = server_db_params[serviceLocation]
 conn = mysql.connect(**conn_params)
 cur = conn.cursor()
+cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
+# Results
+resultsIP = '172.31.10.240'
+results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
+engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
+				.format(host=results_params['host'], db=results_params['database'],\
+                        user=results_params['user'], pw=results_params['password']))
+results_conn = mysql.connect(**results_params)
+cur = results_conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
 # Redis
@@ -51,7 +61,13 @@ tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_c
 	                     'write_chainsd': 'DOUBLE', 'next_stepsd': 'DOUBLE', 'journeyd': 'DOUBLE'}
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 chains_cols = list(chains_cols_types.keys())
-tracker_table, chains_table = 'tracker', '{e}_chains'.format(e=experiment)
+
+results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
+                      'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
+                      'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\
+                      'Float':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
+                      'planned_duration':  'DOUBLE', 'actual_duration':  'DOUBLE'}
+tracker_table, chains_table, results_table = 'tracker', '{e}_chains'.format(e=experiment), 'results'
 
 # Directories
 working_dir = os.getcwd()

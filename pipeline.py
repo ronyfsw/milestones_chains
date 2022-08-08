@@ -93,7 +93,7 @@ while next_journeys_steps:
     start = time.time()
     # Write chains
     if len(chains_results_rows) > 0:
-        statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
+        statement = insert_rows('{db}.{ct}'.format(db=db_name, ct=chains_table), chains_cols, chains_results_rows)
         cur.execute(statement)
         conn.commit()
         journey_chains_count = len(chains_results_rows)
@@ -122,7 +122,6 @@ while next_journeys_steps:
                    overlap_count, grow_reproduceD, unique_idsD, \
                    write_scaffoldsD, update_mapsD, \
                    write_chainsD, next_stepsD, journeyD]
-    print(tracker_row)
     statement = insert_row('{db}.{tt}'.format(db=db_name, tt=tracker_table), list(tracker_cols_types.keys()),
                            tracker_row)
     cur.execute(statement)

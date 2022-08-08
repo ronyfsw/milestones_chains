@@ -6,3 +6,4 @@ results
 *.npy
 *.txt
 *.xlsx
+data/sub_graphs

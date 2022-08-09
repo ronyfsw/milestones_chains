@@ -8,7 +8,8 @@ from modules.evaluate import *
 from modules.graphs import *
 from modules.config import *
 
-cur.execute("DROP TABLE IF EXISTS MCdb.{t}".format(t=results_table))
+# Drop results table if exists
+results_cur.execute("DROP TABLE IF EXISTS MCdb.{t}".format(t=results_table))
 
 # Data
 file_path = os.path.join(data_path, data_file_name)

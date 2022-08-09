@@ -40,8 +40,8 @@ cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 resultsIP = '172.31.10.240'
 results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
 results_conn = mysql.connect(**results_params)
-cur = results_conn.cursor()
-cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+results_cur = results_conn.cursor()
+results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\
                         user=results_params['user'], pw=results_params['password']))

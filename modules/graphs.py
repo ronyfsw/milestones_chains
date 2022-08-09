@@ -1,7 +1,7 @@
 from modules.libraries import *
-from modules_delete.splitgraph import *
-from dev.paths import *
-from modules_delete.vizz import *
+from modules.splitgraph import *
+from modules.paths import *
+from modules.vizz import *
 
 def build_graph(file_path):
 	# Graph

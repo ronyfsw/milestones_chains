@@ -1,16 +1,6 @@
-import os
-import sys
-
-import numpy as np
-import psutil
-import networkx as nx
-import re
-import pandas as pd
-from concurrent.futures import ProcessPoolExecutor
-import time
 import mysql.connector as mysql_con
-from modules.utils import *
-from modules.splitgraph import *
+from modules_delete.utils import *
+from modules_delete.splitgraph import *
 
 user, password, database = 'rony', 'exp8546$fs', 'MCdb'
 conn_params = {'host': 'localhost', 'user': user, 'password': password, 'database': database}
@@ -132,8 +122,6 @@ def is_milestones_chain(chain_ids_types, milestone_types=['TT_Mile', 'TT_FinMile
 		confirm = True
 	chain = [str(t) for t in chain]
 	return chain, confirm
-
-
 
 def handle_link_type(chain, remove=False):
 	'''

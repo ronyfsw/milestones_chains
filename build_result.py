@@ -1,7 +1,3 @@
-import sys
-
-import pandas as pd
-
 from modules.libraries import *
 from modules.parsers import *
 from modules.evaluate import *

@@ -1,9 +1,7 @@
-import time
-from itertools import combinations, product
 from modules.libraries import *
-from modules.splitgraph import *
-from modules.paths import *
-from modules.vizz import *
+from modules_delete.splitgraph import *
+from dev.paths import *
+from modules_delete.vizz import *
 
 def build_graph(file_path):
 	# Graph

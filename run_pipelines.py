@@ -1,10 +1,3 @@
-from modules.config import *
-from modules.libraries import *
-from modules.graphs import *
-from modules.chains import *
-from modules.encoders import *
-from modules.nodes import *
-from modules.filters import *
 from modules.worm_modules import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
@@ -13,12 +6,8 @@ print('pipeline started on', start_time)
 # Refresh results tables and databases
 redisClient.flushdb()
 successorsDB.flushdb()
-predecessorsDB.flushdb()
 cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
 statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
-cur.execute(statement)
-cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=tracker_table))
-statement = build_create_table_statement(db_name, tracker_table, tracker_cols_types)
 cur.execute(statement)
 
 # Data
@@ -42,19 +31,10 @@ print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 terminal_nodes = get_terminal_nodes(G)
 with open('terminal_nodes.txt', 'w') as f: f.write('\n'.join(terminal_nodes))
 
-saturation_successors, saturation_predecessors = {}, {}
 for Gnode in Gnodes:
 	if Gnode not in isolates:
-		node_successors, node_predecessors = list(G.successors(Gnode)), list(G.predecessors(Gnode))
-		successorsDB.set(Gnode, ','.join(node_successors))
-		predecessorsDB.set(Gnode, ','.join(node_predecessors))
-		saturation_successors[Gnode] = node_successors
-		saturation_predecessors[Gnode] = node_predecessors
+		successorsDB.set(Gnode, ','.join(list(G.successors(Gnode))))
 
-# Results tables
-cur.execute("DROP TABLE IF EXISTS {t}".format(t=tracker_table))
-statement = build_create_table_statement(db_name, tracker_table, tracker_cols_types)
-cur.execute(statement)
 
 # Partitions
 # Sub graphs of the source program graph

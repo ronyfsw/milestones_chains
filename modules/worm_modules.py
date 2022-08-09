@@ -1,9 +1,8 @@
-import time
-
 from modules.libraries import *
 from modules.graphs import *
 from modules.config import *
 from modules.encoders import *
+
 def get_terminal_nodes(G):
 	Gnodes = list(G.nodes())
 	isolates = graph_isolates(G)
@@ -44,7 +43,6 @@ def validate(chain, source_pairs):
 	return error_pairs
 
 def growReproduce(map_or_step):
-	#print('map_or_step:',map_or_step)
 	cid, chain, next_steps = None, None, None
 	chain_key = map_or_step[0]
 	successors = map_or_step[1]
@@ -55,7 +53,6 @@ def growReproduce(map_or_step):
 
 	if previous_step_chain:
 		# Growth
-		start = time.time()
 		previous_step_chain = previous_step_chain.split(node_delimiter)
 		chain = previous_step_chain + [growth_node]
 		chain = node_delimiter.join(chain)
@@ -68,6 +65,5 @@ def growReproduce(map_or_step):
 			next_step = (chain_key, pointer)
 			next_steps.append(next_step)
 		next_steps = tuple(next_steps)
-		gr_process_dur = round(time.time() - start, 2)
 
-	return cid, chain, next_steps, gr_process_dur
+	return cid, chain, next_steps

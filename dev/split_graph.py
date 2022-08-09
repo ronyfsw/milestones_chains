@@ -1,6 +1,6 @@
 from modules.config import *
 from modules.graphs import *
-from modules.vizz import *
+from modules_delete.vizz import *
 from pyvis.network import Network
 nt = Network('100%', '100%')
 nt.set_options('''var options = {"nodes": {"size": 20, "shape": "triangle", "width":15,

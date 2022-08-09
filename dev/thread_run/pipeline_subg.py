@@ -1,14 +1,4 @@
-import time
-import subprocess
-
 with open('terminal_nodes.txt', 'w') as f: f.write('tmp')
-from modules.config import *
-from modules.libraries import *
-from modules.graphs import *
-from modules.chains import *
-from modules.encoders import *
-from modules.nodes import *
-from modules.filters import *
 from modules.worm_modules import *
 import warnings
 warnings.filterwarnings("ignore")

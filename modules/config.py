@@ -46,26 +46,18 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\
                         user=results_params['user'], pw=results_params['password']))
 
-# Tables
-tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER',\
- 			     'journey_chains_count': 'INTEGER', 'chains_written_count': 'INTEGER',\
-	                     'overlap_count': 'INTEGER', 'grow_reproduced': 'DOUBLE', 'unique_idsd': 'DOUBLE',\
-	                     'write_scaffoldsd': 'DOUBLE', 'update_mapsd': 'DOUBLE',\
-	                     'write_chainsd': 'DOUBLE', 'next_stepsd': 'DOUBLE', 'journeyd': 'DOUBLE'}
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 chains_cols = list(chains_cols_types.keys())
-
 results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
                       'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\
                       'Float':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
                       'planned_duration':  'DOUBLE', 'actual_duration':  'DOUBLE'}
-tracker_table, chains_table, results_table = 'tracker', '{e}_chains'.format(e=experiment), 'results'
+chains_table, results_table = '{e}_chains'.format(e=experiment), 'results'
 
 # Redis
 redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
 successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)
-predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses=True)
 
 # Directories
 working_dir = os.getcwd()

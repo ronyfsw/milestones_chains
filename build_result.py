@@ -3,6 +3,8 @@ from modules.parsers import *
 from modules.evaluate import *
 from modules.graphs import *
 from modules.config import *
+start_time = datetime.now().strftime("%H:%M:%S")
+print('pipeline started on', start_time)
 
 # Drop results table if exists
 results_cur.execute("DROP TABLE IF EXISTS MCdb.{t}".format(t=results_table))
@@ -69,3 +71,5 @@ results_conn.commit()
 md_df = pd.read_sql('SELECT * FROM MCdb.{rt}'.format(rt=results_table), con=results_conn)
 print(md_df.head())
 print(md_df.info())
+print('pipeline started on', start_time)
+print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))

@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/build_result.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/evaluate.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/evaluate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/db_tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/db_tables.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/libraries.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/libraries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_pipelines.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,13 +198,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run_pipelines.py</url>
-          <line>17</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

@@ -27,9 +27,8 @@ serviceIP = locationIP[serviceLocation]
 servicePort = locationPort[serviceLocation]
 url = 'http://{ip}:{port}/cluster_analysis/api/v0.1/milestones'.format(ip=serviceIP, port=servicePort)
 
-## Database connection
-# Compute service
-import mysql.connector as mysql
+## Databases and connectors
+# MySQL
 user, password, db_name = 'rony', 'exp8546$fs', 'MCdb'
 server_db_params = {'Local': {'host': 'localhost', 'user': user, 'password': password, 'database': db_name},\
                     'Remote': {'host': serviceIP, 'user': user, 'password': password, 'database': db_name}}
@@ -38,20 +37,15 @@ conn = mysql.connect(**conn_params)
 cur = conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
-# Results
 resultsIP = '172.31.10.240'
 results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
-engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
-				.format(host=results_params['host'], db=results_params['database'],\
-                        user=results_params['user'], pw=results_params['password']))
 results_conn = mysql.connect(**results_params)
 cur = results_conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
+				.format(host=results_params['host'], db=results_params['database'],\
+                        user=results_params['user'], pw=results_params['password']))
 
-# Redis
-redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
-successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)
-predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses=True)
 
 # Tables
 tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER',\
@@ -68,6 +62,11 @@ results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Float':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
                       'planned_duration':  'DOUBLE', 'actual_duration':  'DOUBLE'}
 tracker_table, chains_table, results_table = 'tracker', '{e}_chains'.format(e=experiment), 'results'
+
+# Redis
+redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
+successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)
+predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses=True)
 
 # Directories
 working_dir = os.getcwd()

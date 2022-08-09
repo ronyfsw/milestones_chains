@@ -1,6 +1,5 @@
 import os
 import subprocess
-from sqlalchemy import create_engine
 from datetime import datetime
 import argparse
 import threading
@@ -22,5 +21,6 @@ nt.set_options('''var options = {"nodes": {"size": 20, "shape": "triangle", "wid
     "font.size":"2"}, "edges":{"width":1, "font.size":"0"}}''')
 import warnings
 warnings.filterwarnings("ignore")
-
-
+from sqlalchemy import create_engine
+import mysql.connector as mysql
+import pymysql

@@ -14,11 +14,11 @@ print('pipeline started on', start_time)
 redisClient.flushdb()
 successorsDB.flushdb()
 predecessorsDB.flushdb()
-cur.execute("DROP TABLE IF EXISTS {t}".format(t=chains_table))
-statement = build_create_table_statement('{t}'.format(t=chains_table), chains_cols_types)
+cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
+statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
 cur.execute(statement)
-cur.execute("DROP TABLE IF EXISTS {t}".format(t=tracker_table))
-statement = build_create_table_statement('{t}'.format(t=tracker_table), tracker_cols_types)
+cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=tracker_table))
+statement = build_create_table_statement(db_name, tracker_table, tracker_cols_types)
 cur.execute(statement)
 
 # Data
@@ -53,7 +53,7 @@ for Gnode in Gnodes:
 
 # Results tables
 cur.execute("DROP TABLE IF EXISTS {t}".format(t=tracker_table))
-statement = build_create_table_statement('{t}'.format(t=tracker_table), tracker_cols_types)
+statement = build_create_table_statement(db_name, tracker_table, tracker_cols_types)
 cur.execute(statement)
 
 # Partitions

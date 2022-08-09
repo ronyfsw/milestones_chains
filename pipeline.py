@@ -98,7 +98,6 @@ while next_journeys_steps:
         conn.commit()
         journey_chains_count = len(chains_results_rows)
         chains_written_count += journey_chains_count
-        # print('chains_results_rows:', chains_results_rows)
         chains_results_rows = []
     write_chainsD = round(time.time() - start, 2)
     # Collect and prepare next journey steps
@@ -131,10 +130,9 @@ print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))
 
 # Write the remaning results
 if chains_results_rows:
-    statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
+    statement = insert_rows(db_name, chains_table, chains_cols, chains_results_rows)
     cur.execute(statement)
     conn.commit()
-    print ('{p} finished'.format(p=pid))
-
+print('{p} finished'.format(p=pid))
 print('pipeline started on', start_time)
 print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))

@@ -42,19 +42,16 @@ terminal_nodes = get_terminal_nodes(G)
 
 # Chains scaffold
 #scaffolds = redisClient.hgetall('scaffolds')
-scaffolds = chains_from_redis('scaffolds')
-n1, n2 = len(scaffolds), len(set(scaffolds))
-print('{n1} chains built ({n2} are unique)'.format(n1=n1, n2=n2))
-chains_printout_path = os.path.join(experiment_path, 'scaffolds.txt')
-chains_str = '\n'.join(scaffolds)
-with open(chains_printout_path, 'w') as f: f.write(chains_str)
-
-scaffolds = list(set(scaffolds))
+# scaffolds = chains_from_redis('scaffolds')
+# n1, n2 = len(scaffolds), len(set(scaffolds))
+# print('{n1} chains built ({n2} are unique)'.format(n1=n1, n2=n2))
+# scaffolds = list(set(scaffolds))
 
 # Chains built
-chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
-print(chains_df.head())
-built_chains_col = list(chains_df['chain'])
+# chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
+# print(chains_df.head())
+# built_chains_col = list(chains_df['chain'])
+built_chains_col = open('/home/rony/Projects_Code/milestones_chains/results/parallel_subgraphs/chains.txt').read().split('\n')
 built_chains = list(set(built_chains_col))
 n1, n2 = len(built_chains_col), len(built_chains)
 print('{n1} completed chains written to MySQL DB ({n2} are unique)'.format(n1=n1, n2=n2))
@@ -89,11 +86,7 @@ tp_df.to_excel(os.path.join(experiment_path, 'terminals_predecessors.xlsx'), ind
 chains_with_terminals = list(set(chains_with_terminals))
 print('The indirect method retrieved {n3} built chains as chains with terminal nodes'.format(
 	n3=len(chains_with_terminals)))
-chains_printout_path = os.path.join(experiment_path, 'built_chains_indirect.txt')
-chains_with_terminals = '\n'.join(chains_with_terminals)
-with open(chains_printout_path, 'w') as f: f.write(chains_with_terminals)
 del chains_with_terminals
-
 
 # Chains pairs in source successor-predecessor pairs
 print('Chains pairs in source successor-predecessor pairs')
@@ -109,8 +102,10 @@ for index, chain in enumerate(built_chains):
 				pair = (id, chain[index+1])
 				if pair not in pairs: pairs.append(pair)
 pairs = list(set(pairs))
-pairs_in_source = list(set([p for p in pairs if p in source_pairs]))
-pairs_not_in_source = list(set([p for p in pairs if p not in source_pairs]))
+#pairs_in_source = list(set([p for p in pairs if p in source_pairs]))
+pairs_in_source = list(set(pairs).intersection(set(source_pairs)))
+#pairs_not_in_source = list(set([p for p in pairs if p not in source_pairs]))
+pairs_not_in_source = list(set(pairs).difference(set(source_pairs)))
 n1, n2 = len(pairs), len(pairs_in_source)
 error_pairs_count = n1 - n2
 error_pairs_perc = round(100*error_pairs_count/n1, 2)

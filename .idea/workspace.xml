@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="" />
+=======
+    <list default="true" id="d43de382-82f6-4ad5-9ee0-49d59d67c2d3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+>>>>>>> subgraphs
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,7 +32,10 @@
     <setting file="file://$PROJECT_DIR$/modules/encoders.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/modules/worm_modules.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/pipeline.py" root0="FORCE_HIGHLIGHTING" />
+<<<<<<< HEAD
     <setting file="file://$PROJECT_DIR$/split_graph2.py" root0="FORCE_HIGHLIGHTING" />
+=======
+>>>>>>> subgraphs
     <setting file="file://$PROJECT_DIR$/tracker_plots.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -42,7 +51,11 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+<<<<<<< HEAD
     &quot;last_opened_file_path&quot;: &quot;/home/rony/Projects_Code/milestones_chains&quot;,
+=======
+    &quot;last_opened_file_path&quot;: &quot;/home/rony/Projects_Code/Milestones_Chains&quot;,
+>>>>>>> subgraphs
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
@@ -63,9 +76,15 @@
       <recent name="$PROJECT_DIR$/dev/degrees" />
     </key>
   </component>
+<<<<<<< HEAD
   <component name="RunManager" selected="Python.pipeline">
     <configuration name="pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="milestones_chains" />
+=======
+  <component name="RunManager" selected="Python.build_result">
+    <configuration name="build_result" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Milestones_Duration" />
+>>>>>>> subgraphs
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -76,7 +95,11 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/build_result.py" />
+>>>>>>> subgraphs
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -85,7 +108,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="pipeline_subg" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+    <configuration name="pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+>>>>>>> subgraphs
       <module name="Milestones_Duration" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -97,7 +124,11 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline_subg.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline.py" />
+>>>>>>> subgraphs
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -106,7 +137,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="run_pipelines" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+    <configuration name="pipeline_subg" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+>>>>>>> subgraphs
       <module name="Milestones_Duration" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -118,8 +153,13 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_pipelines.py" />
       <option name="PARAMETERS" value="$PROJECT_DIR$/data/sub_graphs/sub_graph_0.adjlist" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline_subg.py" />
+      <option name="PARAMETERS" value="" />
+>>>>>>> subgraphs
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -127,7 +167,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="sort_based" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+    <configuration name="run_pipelines" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+>>>>>>> subgraphs
       <module name="Milestones_Duration" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -139,8 +183,13 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sort_based.py" />
       <option name="PARAMETERS" value="" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_pipelines.py" />
+      <option name="PARAMETERS" value="$PROJECT_DIR$/data/sub_graphs/sub_graph_0.adjlist" />
+>>>>>>> subgraphs
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -148,8 +197,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="tracker_plots" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="milestones_chains" />
+=======
+    <configuration name="validate" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Milestones_Duration" />
+>>>>>>> subgraphs
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -160,7 +214,11 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tracker_plots.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/validate.py" />
+>>>>>>> subgraphs
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -171,11 +229,19 @@
     </configuration>
     <recent_temporary>
       <list>
+<<<<<<< HEAD
         <item itemvalue="Python.pipeline" />
         <item itemvalue="Python.tracker_plots" />
         <item itemvalue="Python.run_pipelines" />
         <item itemvalue="Python.pipeline_subg" />
         <item itemvalue="Python.sort_based" />
+=======
+        <item itemvalue="Python.build_result" />
+        <item itemvalue="Python.run_pipelines" />
+        <item itemvalue="Python.validate" />
+        <item itemvalue="Python.pipeline" />
+        <item itemvalue="Python.pipeline_subg" />
+>>>>>>> subgraphs
       </list>
     </recent_temporary>
   </component>
@@ -190,6 +256,7 @@
     </task>
     <servers />
   </component>
+<<<<<<< HEAD
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -201,10 +268,13 @@
       </map>
     </option>
   </component>
+=======
+>>>>>>> subgraphs
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+<<<<<<< HEAD
           <url>file://$PROJECT_DIR$/modules/chains.py</url>
           <line>7</line>
           <option name="timeStamp" value="519" />
@@ -223,6 +293,11 @@
           <url>file://$PROJECT_DIR$/pipeline.py</url>
           <line>75</line>
           <option name="timeStamp" value="547" />
+=======
+          <url>file://$PROJECT_DIR$/run_pipelines.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="2" />
+>>>>>>> subgraphs
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -235,10 +310,18 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
+<<<<<<< HEAD
         <watch expression="root_successor" />
         <watch expression="root_node" />
         <watch expression="root_successors" />
         <watch expression="no_preds" />
+=======
+        <watch expression="root_node" />
+        <watch expression="root_successors" />
+        <watch expression="no_preds" />
+        <watch expression="subGroot_successors" />
+        <watch expression="run_path" />
+>>>>>>> subgraphs
       </configuration>
     </watches-manager>
   </component>

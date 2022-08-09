@@ -39,7 +39,7 @@ def activities_duration(project_df, calculate):
         dt_format = infer_dt_format(header_sample)
         project_df[header] = [datetime.strptime(date_string, dt_format) for date_string in list(project_df[header])]
 
-    project_df['Duration'] = (project_df[headers[1]] - project_df[headers[0]]).dt.days.astype(int)
+    project_df['Duration'] = (project_df[headers[1]] - project_df[headers[0]]).dt.days.astype(float)
     print('{n} tasks in results'.format(n=len(project_df)))
     return dict(zip(list(project_df['ID']), list(project_df['Duration'])))
 
@@ -79,7 +79,6 @@ def clusters_duration_std(clusters_dict, id_planned_duration):
         scores.append([cluster_key, duration_std])
     scores = pd.DataFrame(scores, columns=['key', 'duration_std'])
     return scores
-
 
 def ch_index_sklearn(clusters_dict, ids_embeddings=np.empty(1)):
     '''

@@ -8,9 +8,6 @@ from modules.evaluate import *
 from modules.graphs import *
 from modules.config import *
 
-# Drop results table if exists
-results_cur.execute("DROP TABLE IF EXISTS MCdb.{t}".format(t=results_table))
-
 # Data
 file_path = os.path.join(data_path, data_file_name)
 G = build_graph(file_path)
@@ -35,12 +32,11 @@ planned_actual_df = pd.merge(planned_duration_df, actual_duration_df, how='left'
 tasks_duration = pd.merge(data_df, planned_actual_df)
 
 # Chain results
-chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
-chains = list(set((chains_df['chain'])))
-print('{n1} chains'.format(n1=len(chains)))
+chains_path = os.path.join(experiment_path, 'chains.txt')
+chains = open(chains_path).read().split('\n')
+n1, n2 = len(chains), len(set(chains))
+print('{n1} chains | {n2} unique chains'.format(n1=n1, n2=n2))
 a = 0
-
-chains = chains[:100]
 
 # Tasks to Rows
 print('Tasks to Rows split')
@@ -66,10 +62,21 @@ tasks_chains = pd.DataFrame(tasks_chains, columns=['ID', 'ChainID', 'NeighbourID
 
 # Tasks, Metadata and Duration
 data_chains_duration = pd.merge(tasks_chains, tasks_duration, how='left')
-print(data_chains_duration.info())
+
 print('Write chains tasks with metadata')
-data_chains_duration.to_sql(results_table, engine, index=False)
-results_conn.commit()
-md_df = pd.read_sql('SELECT * FROM MCdb.{rt}'.format(rt=results_table), con=results_conn)
-print(md_df.head())
-print(md_df.info())
+# Chunk the results to enable their writing and analysis to a spreadsheet
+chunk_size = 70
+chains_ids = list(tasks_chains['ChainID'].unique())
+ids_chunks = [list(c) for c in np.array_split(chains_ids, chunk_size)]
+chunks_sizes = []
+print('writing results in chunks')
+for ids_chunk in ids_chunks:
+	chunk = data_chains_duration[data_chains_duration['ChainID'].isin(ids_chunk)]
+	chunk_ids = [int(id.replace('C', '')) for id in list(chunk['ChainID'])]
+	min_id, max_id = min(chunk_ids), max(chunk_ids)
+	file_name = '{m1}_{m2}.xlsx'.format(m1=str(min_id), m2=str(max_id))
+	chunk.to_excel(os.path.join(chunks_path, file_name), index=False)
+	chunks_sizes.append(sys.getsizeof(chunk))
+	print(file_name)
+mean_chunk_size = round(np.mean(np.array([sys.getsizeof(c) for c in chunks_sizes]))/(1024 * 1024), 6)
+print('mean_chunk_size:', mean_chunk_size)

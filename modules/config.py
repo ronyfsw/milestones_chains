@@ -1,7 +1,6 @@
-experiment = 'map_1_exec'
-new_experiment = True
+experiment = 'build_metadata'
 journey_chunk = 50000
-available_executors = 46
+available_executors = 10
 import os
 import sys
 import redis
@@ -28,50 +27,45 @@ serviceIP = locationIP[serviceLocation]
 servicePort = locationPort[serviceLocation]
 url = 'http://{ip}:{port}/cluster_analysis/api/v0.1/milestones'.format(ip=serviceIP, port=servicePort)
 
-# Database connection
-#server_db_params = {'Local': {'host': 'localhost', 'user': 'rony', 'password': 'exp8546$fs', 'database': db_name},\
-#                    'Remote': {'host': serviceIP, 'user': 'researchUIuser', 'password': 'query1234$fs', 'database': db_name}}
-#from sqlalchemy import create_engine
-import mysql.connector as mysql
-private_serviceIP = '172.31.15.123'
+## Databases and connectors
+# MySQL
 user, password, db_name = 'rony', 'exp8546$fs', 'MCdb'
-# engine = create_engine('mysql+mysqldb://{u}:{p}@localhost/{db}'\
-#                          .format(u=user, p=password, db=db_name))
 server_db_params = {'Local': {'host': 'localhost', 'user': user, 'password': password, 'database': db_name},\
-                    'Remote': {'host': private_serviceIP, 'user': user, 'password': password, 'database': db_name}}
+                    'Remote': {'host': serviceIP, 'user': user, 'password': password, 'database': db_name}}
 conn_params = server_db_params[serviceLocation]
 conn = mysql.connect(**conn_params)
-c = conn.cursor()
-c.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+cur = conn.cursor()
+cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
+resultsIP = '172.31.10.240'
+results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
+results_conn = mysql.connect(**results_params)
+results_cur = results_conn.cursor()
+results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
+				.format(host=results_params['host'], db=results_params['database'],\
+                        user=results_params['user'], pw=results_params['password']))
+
+# Tables
+tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER',\
+ 			     'journey_chains_count': 'INTEGER', 'chains_written_count': 'INTEGER',\
+	                     'overlap_count': 'INTEGER', 'grow_reproduced': 'DOUBLE', 'unique_idsd': 'DOUBLE',\
+	                     'write_scaffoldsd': 'DOUBLE', 'update_mapsd': 'DOUBLE',\
+	                     'write_chainsd': 'DOUBLE', 'next_stepsd': 'DOUBLE', 'journeyd': 'DOUBLE'}
+chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
+chains_cols = list(chains_cols_types.keys())
+
+results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
+                      'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
+                      'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\
+                      'Float':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
+                      'planned_duration':  'DOUBLE', 'actual_duration':  'DOUBLE'}
+tracker_table, chains_table, results_table = 'tracker', '{e}_chains'.format(e=experiment), 'results'
 
 # Redis
 redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
 successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)
 predecessorsDB = redis.Redis(host='localhost', port=6379, db=5, decode_responses=True)
-
-# Tables
-tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER',\
- 			     'journey_chains_count': 'INTEGER', 'chains_written_count': 'INTEGER',\
-	                     'overlap_count': 'INTEGER', 'grow_reproduced': 'DOUBLE', 'gr_processesd':'DOUBLE',\
-                        'unique_idsd': 'DOUBLE',\
-	                     'write_scaffoldsd': 'DOUBLE', 'update_mapsd': 'DOUBLE',\
-	                     'write_chainsd': 'DOUBLE', 'next_stepsd': 'DOUBLE', 'journeyd': 'DOUBLE'}
-
-chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
-chains_cols = list(chains_cols_types.keys())
-tracker_table, chains_table = 'tracker', 'chains'
-
-# Build databases and tables
-if new_experiment:
-    redisClient.flushdb()
-    successorsDB.flushdb()
-    predecessorsDB.flushdb()
-    c.execute("DROP TABLE IF EXISTS {t}".format(t=chains_table))
-    statement = build_create_table_statement('{t}'.format(t=chains_table), chains_cols_types)
-    c.execute(statement)
-    c.execute("DROP TABLE IF EXISTS {t}".format(t=tracker_table))
-    statement = build_create_table_statement('{t}'.format(t=tracker_table), tracker_cols_types)
-    c.execute(statement)
 
 # Directories
 working_dir = os.getcwd()
@@ -86,7 +80,10 @@ if experiment not in os.listdir(results_path):
 plots_path = os.path.join(experiment_path, 'plots')
 if 'plots' not in os.listdir(experiment_path):
     os.mkdir(plots_path)
-
 chunks_path = os.path.join(experiment_path, 'chunks')
 if 'chunks' not in os.listdir(experiment_path):
 	os.mkdir(chunks_path)
+
+sub_graphs_path = os.path.join(data_path, 'sub_graphs')
+if 'sub_graphs' not in os.listdir(data_path):
+	os.mkdir(sub_graphs_path)

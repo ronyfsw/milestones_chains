@@ -93,11 +93,12 @@ while next_journeys_steps:
     start = time.time()
     # Write chains
     if len(chains_results_rows) > 0:
-        statement = insert_rows(db_name, chains_table, chains_cols, chains_results_rows)
+        statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
         cur.execute(statement)
         conn.commit()
         journey_chains_count = len(chains_results_rows)
         chains_written_count += journey_chains_count
+        # print('chains_results_rows:', chains_results_rows)
         chains_results_rows = []
     write_chainsD = round(time.time() - start, 2)
     # Collect and prepare next journey steps
@@ -121,18 +122,23 @@ while next_journeys_steps:
                    overlap_count, grow_reproduceD, unique_idsD, \
                    write_scaffoldsD, update_mapsD, \
                    write_chainsD, next_stepsD, journeyD]
-    statement = insert_row(db_name, tracker_table, tracker_cols_types.keys(), tracker_row)
+    print(tracker_row)
+    statement = insert_row('{db}.{tt}'.format(db=db_name, tt=tracker_table), list(tracker_cols_types.keys()),
+                           tracker_row)
     cur.execute(statement)
     conn.commit()
 
+start_time = datetime.now().strftime("%H:%M:%S")
 print('pipeline started on', start_time)
 print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))
 
 # Write the remaning results
 if chains_results_rows:
-    statement = insert_rows(db_name, chains_table, chains_cols, chains_results_rows)
+    statement = insert_rows('{db}.chains'.format(db=db_name), chains_cols, chains_results_rows)
     cur.execute(statement)
     conn.commit()
-print('{p} finished'.format(p=pid))
+    print ('{p} finished'.format(p=pid))
+
+start_time = datetime.now().strftime("%H:%M:%S")
 print('pipeline started on', start_time)
 print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))

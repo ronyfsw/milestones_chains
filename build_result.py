@@ -38,7 +38,7 @@ chains = list(set((chains_df['chain'])))
 print('{n1} chains'.format(n1=len(chains)))
 a = 0
 
-chains = chains[:100]
+# chains = chains[:100]
 
 # Tasks to Rows
 print('Tasks to Rows split')
@@ -66,8 +66,13 @@ tasks_chains = pd.DataFrame(tasks_chains, columns=['ID', 'ChainID', 'NeighbourID
 data_chains_duration = pd.merge(tasks_chains, tasks_duration, how='left')
 print(data_chains_duration.info())
 print('Write chains tasks with metadata')
-data_chains_duration.to_sql(results_table, engine, index=False)
-results_conn.commit()
+write_chunk = 10000
+while len(data_chains_duration) > 0:
+	print('{n} rows to write'.format(n=len(data_chains_duration)))
+	data_chains_duration_write = data_chains_duration[:write_chunk]
+	data_chains_duration.to_sql(results_table, engine, index=False)
+	results_conn.commit()
+	data_chains_duration = data_chains_duration[write_chunk:]
 md_df = pd.read_sql('SELECT * FROM MCdb.{rt}'.format(rt=results_table), con=results_conn)
 print(md_df.head())
 print(md_df.info())

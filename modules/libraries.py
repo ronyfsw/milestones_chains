@@ -13,6 +13,10 @@ from concurrent.futures import ProcessPoolExecutor
 import numpy as np
 import pandas as pd
 pd.set_option("display.max_rows", None, "display.max_columns", None, 'display.max_colwidth', 100)
+from sqlalchemy import create_engine
+import mysql.connector as mysql
+import pymysql
+import redis
 from scipy import stats
 import networkx as nx
 from pyvis.network import Network
@@ -21,6 +25,3 @@ nt.set_options('''var options = {"nodes": {"size": 20, "shape": "triangle", "wid
     "font.size":"2"}, "edges":{"width":1, "font.size":"0"}}''')
 import warnings
 warnings.filterwarnings("ignore")
-from sqlalchemy import create_engine
-import mysql.connector as mysql
-import pymysql

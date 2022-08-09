@@ -1,11 +1,8 @@
 experiment = 'build_metadata'
 journey_chunk = 50000
 available_executors = 10
-import os
-import sys
-import redis
-from modules.db_tables import *
 from modules.libraries import *
+from modules.db_tables import *
 
 wd = os.getcwd()
 data_path = os.path.join(wd, 'data')
@@ -36,7 +33,6 @@ conn_params = server_db_params[serviceLocation]
 conn = mysql.connect(**conn_params)
 cur = conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
-
 resultsIP = '172.31.10.240'
 results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
 results_conn = mysql.connect(**results_params)

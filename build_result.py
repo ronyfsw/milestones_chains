@@ -80,7 +80,8 @@ write_chunk = 10000
 while len(data_chains_duration) > 0:
 	print('{n} rows to write'.format(n=len(data_chains_duration)))
 	rows_to_write = data_chains_duration[:write_chunk]
-	rows_to_write.to_sql(results_table, engine, index=False, if_exists='append')
+	print('writing {n1} rows'.format(n1=len(rows_to_write)))
+	rows_to_write.to_sql(results_table, engine, index=False)
 	results_conn.commit()
 	data_chains_duration = data_chains_duration[write_chunk:]
 md_df = pd.read_sql('SELECT * FROM {db}.{rt}'.format(db=db_name, rt=results_table), con=results_conn)

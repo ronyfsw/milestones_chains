@@ -42,14 +42,15 @@ a = 0
 
 # Tasks to Rows
 print('Tasks to Rows split')
-tasks_chains = []
-for index, chain in enumerate(chains):
-	chain_id = 'C{i}'.format(i=str(index+1))
+
+def tasks_to_rows(index_chain):
+	chain_index, chain = index_chain
+	chain_index = 'C{i}'.format(i=str(chain_index + 1))
 	tasks = chain.split(node_delimiter)
 	tasks = [tasks_decoder[t] for t in tasks]
 	for index, task in enumerate(tasks):
-		if index <= (len(tasks)-2):
-			next_task = tasks[index+1]
+		if index <= (len(tasks) - 2):
+			next_task = tasks[index + 1]
 		else:
 			next_task = None
 		if next_task:
@@ -57,9 +58,18 @@ for index, chain in enumerate(chains):
 				pair_edge_type = links_types[(task, next_task)]
 			except KeyError:
 				pair_edge_type = None
-		else: pair_edge_type = None
-		tasks_chains.append((task, chain_id, next_task, pair_edge_type))
-		a = 0
+		else:
+			pair_edge_type = None
+
+	return task, chain_index, next_task, pair_edge_type
+
+indices_chains = []
+for index, chain in enumerate(chains): indices_chains.append((index, chain))
+executor = ProcessPoolExecutor(available_executors)
+tasks_chains = []
+for task, chain_id, next_task, pair_edge_type in executor.map(tasks_to_rows, indices_chains):
+	tasks_chains.append((task, chain_id, next_task, pair_edge_type))
+	a = 0
 tasks_chains = pd.DataFrame(tasks_chains, columns=['ID', 'ChainID', 'NeighbourID', 'Dependency'])
 
 # Tasks, Metadata and Duration
@@ -73,7 +83,7 @@ while len(data_chains_duration) > 0:
 	rows_to_write.to_sql(results_table, engine, index=False, if_exists='append')
 	results_conn.commit()
 	data_chains_duration = data_chains_duration[write_chunk:]
-md_df = pd.read_sql('SELECT * FROM MCdb.{rt}'.format(rt=results_table), con=results_conn)
+md_df = pd.read_sql('SELECT * FROM {db}.{rt}'.format(db=db_name, rt=results_table), con=results_conn)
 print(md_df.head())
 print(md_df.info())
 print('pipeline started on', start_time)

@@ -46,7 +46,6 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\
                         user=results_params['user'], pw=results_params['password']))
 
-
 # Tables
 tracker_cols_types ={'journey': 'INTEGER', 'next_count': 'INTEGER', 'scaffolds_count': 'INTEGER',\
  			     'journey_chains_count': 'INTEGER', 'chains_written_count': 'INTEGER',\

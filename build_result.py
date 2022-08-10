@@ -43,7 +43,8 @@ a = 0
 # Tasks to Rows
 print('Tasks to Rows split')
 
-def tasks_to_rows(index_chain):
+def chain_to_rows(index_chain):
+	rows = []
 	chain_index, chain = index_chain
 	chain_index = 'C{i}'.format(i=str(chain_index + 1))
 	tasks = chain.split(node_delimiter)
@@ -60,20 +61,21 @@ def tasks_to_rows(index_chain):
 				pair_edge_type = None
 		else:
 			pair_edge_type = None
+		rows.append(task, chain_index, next_task, pair_edge_type)
 
-	return task, chain_index, next_task, pair_edge_type
+	return rows
 
 indices_chains = []
 for index, chain in enumerate(chains): indices_chains.append((index, chain))
 executor = ProcessPoolExecutor(available_executors)
-tasks_chains = []
-for task, chain_id, next_task, pair_edge_type in executor.map(tasks_to_rows, indices_chains):
-	tasks_chains.append((task, chain_id, next_task, pair_edge_type))
+chains_rows = []
+for chain_rows in executor.map(chain_to_rows, indices_chains):
+	chains_rows += chain_rows
 	a = 0
-tasks_chains = pd.DataFrame(tasks_chains, columns=['ID', 'ChainID', 'NeighbourID', 'Dependency'])
+chains_rows_df = pd.DataFrame(chains_rows, columns=['ID', 'ChainID', 'NeighbourID', 'Dependency'])
 
 # Tasks, Metadata and Duration
-data_chains_duration = pd.merge(tasks_chains, tasks_duration, how='left')
+data_chains_duration = pd.merge(chains_rows_df, tasks_duration, how='left')
 print(data_chains_duration.info())
 print('Write chains tasks with metadata')
 write_chunk = 10000
@@ -81,7 +83,7 @@ while len(data_chains_duration) > 0:
 	print('{n} rows to write'.format(n=len(data_chains_duration)))
 	rows_to_write = data_chains_duration[:write_chunk]
 	print('writing {n1} rows'.format(n1=len(rows_to_write)))
-	rows_to_write.to_sql(results_table, engine, index=False)
+	rows_to_write.to_sql(results_table, engine, index=False, if_exists='append')
 	results_conn.commit()
 	data_chains_duration = data_chains_duration[write_chunk:]
 md_df = pd.read_sql('SELECT * FROM {db}.{rt}'.format(db=db_name, rt=results_table), con=results_conn)

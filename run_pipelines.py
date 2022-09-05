@@ -13,9 +13,6 @@ successorsDB.flushdb()
 
 cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
 results_cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=results_table))
-# statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
-#statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
-#cur.execute(statement)
 
 # Data
 G = build_graph(file_path)
@@ -66,8 +63,6 @@ for index, root_successor in enumerate(root_successors):
 run_paths = run_paths.rstrip(' &')
 print('run_paths:', run_paths)
 subprocess.run(run_paths, shell=True)
-
-#with open('chains.txt', 'w') as f: f.write('\n'.join(chains))
 
 print('pipelines started on', start_time)
 print('pipelines ended on', datetime.now().strftime("%H:%M:%S"))

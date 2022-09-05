@@ -1,5 +1,5 @@
 from modules.libraries import *
-from modules.db_tables import *
+#from modules.db_tables import *
 
 # User configuration
 data_file_name = 'MWH-06-UP#13_FSW_REV.graphml'

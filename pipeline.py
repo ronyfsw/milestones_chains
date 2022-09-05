@@ -1,3 +1,5 @@
+import numpy as np
+
 from modules.worm_modules import *
 from modules.chains import *
 start_time = datetime.now().strftime("%H:%M:%S")
@@ -50,6 +52,7 @@ while next_journeys_steps:
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
+
     # Write chain scaffolds
     for cid_chain in ids_chains:
         cid, chain = cid_chain
@@ -84,18 +87,23 @@ while next_journeys_steps:
             chains_rows += chain_rows
         del chains_results    
         chains_rows = pd.DataFrame(chains_rows, columns=['ID', 'ChainID', 'NeighbourID', 'Dependency'])
-        # print('chains_rows')
-        # print(chains_rows.head())
-        # print(chains_rows.info())
-        tasks = pd.merge(chains_rows, metadata_duration, how='inner')
-        # print('tasks')
-        # print(tasks.head())
-        # print(tasks.info())
+        tasks = pd.merge(chains_rows, metadata_duration, how='inner').sort_values(by=['ChainID'])
+        #print(tasks[['ID', 'ChainID']])
+        # Generate tasks sequence ids
+        seq_ids = []
+        ids_counts = tasks['ChainID'].value_counts()
+        counts = list(ids_counts.values)
+        for count in counts:
+            cids = list(np.arange(1, count+1))
+            seq_ids += cids
+        tasks['TaskSequence'] = seq_ids
+        tasks = tasks[['ID', 'TaskSequence', 'ChainID', 'NeighbourID', 'Dependency', 'TaskType', 'Label',
+         'PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd', 'Float',
+         'Status', 'File', 'planned_duration', 'actual_duration']] #.sort_values(by=['TaskSequence'])
+        #print(tasks[['ID', 'TaskSequence', 'ChainID']])
+        #chains_rows = chains_rows[['ID', 'TaskSequence', 'ChainID', 'NeighbourID', 'Dependency']]
         tasks.to_sql(results_table, engine, index=False, if_exists='append')
         results_conn.commit()
-        #statement = insert_rows(db_name, chains_table, chains_cols, chains_rows)
-        #cur.execute(statement)
-        #conn.commit()
         journey_chains_count = len(chains_rows)
         chains_written_count += journey_chains_count
         journey_tasks_count = len(tasks)
@@ -106,9 +114,6 @@ while next_journeys_steps:
     # filter saturated scaffolds
     scaffolds_count = redisClient.hlen('scaffolds')
     next_journeys_steps_count = len(next_journeys_steps)
-    # print('file:{f}|pid:{p}|journey {g}|{n} steps|{n1} scaffolds|{n2} next journeys steps|{n3} journey chains|{n4} chains'\
-    #       .format(f=file, p=pid, g=journey, n=next_count, n1=scaffolds_count, n2=next_journeys_steps_count,\
-    #               n3=journey_chains_count, n4=chains_written_count))
     print('file:{f}|pid:{p}|journey {g}|{n} steps|{n1} scaffolds|{n2} next journeys steps|{n3} journey chains|{n4} chains|journey|{tr} tasks |{tt} journeys tasks' \
     .format(f=file, p=pid, g=journey, n=next_count, n1=scaffolds_count, n2=next_journeys_steps_count, \
               n3=journey_chains_count, n4=chains_written_count, tr=journey_tasks_count, tt=tasks_written_count))
@@ -119,9 +124,6 @@ if len(chains_rows)>0:
     tasks = pd.merge(chains_rows, metadata_duration, how='inner')
     tasks.to_sql(results_table, engine, index=False, if_exists='append')
     results_conn.commit()
-    # statement = insert_rows(db_name, chains_table, chains_cols, chains_rows)
-    # cur.execute(statement)
-    # conn.commit()
 print('{p} finished'.format(p=pid))
 print('pipeline started on', start_time)
 print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))

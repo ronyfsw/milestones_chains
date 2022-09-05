@@ -1,7 +1,7 @@
 from decimal import Decimal
 import numpy as np
 import random
-from modules.filters import *
+#from modules.filters import *
 def objects_encoder(objectsToEncode, use_floats=True):
 	'''
 	Encode strings as a floating point number

@@ -1,8 +1,9 @@
+a=0
 from modules.libraries import *
 from modules.graphs import *
 from modules.config import *
 from modules.encoders import *
-
+a = 0
 def get_terminal_nodes(G):
 	Gnodes = list(G.nodes())
 	isolates = graph_isolates(G)

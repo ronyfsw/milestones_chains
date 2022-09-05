@@ -1,17 +1,21 @@
-experiment = 'build_metadata'
-journey_chunk = 50000
-available_executors = 10
 from modules.libraries import *
 from modules.db_tables import *
 
+# User configuration
+data_file_name = 'MWH-06-UP#13_FSW_REV.graphml'
+experiment = 'build_metadata'
+TDAs_in_results = False
+
+# Data
 wd = os.getcwd()
 data_path = os.path.join(wd, 'data')
 experiment_id = 3
-data_file_name = 'MWH-06-UP#13_FSW_REV.graphml'
 file_path = os.path.join(data_path, data_file_name)
 partition_size_cutoff = 50
 
 # Pipeline
+journey_chunk = 50000
+available_executors = 10
 node_delimiter = '<>'
 chain_delimiter ='<**>'
 
@@ -42,8 +46,10 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\
                         user=results_params['user'], pw=results_params['password']))
 
-chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
-chains_cols = list(chains_cols_types.keys())
+#chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
+#chains_cols = list(chains_cols_types.keys())
+chains_cols = ['ID', 'Chain']
+
 results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
                       'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\

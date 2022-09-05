@@ -1,19 +1,27 @@
+print('start')
 from modules.worm_modules import *
-
 start_time = datetime.now().strftime("%H:%M:%S")
 print('pipeline started on', start_time)
+
+print('Generate tasks metadata')
+subprocess.run("python3 metadata_duration.py", shell=True)
+print('Generate tasks metadata completed')
 
 # Refresh results tables and databases
 redisClient.flushdb()
 successorsDB.flushdb()
+
 cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
-statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
-cur.execute(statement)
+results_cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=results_table))
+# statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
+#statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
+#cur.execute(statement)
 
 # Data
 G = build_graph(file_path)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 terminal_nodes = get_terminal_nodes(G)
+
 # Encode nodes
 nodes_encoder = objects_encoder(Gnodes)
 nodes_decoder = build_decoder(nodes_encoder)
@@ -35,7 +43,6 @@ for Gnode in Gnodes:
 	if Gnode not in isolates:
 		successorsDB.set(Gnode, ','.join(list(G.successors(Gnode))))
 
-
 # Partitions
 # Sub graphs of the source program graph
 run_paths = ''
@@ -52,12 +59,14 @@ for index, root_successor in enumerate(root_successors):
         graph_path = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, graph_path)
         run_paths += "python3 pipeline.py {gp} & ".format(gp=graph_path)
-
     else:
         print('graph {i} is not dag'.format(i=index+1))
+
+# Run the pipeline in parallel on each of the subgraphs produced
 run_paths = run_paths.rstrip(' &')
 print('run_paths:', run_paths)
 subprocess.run(run_paths, shell=True)
+
 #with open('chains.txt', 'w') as f: f.write('\n'.join(chains))
 
 print('pipelines started on', start_time)

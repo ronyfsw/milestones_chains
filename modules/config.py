@@ -3,7 +3,7 @@ from modules.libraries import *
 
 # User configuration
 data_file_name = 'MWH-06-UP#13_FSW_REV.graphml'
-experiment = 'build_metadata'
+experiment = 'experiment1'
 TDAs_in_results = False
 
 # Data
@@ -12,6 +12,7 @@ data_path = os.path.join(wd, 'data')
 experiment_id = 3
 file_path = os.path.join(data_path, data_file_name)
 partition_size_cutoff = 50
+fill_date = '1944-06-06'
 
 # Pipeline
 journey_chunk = 50000
@@ -50,12 +51,29 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 #chains_cols = list(chains_cols_types.keys())
 chains_cols = ['ID', 'Chain']
 
+chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
+chains_cols = list(chains_cols_types.keys())
+
 results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
                       'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\
-                      'Float':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
+                      'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
                       'planned_duration':  'DOUBLE', 'actual_duration':  'DOUBLE'}
-chains_table, results_table = '{e}_chains'.format(e=experiment), 'results'
+
+results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
+                      'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
+                      'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\
+                      'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
+                      'planned_duration':  'TEXT', 'actual_duration':  'TEXT'}
+
+results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
+                      'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
+                      'PlannedStart': 'DATE', 'PlannedEnd':  'DATE', 'ActualStart':  'DATE', 'ActualEnd':  'DATE',\
+                      'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
+                      'planned_duration':  'TEXT', 'actual_duration':  'TEXT'}
+
+results_cols = list(results_cols_types.keys())
+chains_table, results_table = '{e}_chains'.format(e=experiment), '{e}_results'.format(e=experiment)
 
 # Redis
 redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)

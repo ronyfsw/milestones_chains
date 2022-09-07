@@ -66,7 +66,7 @@ results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
                       'planned_duration':  'TEXT', 'actual_duration':  'TEXT'}
 
-results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
+results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'TaskID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
                       'PlannedStart': 'DATE', 'PlannedEnd':  'DATE', 'ActualStart':  'DATE', 'ActualEnd':  'DATE',\
                       'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\

@@ -18,7 +18,7 @@ print(results_cur.fetchall())
 # Chain results
 chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
 chains = list(set((chains_df['chain'])))
-#chains = chains[:100]
+# chains = chains[:100]
 print('{n1} chains'.format(n1=len(chains)))
 
 # Tasks and Links
@@ -34,10 +34,18 @@ print('Tasks to Rows split')
 def chain_to_rows(index_chain):
 	rows = []
 	chain_index, chain = index_chain
+	# Chain index
 	chain_index = 'C{i}'.format(i=str(chain_index + 1))
 	tasks = chain.split(node_delimiter)
 	tasks = [tasks_decoder[t] for t in tasks]
 	for index, task in enumerate(tasks):
+		# Task index
+		if TDAs_in_results:
+			task_index = 'T{i}'.format(i=str(index))
+		else:
+			task_index = 'M{i}'.format(i=str(index+1))
+		task_index = chain_index+task_index
+
 		if index <= (len(tasks) - 2):
 			next_task = tasks[index + 1]
 		else:
@@ -49,17 +57,19 @@ def chain_to_rows(index_chain):
 				pair_edge_type = None
 		else:
 			pair_edge_type = None
-		rows.append((task, chain_index, next_task, pair_edge_type))
+		rows.append((task, chain_index, task_index, next_task, pair_edge_type))
 	return rows
 
 print('collecting and writing results rows')
 indices_chains = []
-for index, chain in enumerate(chains): indices_chains.append((index, chain))
+for index, chain in enumerate(chains):
+	indices_chains.append((index, chain))
 executor = ProcessPoolExecutor(available_executors)
 results_rows = []
 rows_count = 0
 md_ids = list(metadata_duration['ID'])
 start = time.time()
+chunk = 10000
 for chain_rows in executor.map(chain_to_rows, indices_chains):
 	for chain_row in chain_rows:
 		id = chain_row[0]
@@ -70,7 +80,7 @@ for chain_rows in executor.map(chain_to_rows, indices_chains):
 			chain_row = tuple(chain_row)
 			results_rows.append(chain_row)
 	#print(len(chain_rows), len(results_rows))
-	if len(results_rows) >= 100000:
+	if len(results_rows) >= chunk:
 		statement = insert_rows(db_name, results_table, results_cols, results_rows)
 		results_cur.execute(statement)
 		results_conn.commit()
@@ -78,3 +88,5 @@ for chain_rows in executor.map(chain_to_rows, indices_chains):
 		results_rows = []
 		print('writing {c} rows took {t} seconds'.format(c=rows_count, t=round(time.time() - start)))
 
+print('build results started on', start_time)
+print('build results ended on', datetime.now().strftime("%H:%M:%S"))

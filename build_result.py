@@ -69,7 +69,7 @@ results_rows = []
 rows_count = 0
 md_ids = list(metadata_duration['ID'])
 start = time.time()
-chunk = 10000
+chunk = 10
 for chain_rows in executor.map(chain_to_rows, indices_chains):
 	for chain_row in chain_rows:
 		id = chain_row[0]

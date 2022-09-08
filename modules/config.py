@@ -40,20 +40,21 @@ cur = conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 resultsIP = '172.31.10.240'
 results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
-#results_conn = mysql.connect(**results_params)
-# results_cur = results_conn.cursor()
-#results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+# MySQL remote connection
+results_conn = mysql.connect(**results_params)
+results_cur = results_conn.cursor()
+results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
 # postgres remote connection
-db_name = 'mcdb'
-#results_conn = psycopg2.connect(database=db_name, user=user, password=password, host=resultsIP, port='5432')
-results_conn = psycopg2.connect(database=db_name, user='rony', password='1234', host='localhost', port='5432')
-# results_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-results_cur = results_conn.cursor()
-
+db_name = 'MCdb'
+#pg_results_conn = psycopg2.connect(database=db_name, user='rony', password='1234', host='localhost', port='5432')
+# pg_results_conn = psycopg2.connect(**conn_params)
+# pg_results_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+# pg_results_cur = pg_results_conn.cursor()
+connect_args = {'local_infile': True}
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\
-                        user=results_params['user'], pw=results_params['password']))
+                        user=results_params['user'], pw=results_params['password']), connect_args=connect_args)
 
 #chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 #chains_cols = list(chains_cols_types.keys())

@@ -40,9 +40,17 @@ cur = conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 resultsIP = '172.31.10.240'
 results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
-results_conn = mysql.connect(**results_params)
+#results_conn = mysql.connect(**results_params)
+# results_cur = results_conn.cursor()
+#results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
+# postgres remote connection
+db_name = 'mcdb'
+#results_conn = psycopg2.connect(database=db_name, user=user, password=password, host=resultsIP, port='5432')
+results_conn = psycopg2.connect(database=db_name, user='rony', password='1234', host='localhost', port='5432')
+# results_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 results_cur = results_conn.cursor()
-results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\
                         user=results_params['user'], pw=results_params['password']))
@@ -53,23 +61,16 @@ chains_cols = ['ID', 'Chain']
 
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 chains_cols = list(chains_cols_types.keys())
-
-results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
+results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'TaskID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
-                      'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\
-                      'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
-                      'planned_duration':  'DOUBLE', 'actual_duration':  'DOUBLE'}
-
-results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'NeighbourID': 'TEXT',\
-                      'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
-                      'PlannedStart': 'TEXT', 'PlannedEnd':  'TEXT', 'ActualStart':  'TEXT', 'ActualEnd':  'TEXT',\
+                      'PlannedStart': 'DATE', 'PlannedEnd':  'DATE', 'ActualStart':  'DATE', 'ActualEnd':  'DATE',\
                       'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
                       'planned_duration':  'TEXT', 'actual_duration':  'TEXT'}
 
 results_cols_types = {'ID': 'TEXT', 'ChainID': 'TEXT', 'TaskID': 'TEXT', 'NeighbourID': 'TEXT',\
                       'Dependency': 'TEXT', 'TaskType': 'TEXT', 'Label':  'TEXT',\
                       'PlannedStart': 'DATE', 'PlannedEnd':  'DATE', 'ActualStart':  'DATE', 'ActualEnd':  'DATE',\
-                      'Float1':  'DOUBLE', 'Status':  'TEXT', 'File':  'TEXT',\
+                      'Float1':  'FLOAT', 'Status':  'TEXT', 'File':  'TEXT',\
                       'planned_duration':  'TEXT', 'actual_duration':  'TEXT'}
 
 results_cols = list(results_cols_types.keys())

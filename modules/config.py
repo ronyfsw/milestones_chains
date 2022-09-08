@@ -47,10 +47,10 @@ results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
 # postgres remote connection
 db_name = 'MCdb'
-#pg_results_conn = psycopg2.connect(database=db_name, user='rony', password='1234', host='localhost', port='5432')
-# pg_results_conn = psycopg2.connect(**conn_params)
-# pg_results_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-# pg_results_cur = pg_results_conn.cursor()
+pg_results_conn = psycopg2.connect(database=db_name, user='rony', password='1234', host='localhost', port='5432')
+#pg_results_conn = psycopg2.connect(**conn_params)
+pg_results_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+pg_results_cur = pg_results_conn.cursor()
 connect_args = {'local_infile': True}
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\

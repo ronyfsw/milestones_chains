@@ -5,10 +5,6 @@ from modules.db_tables import *
 start_time = datetime.now().strftime("%H:%M:%S")
 print('pipeline started on', start_time)
 
-print('Generate tasks metadata')
-# subprocess.run("python3 metadata_duration.py", shell=True)
-print('Generate tasks metadata completed')
-
 # Refresh results tables and databases
 redisClient.flushdb()
 successorsDB.flushdb()

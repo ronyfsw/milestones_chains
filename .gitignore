@@ -8,3 +8,6 @@ dev
 *.xlsx
 *.npy
 *.pkl
+*.pem
+*.parquet
+*.zip

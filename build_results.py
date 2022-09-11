@@ -26,12 +26,17 @@ links_types = {}
 for link in links: links_types[(link[0], link[1])] = link[2]['Dependency']
 tasks_decoder = np.load('nodes_decoder.npy', allow_pickle=True)[()]
 metadata_duration = pd.read_excel('metadata_duration.xlsx')
+
+# Tasks metadata
+print('Generate tasks metadata')
+subprocess.run("python3 metadata_duration.py", shell=True)
+print('Generate tasks metadata completed')
+
+
 # Tasks to Rows
 print('Tasks to Rows split')
 def chain_to_rows(index_chunk):
-	chunk_start = time.time()
 	chunk_index, indices_chains = index_chunk
-	#print('chunk {c}| {n} chains start'.format(c=chunk_index, n=len(indices_chains)))
 	results_file_name = os.path.join(chunks_path, 'results_copy_{c}.parquet'.format(c=chunk_index))
 	rows = []
 	for index_chain in indices_chains:
@@ -70,8 +75,6 @@ def chain_to_rows(index_chunk):
 			chain_rows.append(row)
 	results_rows = pd.DataFrame(chain_rows, columns=results_cols)
 	results_rows.to_parquet(results_file_name, index=False, compression='gzip')
-	# print('chunk {c}| {n} chains produced {nr} rows in {t} secs'.\
-	#       format(c=chunk_index, n=len(indices_chains), nr=len(rows), t=time.time()-chunk_start))
 	return len(chain_rows)
 
 print('collecting and writing results rows')

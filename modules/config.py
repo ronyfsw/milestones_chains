@@ -16,9 +16,20 @@ fill_date = '1944-06-06'
 
 # Pipeline
 journey_chunk = 50000
-available_executors = 10
+available_executors = 44
 node_delimiter = '<>'
 chain_delimiter ='<**>'
+
+# Build results
+chains_chunk = 100000
+
+# AWS
+profile_name = 'ds_sandbox'
+results_bucket = 'chainsresults'
+session = boto3.session.Session(profile_name=profile_name)
+s3_client = session.client('s3')
+key_file_name = 'ds_eu_west2_2.pem'
+resultsIP = '172.31.10.240'
 
 ## Server
 serviceLocation = 'Local'
@@ -38,7 +49,6 @@ conn_params = server_db_params[serviceLocation]
 conn = mysql.connect(**conn_params)
 cur = conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
-resultsIP = '172.31.10.240'
 results_params = {'host': resultsIP, 'user': user, 'password': password, 'database': db_name}
 # MySQL remote connection
 results_conn = mysql.connect(**results_params)
@@ -47,10 +57,10 @@ results_cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
 # postgres remote connection
 db_name = 'MCdb'
-pg_results_conn = psycopg2.connect(database=db_name, user='rony', password='1234', host='localhost', port='5432')
+#pg_results_conn = psycopg2.connect(database=db_name, user='rony', password='1234', host='localhost', port='5432')
 #pg_results_conn = psycopg2.connect(**conn_params)
-pg_results_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-pg_results_cur = pg_results_conn.cursor()
+#pg_results_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+#pg_results_cur = pg_results_conn.cursor()
 connect_args = {'local_infile': True}
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=results_params['host'], db=results_params['database'],\

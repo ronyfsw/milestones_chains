@@ -34,6 +34,7 @@ print('Tasks to Rows split')
 def chain_to_rows(index_chain):
 	rows = []
 	chain_index, chain = index_chain
+	print('chain:', chain_index)
 	# Chain index
 	chain_index = 'C{i}'.format(i=str(chain_index + 1))
 	tasks = chain.split(node_delimiter)
@@ -64,13 +65,14 @@ print('collecting and writing results rows')
 indices_chains = []
 for index, chain in enumerate(chains):
 	indices_chains.append((index, chain))
+print('start iterations')
 executor = ProcessPoolExecutor(available_executors)
 results_rows = []
 rows_count = 0
 md_ids = list(metadata_duration['ID'])
 start = time.time()
-chunk = 10
-for chain_rows in executor.map(chain_to_rows, indices_chains):
+chunk = 10000
+for chain_rows in map(chain_to_rows, indices_chains):
 	for chain_row in chain_rows:
 		id = chain_row[0]
 		if id in md_ids:
@@ -86,7 +88,7 @@ for chain_rows in executor.map(chain_to_rows, indices_chains):
 		results_conn.commit()
 		rows_count += len(results_rows)
 		results_rows = []
-		print('writing {c} rows took {t} seconds'.format(c=rows_count, t=round(time.time() - start)))
+		print('building and writing {c} rows took {t} seconds'.format(c=rows_count, t=round(time.time() - start)))
 
 print('build results started on', start_time)
 print('build results ended on', datetime.now().strftime("%H:%M:%S"))

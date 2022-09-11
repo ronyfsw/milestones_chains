@@ -22,6 +22,7 @@ chain_delimiter ='<**>'
 
 # Build results
 chains_chunk = 100000
+zipped_results_file_name = '{e}_results.zip'.format(e=experiment)
 
 # AWS
 profile_name = 'ds_sandbox'
@@ -53,7 +54,6 @@ chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 chains_cols = list(chains_cols_types.keys())
 results_cols = ['ID', 'ChainID', 'TaskID', 'NeighbourID', 'Dependency', 'TaskType', 'Label',
                 'PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd', 'Float1', 'Status', 'File', 'planned_duration', 'actual_duration']
-print(results_cols)
 chains_table, results_table = '{e}_chains'.format(e=experiment), '{e}_results'.format(e=experiment)
 
 # Redis

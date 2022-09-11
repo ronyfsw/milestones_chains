@@ -25,13 +25,12 @@ links = G.edges(data=True)
 links_types = {}
 for link in links: links_types[(link[0], link[1])] = link[2]['Dependency']
 tasks_decoder = np.load('nodes_decoder.npy', allow_pickle=True)[()]
-metadata_duration = pd.read_excel('metadata_duration.xlsx')
 
 # Tasks metadata
 print('Generate tasks metadata')
 subprocess.run("python3 metadata_duration.py", shell=True)
 print('Generate tasks metadata completed')
-
+metadata_duration = pd.read_excel('metadata_duration.xlsx')
 
 # Tasks to Rows
 print('Tasks to Rows split')
@@ -113,8 +112,8 @@ for chunk_rows_count in executor.map(chain_to_rows, indexed_chains_chunks):
 
 # Results file
 pq.write_table(pq.ParquetDataset(chunks_path).read(), 'results.parquet', row_group_size=100000)
-os.system('zip results.zip {f}'.format(f='results.parquet'))
-s3_client.upload_file('results.zip', results_bucket, experiment)
+os.system('zip {r} {f}'.format(f='results.parquet', r=zipped_results_file_name))
+s3_client.upload_file(zipped_results_file_name, results_bucket, experiment)
 
 # copy to instance
 #os.system('scp -i {k} -r results.zip ubuntu@{ip}:results'.format(k=key_file_name, ip=resultsIP))

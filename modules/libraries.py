@@ -1,5 +1,3 @@
-import psycopg2
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import pyarrow as pa
 import pyarrow.parquet as pq
 import boto3

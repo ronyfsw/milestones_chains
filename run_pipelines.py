@@ -5,19 +5,6 @@ from modules.db_tables import *
 start_time = datetime.now().strftime("%H:%M:%S")
 print('pipeline started on', start_time)
 
-# Refresh results tables and databases
-redisClient.flushdb()
-successorsDB.flushdb()
-cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
-statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
-print(statement)
-cur.execute(statement)
-
-results_cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=results_table))
-statement = build_create_table_statement(db_name, results_table, results_cols_types)
-print(statement)
-results_cur.execute(statement)
-
 # Data
 G = build_graph(file_path)
 Gnodes, Gedges = list(G.nodes()), G.edges()
@@ -39,6 +26,15 @@ Gnodes, Gedges = list(G.nodes()), list(G.edges())
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 terminal_nodes = get_terminal_nodes(G)
 with open('terminal_nodes.txt', 'w') as f: f.write('\n'.join(terminal_nodes))
+
+# Refresh results tables and databases
+redisClient.flushdb()
+successorsDB.flushdb()
+cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
+statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
+print(statement)
+cur.execute(statement)
+
 
 for Gnode in Gnodes:
 	if Gnode not in isolates:

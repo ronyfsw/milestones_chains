@@ -13,9 +13,10 @@ start_time = datetime.now().strftime("%H:%M:%S")
 print('build results on', start_time)
 
 # Chain results
+chains_table = 'chains'
 chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
 chains = list(set((chains_df['chain'])))
-# chains = chains[:10000]
+chains = chains[:10000]
 print('{n1} chains'.format(n1=len(chains)))
 
 # Tasks and Links
@@ -28,9 +29,10 @@ tasks_decoder = np.load('nodes_decoder.npy', allow_pickle=True)[()]
 
 # Tasks metadata
 print('Generate tasks metadata')
-subprocess.run("python3 metadata_duration.py", shell=True)
+#subprocess.run("python3 metadata_duration.py", shell=True)
 print('Generate tasks metadata completed')
 metadata_duration = pd.read_excel('metadata_duration.xlsx')
+md_ids = list(set(metadata_duration['ID']))
 
 # Tasks to Rows
 print('Tasks to Rows split')
@@ -89,7 +91,6 @@ print('indices_chains prep duration = {t}'.format(t=time.time()-start))
 executor = ProcessPoolExecutor(available_executors)
 results_rows = []
 rows_count = 0
-md_ids = list(metadata_duration['ID'])
 print('iterating chains')
 start1 = time.time()
 performance = []
@@ -111,7 +112,9 @@ for chunk_rows_count in executor.map(chain_to_rows, indexed_chains_chunks):
 		plt.savefig('rps.png')
 
 # Results file
+print('combine results')
 pq.write_table(pq.ParquetDataset(chunks_path).read(), 'results.parquet', row_group_size=100000)
+print('zip results')
 os.system('zip {r} {f}'.format(f='results.parquet', r=zipped_results_file_name))
 s3_client.upload_file(zipped_results_file_name, results_bucket, experiment)
 

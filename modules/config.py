@@ -4,7 +4,7 @@ from modules.libraries import *
 # User configuration
 data_file_name = 'MWH-06-UP#13_FSW_REV.graphml'
 experiment = 'experiment1'
-TDAs_in_results = True
+TDAs_in_results = False
 
 # Data
 wd = os.getcwd()
@@ -51,6 +51,7 @@ conn = mysql.connect(**conn_params)
 cur = conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
+
 chains_cols = list(chains_cols_types.keys())
 results_cols = ['ID', 'ChainID', 'TaskID', 'NeighbourID', 'Dependency', 'TaskType', 'Label',
                 'PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd', 'Float1', 'Status', 'File', 'planned_duration', 'actual_duration']

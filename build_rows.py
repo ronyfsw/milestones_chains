@@ -22,6 +22,7 @@ experiment = args.experiment
 tasks_types = args.tasks_types
 TDAs_in_results = False
 if tasks_types == 'tdas': TDAs_in_results = True
+print('build rows args:', args)
 
 # Chain results
 chains_table = '{e}_chains'.format(e=experiment)
@@ -31,7 +32,8 @@ chains = list(set((chains_df['chain'])))
 print('{n1} chains'.format(n1=len(chains)))
 
 # Tasks and Links
-G = build_graph(data_file_name)
+G = nx.read_graphml(data_file_name)
+G = nx.DiGraph(G)
 links = G.edges(data=True)
 links_types = {}
 for link in links: links_types[(link[0], link[1])] = link[2]['Dependency']

@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('sub_graph_file_name')
 parser.add_argument('experiment')
 args = parser.parse_args()
-print('args:', args)
+#print('args:', args)
 sub_graph_file_name = args.sub_graph_file_name
 experiment = args.experiment
 chains_table = '{e}_chains'.format(e=experiment)
@@ -110,6 +110,5 @@ if len(chains_rows) > 0:
     cur.execute(statement)
     conn.commit()
 conn.close()
-print('process {p} finished'.format(p=pid))
-print('build chains started on', start_time)
-print('build chains ended on', datetime.now().strftime("%H:%M:%S"))
+#print('build chains started on', start_time)
+print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))

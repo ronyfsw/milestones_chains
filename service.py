@@ -79,7 +79,7 @@ for index, root_successor in enumerate(root_successors):
     if is_dag:
         #subG = nx.DiGraph(subG)
         print(50*'#')
-        print(root_successor, subG)
+        #print(root_successor, subG)
         sub_graph_file_name = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, sub_graph_file_name)
         run_paths += "python3 build_chains.py {s} {e} & "\
@@ -89,7 +89,7 @@ for index, root_successor in enumerate(root_successors):
 
 # Run the pipeline in parallel on each of the subgraphs produced
 run_paths = run_paths.rstrip(' &')
-print('run_paths:', run_paths)
+#print('run_paths:', run_paths)
 subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))

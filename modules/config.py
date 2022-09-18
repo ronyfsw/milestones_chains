@@ -40,6 +40,13 @@ serviceIP = locationIP[serviceLocation]
 servicePort = locationPort[serviceLocation]
 url = 'http://{ip}:{port}/cluster_analysis/api/v0.1/milestones'.format(ip=serviceIP, port=servicePort)
 
+# Paths
+working_dir = os.getcwd()
+run_dir_path = os.path.join(working_dir, 'run_dir')
+chunks_path = os.path.join(run_dir_path, 'chunks')
+sub_graphs_path = os.path.join(run_dir_path, 'sub_graphs')
+scaffolds_path = os.path.join(run_dir_path, 'scaffolds')
+
 ## Databases and connectors
 # MySQL
 user, password, db_name = 'rony', 'exp8546$fs', 'MCdb'

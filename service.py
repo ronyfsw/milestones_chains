@@ -26,10 +26,11 @@ print('args:', args)
 data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
-prt = args.prt
+build_rows = args.prt
 chains_table = '{e}_chains'.format(e=experiment)
 TDAs_in_results = build_rows = False
 if tasks_types == 'tdas': TDAs_in_results = True
+
 if build_rows == 'prt': build_rows = True
 
 # Data
@@ -95,8 +96,7 @@ print('run_paths:', run_paths)
 subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
-
-start_time = datetime.now().strftime("%H:%M:%S")
+print('build_rows?', build_rows)
 if build_rows:
     subprocess.run("python3 build_rows.py {f} {e} {t}"
                    .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)

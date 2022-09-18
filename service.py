@@ -77,8 +77,7 @@ for index, root_successor in enumerate(root_successors):
     subG = G.subgraph(subGnodes)
     is_dag = nx.is_directed_acyclic_graph(subG)
     if is_dag:
-        #subG = nx.DiGraph(subG)
-        print(50*'#')
+        # print(50*'#')
         #print(root_successor, subG)
         sub_graph_file_name = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, sub_graph_file_name)

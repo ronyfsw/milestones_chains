@@ -10,7 +10,7 @@ from worm_modules import *
 from chains import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
-print('pipeline started on', start_time)
+print('build chains started on', start_time)
 pid = os.getpid()
 
 parser = argparse.ArgumentParser()
@@ -103,8 +103,6 @@ while next_journeys_steps:
     print('{n1} scaffolds, {n2} next journeys steps, {n3} journey chains, {n4} chains'
           .format(n1=scaffolds_count, n2=next_journeys_steps_count, n3=journey_chains_count, n4=chains_written_count))
 
-
-
 #redisClient.flushdb()
 # Write the remaning results
 if len(chains_rows) > 0:
@@ -113,5 +111,5 @@ if len(chains_rows) > 0:
     conn.commit()
 conn.close()
 print('process {p} finished'.format(p=pid))
-print('pipeline started on', start_time)
-print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))
+print('build chains started on', start_time)
+print('build chains ended on', datetime.now().strftime("%H:%M:%S"))

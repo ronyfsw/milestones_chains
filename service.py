@@ -13,7 +13,7 @@ from graphs import *
 from worm_modules import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
-print('pipeline started on', start_time)
+print('service started on', start_time)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('data_file_name')
@@ -71,6 +71,7 @@ for Gnode in Gnodes:
 # Sub graphs of the source program graph
 run_paths = ''
 chains = []
+print('{n} root_successors will be used to build sub-graphs')
 for index, root_successor in enumerate(root_successors):
     nodes_to_drop = [s for s in root_successors if s != root_successor] + isolates
     subGnodes = [n for n in Gnodes if n not in nodes_to_drop]
@@ -91,9 +92,13 @@ for index, root_successor in enumerate(root_successors):
 run_paths = run_paths.rstrip(' &')
 print('run_paths:', run_paths)
 subprocess.run(run_paths, shell=True)
-print('pipelines started on', start_time)
-print('pipelines ended on', datetime.now().strftime("%H:%M:%S"))
+print('chains building started on', start_time)
+print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
+start_time = datetime.now().strftime("%H:%M:%S")
+print('build rows on', start_time)
 if build_rows:
     subprocess.run("python3 build_rows.py {e} {f} {t}"
                    .format(e=experiment, f=data_file_name, t=tasks_types), shell=True)
+print('build rows started on', start_time)
+print('build rows ended on', datetime.now().strftime("%H:%M:%S"))

@@ -61,8 +61,9 @@ successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=T
 # Directories
 working_dir = os.getcwd()
 run_dir_path = os.path.join(working_dir, 'run_dir')
-if 'run_dir' not in os.listdir(working_dir):
-	os.mkdir(run_dir_path)
+if 'run_dir' in os.listdir(working_dir):
+	shutil.rmtree(run_dir_path)
+os.mkdir(run_dir_path)
 chunks_path = os.path.join(run_dir_path, 'chunks')
 sub_graphs_path = os.path.join(run_dir_path, 'sub_graphs')
 scaffolds_path = os.path.join(run_dir_path, 'scaffolds')

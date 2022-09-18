@@ -133,7 +133,6 @@ print('combine, zip and upload results')
 
 # Tasks metadata
 subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)
-print('Generate tasks metadata completed')
 print('build results started on', start_time)
 print('build results ended on', datetime.now().strftime("%H:%M:%S"))
 

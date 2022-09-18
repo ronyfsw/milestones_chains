@@ -11,6 +11,7 @@ if modules_dir not in sys.path: sys.path.append(modules_dir)
 from db_tables import *
 from graphs import *
 from worm_modules import *
+from set_up import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 print('service started on', start_time)
@@ -71,7 +72,7 @@ for Gnode in Gnodes:
 # Sub graphs of the source program graph
 run_paths = ''
 chains = []
-print('{n} root_successors will be used to build sub-graphs')
+print('{n} root_successors will be used to build sub-graphs'.format(n=len(root_successors)))
 for index, root_successor in enumerate(root_successors):
     nodes_to_drop = [s for s in root_successors if s != root_successor] + isolates
     subGnodes = [n for n in Gnodes if n not in nodes_to_drop]

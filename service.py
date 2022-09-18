@@ -45,8 +45,6 @@ nodes_decoder = build_decoder(nodes_encoder)
 np.save('nodes_encoder.npy', nodes_encoder)
 np.save('nodes_decoder.npy', nodes_decoder)
 G = nx.relabel_nodes(G, nodes_encoder)
-data_file_name = os.path.join(sub_graphs_path, 'graph.edgelist')
-nx.write_edgelist(G, data_file_name)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 root_node = list(nx.topological_sort(G))[0]
 root_successors = list(G.successors(root_node))

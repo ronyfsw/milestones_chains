@@ -12,6 +12,9 @@ args = parser.parse_args()
 experiment = args.experiment
 zipped_results_file_name = '{e}_results.zip'.format(e=experiment)
 
+start_time = datetime.now().strftime("%H:%M:%S")
+print('merge and upload results started on', start_time)
+
 start = time.time()
 print('combine results')
 # pq.write_table(pq.ParquetDataset(chunks_path).read(), 'results.parquet', row_group_size=100000)
@@ -33,3 +36,5 @@ print('uploading zipped file to s3')
 start = time.time()
 s3_client.upload_file(zipped_results_file_name, results_bucket, experiment)
 print('upload results took {t} seconds'.format(t=time.time()-start))
+print('merge and upload results started on', start_time)
+print('merge and upload results ended on', datetime.now().strftime("%H:%M:%S"))

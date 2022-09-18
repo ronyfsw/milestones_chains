@@ -100,8 +100,8 @@ while next_journeys_steps:
     #scaffolds_count = redisClient.hlen(scaffolds_set)
     scaffolds_count = len(scaffolds)
     next_journeys_steps_count = len(next_journeys_steps)
-    print('{n1} scaffolds, {n2} next journeys steps, {n3} journey chains, {n4} chains'
-          .format(n1=scaffolds_count, n2=next_journeys_steps_count, n3=journey_chains_count, n4=chains_written_count))
+    #print('{n1} scaffolds, {n2} next journeys steps, {n3} journey chains, {n4} chains'
+    #      .format(n1=scaffolds_count, n2=next_journeys_steps_count, n3=journey_chains_count, n4=chains_written_count))
 
 #redisClient.flushdb()
 # Write the remaning results

@@ -121,8 +121,8 @@ for chunk_rows_count in executor.map(chain_to_rows, indexed_chains_chunks):
 		plt.ylabel(y_col)
 		plt.savefig('rps.png')
 
-print('build results started on', start_time)
-print('build results ended on', datetime.now().strftime("%H:%M:%S"))
+print('build rows started on', start_time)
+print('build rows ended on', datetime.now().strftime("%H:%M:%S"))
 
 # Results file
 print('combine, zip and upload results')
@@ -133,6 +133,4 @@ print('combine, zip and upload results')
 
 # Tasks metadata
 subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)
-print('build results started on', start_time)
-print('build results ended on', datetime.now().strftime("%H:%M:%S"))
 

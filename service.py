@@ -97,9 +97,6 @@ print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
 start_time = datetime.now().strftime("%H:%M:%S")
-print('build rows on', start_time)
 if build_rows:
-    subprocess.run("python3 build_rows.py {e} {f} {t}"
-                   .format(e=experiment, f=data_file_name, t=tasks_types), shell=True)
-print('build rows started on', start_time)
-print('build rows ended on', datetime.now().strftime("%H:%M:%S"))
+    subprocess.run("python3 build_rows.py {f} {e} {t}"
+                   .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)

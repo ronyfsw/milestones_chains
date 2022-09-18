@@ -26,12 +26,11 @@ print('args:', args)
 data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
-build_rows = args.prt
+results = args.prt
 chains_table = '{e}_chains'.format(e=experiment)
 TDAs_in_results = build_rows = False
 if tasks_types == 'tdas': TDAs_in_results = True
-
-if build_rows == 'prt': build_rows = True
+if results == 'prt': build_rows = True
 
 # Data
 s3_resource.Bucket(data_bucket).download_file(data_file_name, data_file_name)

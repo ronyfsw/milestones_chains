@@ -1,16 +1,14 @@
-from modules.libraries import *
-#from modules.db_tables import *
-
-# User configuration
-data_file_name = 'MWH-06-UP#13_FSW_REV.graphml'
-experiment = 'experiment1'
-TDAs_in_results = False
+from pathlib import Path
+import os
+import sys
+home_dir = Path.home()
+modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
+if modules_dir not in sys.path: sys.path.append(modules_dir)
+from libraries import *
 
 # Data
 wd = os.getcwd()
-data_path = os.path.join(wd, 'data')
 experiment_id = 3
-file_path = os.path.join(data_path, data_file_name)
 partition_size_cutoff = 50
 fill_date = '1944-06-06'
 
@@ -22,13 +20,14 @@ chain_delimiter ='<**>'
 
 # Build results
 chains_chunk = 100000
-zipped_results_file_name = '{e}_results.zip'.format(e=experiment)
 
 # AWS
 profile_name = 'ds_sandbox'
 results_bucket = 'chainsresults'
+data_bucket = 'programsdatabucket'
 session = boto3.session.Session(profile_name=profile_name)
 s3_client = session.client('s3')
+s3_resource = session.resource('s3')
 key_file_name = 'ds_eu_west2_2.pem'
 resultsIP = '172.31.10.240'
 
@@ -51,11 +50,9 @@ conn = mysql.connect(**conn_params)
 cur = conn.cursor()
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
-
 chains_cols = list(chains_cols_types.keys())
 results_cols = ['ID', 'ChainID', 'TaskID', 'NeighbourID', 'Dependency', 'TaskType', 'Label',
                 'PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd', 'Float1', 'Status', 'File', 'planned_duration', 'actual_duration']
-chains_table, results_table = '{e}_chains'.format(e=experiment), '{e}_results'.format(e=experiment)
 
 # Redis
 redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
@@ -63,21 +60,16 @@ successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=T
 
 # Directories
 working_dir = os.getcwd()
-data_path = os.path.join(os.getcwd(), 'data')
-file_path = os.path.join(data_path, data_file_name)
-results_path = os.path.join(working_dir, 'results')
-#experiment_dir = 'experiment_{id}'.format(id=experiment_id)
-source_path = os.path.join(data_path, 'predecessors_successors.xlsx')
-experiment_path = os.path.join(results_path, experiment)
-if experiment not in os.listdir(results_path):
-    os.mkdir(experiment_path)
-plots_path = os.path.join(experiment_path, 'plots')
-if 'plots' not in os.listdir(experiment_path):
-    os.mkdir(plots_path)
-chunks_path = os.path.join(experiment_path, 'chunks')
-if 'chunks' not in os.listdir(experiment_path):
+run_dir_path = os.path.join(working_dir, 'run_dir')
+if 'run_dir' not in os.listdir(working_dir):
+	os.mkdir(run_dir_path)
+chunks_path = os.path.join(run_dir_path, 'chunks')
+sub_graphs_path = os.path.join(run_dir_path, 'sub_graphs')
+scaffolds_path = os.path.join(run_dir_path, 'scaffolds')
+run_dirs = os.listdir(run_dir_path)
+if 'chunks' not in run_dirs:
 	os.mkdir(chunks_path)
-
-sub_graphs_path = os.path.join(data_path, 'sub_graphs')
-if 'sub_graphs' not in os.listdir(data_path):
+if 'scaffolds' not in run_dirs:
+	os.mkdir(scaffolds_path)
+if 'sub_graphs' not in run_dirs:
 	os.mkdir(sub_graphs_path)

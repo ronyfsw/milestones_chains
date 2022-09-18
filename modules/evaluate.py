@@ -1,8 +1,10 @@
-from datetime import datetime
-import pandas as pd
-import numpy as np
-from modules.libraries import *
-#from modules.config import *
+from pathlib import Path
+import os
+import sys
+home_dir = Path.home()
+modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
+if modules_dir not in sys.path: sys.path.append(modules_dir)
+from libraries import *
 
 def infer_dt_format(dt):
     '''

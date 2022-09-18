@@ -28,3 +28,4 @@ nt.set_options('''var options = {"nodes": {"size": 20, "shape": "triangle", "wid
     "font.size":"2"}, "edges":{"width":1, "font.size":"0"}}''')
 import warnings
 warnings.filterwarnings("ignore")
+import matplotlib.pyplot as plt

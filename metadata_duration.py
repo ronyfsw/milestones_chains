@@ -6,9 +6,17 @@ from modules.evaluate import *
 from modules.graphs import *
 from modules.config import *
 
+parser = argparse.ArgumentParser()
+parser.add_argument('data_file_name')
+parser.add_argument('tasks_types')
+args = parser.parse_args()
+data_file_name = args.data_file_name
+tasks_types = args.tasks_types
+TDAs_in_results = False
+if tasks_types == 'tdas': TDAs_in_results = True
+
 # Tasks metadata
-file_path = os.path.join(data_path, data_file_name)
-graphml_str = open(file_path).read().replace('&amp;', '')
+graphml_str = open(data_file_name).read().replace('&amp;', '')
 headers = ['ID', 'TaskType', 'Label', 'PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd', 'Float', 'Status']
 data_df = parse_graphml(data_file_name, graphml_str, headers)
 

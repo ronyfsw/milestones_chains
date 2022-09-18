@@ -1,7 +1,13 @@
-from modules.libraries import *
-from modules.graphs import *
-from modules.config import *
-from modules.encoders import *
+from pathlib import Path
+import os
+import sys
+home_dir = Path.home()
+modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
+if modules_dir not in sys.path: sys.path.append(modules_dir)
+from libraries import *
+from graphs import *
+from config import *
+from encoders import *
 
 def get_terminal_nodes(G):
 	Gnodes = list(G.nodes())
@@ -44,12 +50,17 @@ def validate(chain, source_pairs):
 
 def growReproduce(map_or_step):
 	cid, chain, next_steps = None, None, None
-	chain_key = map_or_step[0]
-	successors = map_or_step[1]
+	process_id = map_or_step[0]
+	chain_key = map_or_step[1]
+	#print('**** chain key:', chain_key)
+	successors = map_or_step[2]
 	growth_node = successors[0]
 	pointers = successors[1:]
 
-	previous_step_chain = redisClient.hget('scaffolds', chain_key)
+	#previous_step_chain = redisClient.hget('scaffolds', chain_key)
+	scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=process_id))
+	scaffolds = np.load(scaffolds_dict, allow_pickle=True)[()]
+	previous_step_chain = scaffolds[chain_key]
 
 	if previous_step_chain:
 		# Growth
@@ -62,7 +73,7 @@ def growReproduce(map_or_step):
 		next_steps = []
 		for pointer in pointers:
 			pointer = (pointer,)
-			next_step = (chain_key, pointer)
+			next_step = (process_id, chain_key, pointer)
 			next_steps.append(next_step)
 		next_steps = tuple(next_steps)
 

@@ -1,4 +1,10 @@
-from modules.config import *
+from pathlib import Path
+import os
+import sys
+home_dir = Path.home()
+modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
+if modules_dir not in sys.path: sys.path.append(modules_dir)
+from config import *
 def scaffold_to_chain(scaffold):
     ids_scaffolds = redisClient.hgetall('scaffolds_nodes')
     chain = scaffold.split(node_delimiter)

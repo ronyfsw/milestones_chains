@@ -1,9 +1,11 @@
+from pathlib import Path
 import os
 import sys
-modules_dir = os.path.join(os.getcwd(), 'modules')
-if modules_dir not in sys.path:
-    sys.path.append(modules_dir)
+home_dir = Path.home()
+modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
+if modules_dir not in sys.path: sys.path.append(modules_dir)
 from libraries import *
+from config import *
 
 def build_create_table_statement(db_name, table_name, cols_types):
 

@@ -60,7 +60,7 @@ def chain_to_rows(index_chunk):
 		for index, task in enumerate(tasks):
 			# Task index
 			if TDAs_in_results:
-				task_index = 'T{i}'.format(i=str(index))
+				task_index = 'T{i}'.format(i=str(index+1))
 			else:
 				task_index = 'M{i}'.format(i=str(index+1))
 			task_index = chain_index+task_index

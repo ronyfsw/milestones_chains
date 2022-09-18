@@ -53,9 +53,6 @@ user, password, db_name = 'rony', 'exp8546$fs', 'MCdb'
 server_db_params = {'Local': {'host': 'localhost', 'user': user, 'password': password, 'database': db_name},\
                     'Remote': {'host': serviceIP, 'user': user, 'password': password, 'database': db_name}}
 conn_params = server_db_params[serviceLocation]
-conn = mysql.connect(**conn_params)
-cur = conn.cursor()
-cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
 chains_cols = list(chains_cols_types.keys())
 results_cols = ['ID', 'ChainID', 'TaskID', 'NeighbourID', 'Dependency', 'TaskType', 'Label',

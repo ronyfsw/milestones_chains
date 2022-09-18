@@ -6,6 +6,11 @@ modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 from config import *
 
+# Database connection
+conn = mysql.connect(**conn_params)
+cur = conn.cursor()
+cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
 # Directories
 if 'run_dir' in os.listdir(working_dir):
 	shutil.rmtree(run_dir_path)
@@ -17,3 +22,4 @@ if 'scaffolds' not in run_dirs:
 	os.mkdir(scaffolds_path)
 if 'sub_graphs' not in run_dirs:
 	os.mkdir(sub_graphs_path)
+

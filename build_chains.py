@@ -8,6 +8,7 @@ from libraries import *
 from db_tables import *
 from worm_modules import *
 from chains import *
+from config import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 pid = os.getpid()
@@ -16,15 +17,23 @@ print('build chains process {p} started on'.format(p=pid), start_time)
 parser = argparse.ArgumentParser()
 parser.add_argument('sub_graph_file_name')
 parser.add_argument('experiment')
+parser.add_argument('tasks_types')
+parser.add_argument('results')
 args = parser.parse_args()
-#print('args:', args)
+print('args:', args)
 sub_graph_file_name = args.sub_graph_file_name
 experiment = args.experiment
+tasks_types = args.tasks_types
+results = args.results
+chains_table = '{e}_chains'.format(e=experiment)
+build_rows = False
+if results == 'prt': build_rows = True
 chains_table = '{e}_chains'.format(e=experiment)
 
 # Tasks
 tasks_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 terminal_nodes = open(os.path.join(run_dir_path,'terminal_nodes.txt')).read().split('\n')
+nodes_types = np.load(os.path.join(run_dir_path, 'nodes_types.npy'), allow_pickle=True)[()]
 G = nx.read_edgelist(sub_graph_file_name, create_using=nx.DiGraph)
 Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]
@@ -35,7 +44,7 @@ root_successors = tuple(G.successors(root_node))
 scaffolds = {1: root_node}
 scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=pid))
 np.save(scaffolds_dict, scaffolds)
-next_journeys_steps = [(pid, 1, root_successors, pid)]
+next_journeys_steps = [(pid, 1, root_successors)]
 growth_tip = ['no tip']
 executor = ProcessPoolExecutor(available_executors)
 journey = chains_written_count = tasks_written_count = 0
@@ -59,7 +68,20 @@ while next_journeys_steps:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
 
-    # Write chain scaffolds
+    # Filter chains for tdas
+    print('tasks_types:', tasks_types)
+    if tasks_types != 'tdas':
+        chains_nodes_types = []
+        for id, chain in ids_chains:
+            chain = chain.split(node_delimiter)
+            chain_nodes_types = {k:v for k, v in nodes_types.items() if k in chain}
+            chains_nodes_types.append((id, chain, chain_nodes_types))
+
+        ids_chains = []
+        for cid, milestones_chain in executor.map(filter_tdas, chains_nodes_types):
+            ids_chains.append((cid, milestones_chain))
+
+    # Collect chains and write scaffolds
     for cid_chain in ids_chains:
         cid, chain = cid_chain
         # Update chains

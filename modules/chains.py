@@ -31,6 +31,16 @@ def chain_to_rows(index_chain, links_types):
 		else:
 			pair_edge_type = None
 		rows.append((task, chain_index, next_task, pair_edge_type))
-
 	return rows
 
+def filter_tdas(chain_node_types):
+	id, chain, chain_nodes_types = chain_node_types
+	milestone_chain = []
+	for node in chain:
+		if chain_nodes_types[node] != 'TT_Task':
+			milestone_chain.append(node)
+	milestone_chain = node_delimiter.join(milestone_chain)
+	# if len(chain) >= 5:
+	# 	with open('ms_chains_check.txt', 'a') as f:
+	# 		f.write('chain: {c} | chain_dict:{d} | milestones:{m}'.format(c=str(chain), d=str(chain_nodes_types), m=str(milestone_chain)))
+	return (id, milestone_chain)

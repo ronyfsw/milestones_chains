@@ -17,17 +17,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument('data_file_name')
 parser.add_argument('experiment')
 parser.add_argument('tasks_types')
-parser.add_argument('prt')
+parser.add_argument('results')
 args = parser.parse_args()
 print('args:', args)
 data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
-results = args.prt
+results = args.results
 chains_table = '{e}_chains'.format(e=experiment)
-TDAs_in_results = build_rows = False
-if tasks_types == 'tdas': TDAs_in_results = True
-if results == 'prt': build_rows = True
 
 # Data
 s3_resource.Bucket(data_bucket).download_file(data_file_name, data_file_name)
@@ -35,6 +32,7 @@ print('file {f} downloaded'.format(f=data_file_name))
 G = build_graph(data_file_name)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 terminal_nodes = get_terminal_nodes(G)
+# Link types dictionary
 links = G.edges(data=True)
 links_types = {}
 for link in links: links_types[(link[0], link[1])] = link[2]['Dependency']
@@ -55,6 +53,15 @@ print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 terminal_nodes = get_terminal_nodes(G)
 with open(os.path.join(run_dir_path,'terminal_nodes.txt'), 'w') as f:
     f.write('\n'.join(terminal_nodes))
+
+# Nodes types dictionary
+nodes_types = {}
+nodes_data = list(G.nodes(data=True))
+for node_data in nodes_data:
+    node_id = node_data[0]
+    node_type = node_data[1]['TaskType']
+    nodes_types[node_id] = node_type
+np.save(os.path.join(run_dir_path, 'nodes_types.npy'), nodes_types)
 
 # Refresh results tables and databases
 redisClient.flushdb()
@@ -83,8 +90,8 @@ for index, root_successor in enumerate(root_successors):
         #print(root_successor, subG)
         sub_graph_file_name = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, sub_graph_file_name)
-        run_paths += "python3 build_chains.py {s} {e} & "\
-            .format(s=sub_graph_file_name, e=experiment)
+        run_paths += "python3 build_chains.py {s} {e} {t} {r} & "\
+            .format(s=sub_graph_file_name, e=experiment, t=tasks_types, r=results)
     else:
         print('graph {i} is not dag'.format(i=index+1))
 

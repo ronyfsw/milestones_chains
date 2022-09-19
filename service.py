@@ -102,9 +102,7 @@ run_paths = run_paths.rstrip(' &')
 subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
-
-print('build_rows?', build_rows)
-if build_rows:
+if results == 'prt':
     subprocess.run("python3 build_rows.py {f} {e} {t}"
                    .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)
 # Delete run directory and files

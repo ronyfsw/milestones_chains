@@ -23,8 +23,8 @@ experiment = args.experiment
 chains_table = '{e}_chains'.format(e=experiment)
 
 # Tasks
-tasks_decoder = np.load('nodes_decoder.npy', allow_pickle=True)[()]
-terminal_nodes = open('terminal_nodes.txt').read().split('\n')
+tasks_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
+terminal_nodes = open(os.path.join(run_dir_path,'terminal_nodes.txt')).read().split('\n')
 G = nx.read_edgelist(sub_graph_file_name, create_using=nx.DiGraph)
 Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]

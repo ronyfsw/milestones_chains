@@ -32,12 +32,8 @@ chains = list(set((chains_df['chain'])))
 print('{n1} chains'.format(n1=len(chains)))
 
 # Tasks and Links
-G = nx.read_graphml(data_file_name)
-G = nx.DiGraph(G)
-links = G.edges(data=True)
-links_types = {}
-for link in links: links_types[(link[0], link[1])] = link[2]['Dependency']
-tasks_decoder = np.load('nodes_decoder.npy', allow_pickle=True)[()]
+links_types = np.load(os.path.join(run_dir_path, 'links_types.npy'), allow_pickle=True)[()]
+tasks_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 
 # Tasks metadata
 print('Generate tasks metadata')

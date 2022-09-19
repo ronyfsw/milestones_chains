@@ -38,12 +38,16 @@ print('file {f} downloaded'.format(f=data_file_name))
 G = build_graph(data_file_name)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 terminal_nodes = get_terminal_nodes(G)
+links = G.edges(data=True)
+links_types = {}
+for link in links: links_types[(link[0], link[1])] = link[2]['Dependency']
+np.save(os.path.join(run_dir_path, 'links_types.npy'), links_types)
 
 # Encode nodes
 nodes_encoder = objects_encoder(Gnodes)
 nodes_decoder = build_decoder(nodes_encoder)
-np.save('nodes_encoder.npy', nodes_encoder)
-np.save('nodes_decoder.npy', nodes_decoder)
+np.save(os.path.join(run_dir_path, 'nodes_encoder.npy'), nodes_encoder)
+np.save(os.path.join(run_dir_path, 'nodes_decoder.npy'), nodes_encoder)
 G = nx.relabel_nodes(G, nodes_encoder)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 root_node = list(nx.topological_sort(G))[0]
@@ -52,7 +56,8 @@ isolates = graph_isolates(G)
 Gnodes, Gedges = list(G.nodes()), list(G.edges())
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 terminal_nodes = get_terminal_nodes(G)
-with open('terminal_nodes.txt', 'w') as f: f.write('\n'.join(terminal_nodes))
+with open(os.path.join(run_dir_path,'terminal_nodes.txt'), 'w') as f:
+    f.write('\n'.join(terminal_nodes))
 
 # Refresh results tables and databases
 redisClient.flushdb()
@@ -96,3 +101,6 @@ print('build_rows?', build_rows)
 if build_rows:
     subprocess.run("python3 build_rows.py {f} {e} {t}"
                    .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)
+# Delete run directory and files
+if 'run_dir' in os.listdir(working_dir):
+	shutil.rmtree(run_dir_path)

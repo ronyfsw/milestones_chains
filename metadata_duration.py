@@ -13,7 +13,6 @@ args = parser.parse_args()
 data_file_name = args.data_file_name
 tasks_types = args.tasks_types
 TDAs_in_results = False
-if tasks_types == 'tdas': TDAs_in_results = True
 
 # Tasks metadata
 graphml_str = open(data_file_name).read().replace('&amp;', '')
@@ -21,7 +20,7 @@ headers = ['ID', 'TaskType', 'Label', 'PlannedStart', 'PlannedEnd', 'ActualStart
 data_df = parse_graphml(data_file_name, graphml_str, headers)
 
 # Filter TDAs
-if not TDAs_in_results:
+if tasks_types != 'tdas':
     data_df = data_df[data_df['TaskType'] != 'TT_Task']
 
 # Tasks duration

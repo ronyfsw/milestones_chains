@@ -4,6 +4,7 @@
 run_dir
 venv
 results
+config
 dev
 *.txt
 *.xlsx

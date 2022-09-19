@@ -1,17 +1,14 @@
 # run statement: python service.py <file_name> <experiment_name> <'tdas'> <'prt'>
 print('start')
-from pathlib import Path
-import os
-import sys
-home_dir = Path.home()
-modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
+import os, sys, pathlib
+modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modules/')
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 
 #from modules.worm_modules import *
 from db_tables import *
 from graphs import *
 from worm_modules import *
-from set_up import *
+from service_set_up import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 print('service started on', start_time)

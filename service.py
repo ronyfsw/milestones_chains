@@ -9,6 +9,7 @@ from db_tables import *
 from graphs import *
 from worm_modules import *
 from service_set_up import *
+from chains import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 print('service started on', start_time)
@@ -25,7 +26,7 @@ experiment = args.experiment
 tasks_types = args.tasks_types
 results = args.results
 chains_table = '{e}_chains'.format(e=experiment)
-
+executor = ProcessPoolExecutor(available_executors)
 # Data
 s3_resource.Bucket(data_bucket).download_file(data_file_name, data_file_name)
 print('file {f} downloaded'.format(f=data_file_name))
@@ -101,6 +102,7 @@ run_paths = run_paths.rstrip(' &')
 subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
+
 print('build_rows?', build_rows)
 if build_rows:
     subprocess.run("python3 build_rows.py {f} {e} {t}"

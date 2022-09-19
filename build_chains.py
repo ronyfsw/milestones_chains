@@ -20,7 +20,7 @@ parser.add_argument('experiment')
 parser.add_argument('tasks_types')
 parser.add_argument('results')
 args = parser.parse_args()
-print('args:', args)
+# print('args:', args)
 sub_graph_file_name = args.sub_graph_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
@@ -68,26 +68,19 @@ while next_journeys_steps:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
 
-    # Filter chains for tdas
-    print('tasks_types:', tasks_types)
-    if tasks_types != 'tdas':
-        chains_nodes_types = []
-        for id, chain in ids_chains:
-            chain = chain.split(node_delimiter)
-            chain_nodes_types = {k:v for k, v in nodes_types.items() if k in chain}
-            chains_nodes_types.append((id, chain, chain_nodes_types))
-
-        ids_chains = []
-        for cid, milestones_chain in executor.map(filter_tdas, chains_nodes_types):
-            ids_chains.append((cid, milestones_chain))
-
     # Collect chains and write scaffolds
     for cid_chain in ids_chains:
         cid, chain = cid_chain
         # Update chains
         growth_tip = chain.split(node_delimiter)[-1]
         if growth_tip in terminal_nodes:
-            chains_rows.append((cid, chain))
+            if results != 'tdas':
+                chain = chain.split(node_delimiter)
+                chain_nodes_types = {k: v for k, v in nodes_types.items() if k in chain}
+                mid, milestone_chain = filter_tdas(id, chain, chain_nodes_types)
+                chains_rows.append((mid, milestone_chain))
+            else:
+                chains_rows.append((cid, chain))
         # Update scaffolds
         else:
             #redisClient.hset(scaffolds_set, cid, chain)

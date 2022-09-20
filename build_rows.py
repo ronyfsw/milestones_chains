@@ -51,9 +51,9 @@ def chain_to_rows(index_chunk):
 		chain_index, chain = index_chain
 		# Chain index
 		chain_index = 'C{i}'.format(i=str(chain_index + 1))
+		tasks = chain.split(node_delimiter)
 		print('tasks:', tasks)
 		print('chain:', chain)
-		tasks = chain.split(node_delimiter)
 		tasks = [tasks_decoder[t] for t in tasks]
 		for index, task in enumerate(tasks):
 			# Task index

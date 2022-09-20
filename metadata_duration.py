@@ -19,9 +19,12 @@ graphml_str = open(data_file_name).read().replace('&amp;', '')
 headers = ['ID', 'TaskType', 'Label', 'PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd', 'Float', 'Status']
 data_df = parse_graphml(data_file_name, graphml_str, headers)
 
+print('tasks type in md prep:', tasks_types)
+print('{n} tasks in md prep prior to filtering'.format(n=len(data_df)))
 # Filter TDAs
 if tasks_types != 'tdas':
     data_df = data_df[data_df['TaskType'] != 'TT_Task']
+print('{n} tasks in md prep following filtering'.format(n=len(data_df)))
 
 # Tasks duration
 planned_duration = activities_duration(data_df, 'planned')

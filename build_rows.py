@@ -101,6 +101,7 @@ executor = ProcessPoolExecutor(available_executors)
 results_rows = []
 rows_count = 0
 md_ids = list(metadata_duration['ID'])
+print('{n} ids in metadata_duration'.format(n=len(md_ids)))
 print('iterating chains')
 start1 = time.time()
 performance = []

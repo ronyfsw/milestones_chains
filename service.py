@@ -105,6 +105,7 @@ print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 if results == 'prt':
     subprocess.run("python3 build_rows.py {f} {e} {t}"
                    .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)
+
 # Delete run directory and files
 if 'run_dir' in os.listdir(working_dir):
 	shutil.rmtree(run_dir_path)

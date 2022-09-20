@@ -52,8 +52,6 @@ def chain_to_rows(index_chunk):
 		# Chain index
 		chain_index = 'C{i}'.format(i=str(chain_index + 1))
 		tasks = chain.split(node_delimiter)
-		#print('tasks:', tasks)
-		#print('chain:', chain)
 		tasks = [tasks_decoder[t] for t in tasks]
 		for index, task in enumerate(tasks):
 			# Task index
@@ -74,7 +72,7 @@ def chain_to_rows(index_chunk):
 			else:
 				pair_edge_type = None
 			rows.append((task, chain_index, task_index, next_task, pair_edge_type))
-	chain_rows = []
+	chain_rows = not_in_md = []
 	for row in rows:
 		id = row[0]
 		if id in md_ids:
@@ -83,9 +81,13 @@ def chain_to_rows(index_chunk):
 			row = [str(e) for e in row]
 			row = tuple(row)
 			chain_rows.append(row)
-	results_rows = pd.DataFrame(chain_rows, columns=results_cols)
+		else:
+			print('{id} not in md'.format(id=id))
+
+	results_rows = pd.DataFrame(chain_rows, columns=results_cols).drop_duplicates()
 	results_rows.to_parquet(results_file_name, index=False, compression='gzip')
 	return len(chain_rows)
+
 
 print('collecting and writing results rows')
 start = time.time()
@@ -108,19 +110,6 @@ performance = []
 parquet_counter = 0
 for chunk_rows_count in executor.map(chain_to_rows, indexed_chains_chunks):
 	rows_count += chunk_rows_count
-	build_dur = round(time.time() - start1, 2)
-	print('{c} rows build took {t} seconds'.format(c=rows_count, t=build_dur))
-	start = time.time()
-	results_rows = []
-	performance.append((rows_count, build_dur, round(rows_count/build_dur)))
-	df = pd.DataFrame(performance, columns=['rows_count', 'duration', 'rps'])
-	df.to_excel('speed.xlsx', index=False)
-	if len(df) > 4:
-		x_col, y_col = 'rows_count', 'rps'
-		plt.scatter(list(df[x_col]), list(df[y_col]), s=4)  # marker='.'
-		plt.xlabel(x_col)
-		plt.ylabel(y_col)
-		plt.savefig('rps.png')
 
 print('build rows started on', start_time)
 print('build rows ended on', datetime.now().strftime("%H:%M:%S"))

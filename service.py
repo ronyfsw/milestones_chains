@@ -43,7 +43,7 @@ np.save(os.path.join(run_dir_path, 'links_types.npy'), links_types)
 nodes_encoder = objects_encoder(Gnodes)
 nodes_decoder = build_decoder(nodes_encoder)
 np.save(os.path.join(run_dir_path, 'nodes_encoder.npy'), nodes_encoder)
-np.save(os.path.join(run_dir_path, 'nodes_decoder.npy'), nodes_encoder)
+np.save(os.path.join(run_dir_path, 'nodes_decoder.npy'), nodes_decoder)
 G = nx.relabel_nodes(G, nodes_encoder)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 root_node = list(nx.topological_sort(G))[0]

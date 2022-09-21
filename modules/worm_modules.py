@@ -9,11 +9,6 @@ from graphs import *
 from config import *
 from encoders import *
 
-def get_terminal_nodes(G):
-	Gnodes = list(G.nodes())
-	isolates = graph_isolates(G)
-	return [n for n in Gnodes if ((G.out_degree(n) == 0) & (n not in isolates))]
-
 def get_recent_id(map_or_steps_dict):
 	'''
 	Return the ID for the last decendant born

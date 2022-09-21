@@ -13,12 +13,13 @@ G = build_graph(file_path)
 root_node = list(nx.topological_sort(G))[0]
 Gnodes, Gedges = list(G.nodes()), G.edges()
 terminal_nodes = get_terminal_nodes(G)
-results_path = '/home/rony/services/milestones_chains/EMS_DCMA_DD_23_08/results_copy_0.parquet'
+print('{n} terminal nodes:'.format(n=len(terminal_nodes)), terminal_nodes)
+results_path = '/home/rony/services/milestones_chains/results/milestones/milestones.parquet'
 results = pd.read_parquet(results_path)
 results_ids = results[['ID', 'ChainID']]
 chain_ids = list(set(results['ChainID']))
 chains_count = len(chain_ids)
-print('{n} chains'.format(n=chains_count))
+print('{r} rows | {n} chains'.format(r=len(results), n=chains_count))
 print('{n} terminal nodes'.format(n=len(terminal_nodes)))
 error_terminals = []
 terminal_errors = 0

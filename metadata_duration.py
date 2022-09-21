@@ -36,8 +36,8 @@ tasks_duration = pd.merge(data_df, planned_actual_df)
 dt_cols = ['PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd']
 for col in dt_cols:
     tasks_duration[col] = pd.to_datetime(tasks_duration[col], errors='ignore').dt.strftime('%Y-%m-%d')
-fill_vals = {'PlannedStart': fill_date, 'PlannedEnd': fill_date, 'ActualStart':fill_date, 'ActualEnd': fill_date}
-tasks_duration.fillna(value=fill_vals, inplace=True)
+#fill_vals = {'PlannedStart': fill_date, 'PlannedEnd': fill_date, 'ActualStart':fill_date, 'ActualEnd': fill_date}
+#tasks_duration.fillna(value=fill_vals, inplace=True)
 #tasks_duration[['PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd']] = tasks_duration[['PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd']].fillna()
 #.apply(pd.to_datetime, errors='ignore').dt.strftime('%Y-%m-%d')
 #tasks_duration['PlannedEnd'] = pd.to_datetime(tasks_duration['PlannedEnd'])

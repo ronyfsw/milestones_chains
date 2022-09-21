@@ -12,6 +12,12 @@ def build_graph(file_path):
 	G = nx.DiGraph(G)
 	return G
 
+def get_terminal_nodes(G):
+	Gnodes = list(G.nodes())
+	isolates = graph_isolates(G)
+	print('{n} isolates'.format(n=len(isolates)), isolates)
+	return [n for n in Gnodes if ((G.out_degree(n) == 0) & (n not in isolates))]
+
 def graphs_nodes(graphs):
 	nodes = []
 	for graph in graphs: nodes += list(graph.nodes())

@@ -20,8 +20,6 @@ args = parser.parse_args()
 data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
-TDAs_in_results = False
-if tasks_types == 'tdas': TDAs_in_results = True
 print('build rows args:', args)
 
 # Chain results
@@ -55,7 +53,7 @@ def chain_to_rows(index_chunk):
 		tasks = [tasks_decoder[t] for t in tasks]
 		for index, task in enumerate(tasks):
 			# Task index
-			if TDAs_in_results:
+			if tasks_types == 'tdas':
 				task_index = 'T{i}'.format(i=str(index+1))
 			else:
 				task_index = 'M{i}'.format(i=str(index+1))
@@ -72,14 +70,15 @@ def chain_to_rows(index_chunk):
 			else:
 				pair_edge_type = None
 			rows.append((task, chain_index, task_index, next_task, pair_edge_type))
-	chain_rows = not_in_md = []
+	chain_rows = []
 	for row in rows:
+		print('id:', id)
 		id = row[0]
 		if id in md_ids:
 			row_md = list(metadata_duration[metadata_duration['ID'] == id].values[0])[1:]
+			print('row_md:', row_md)
 			row = list(row) + row_md
-			row = [str(e) for e in row]
-			row = tuple(row)
+			row = tuple([str(e) for e in row])
 			chain_rows.append(row)
 		else:
 			print('{id} not in md'.format(id=id))

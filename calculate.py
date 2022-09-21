@@ -6,7 +6,6 @@ from client_set_up import *
 def run_calculation_process(data_file_name, experiment, tasks, results, web_query=False):
     working_dir = os.getcwd()
     data_path = os.path.join(working_dir, 'data', data_file_name)
-    #experiment = '{e}_results'.format(e=experiment)
     if experiment in os.listdir(working_dir):
         shutil.rmtree(experiment)
     os.mkdir(experiment)

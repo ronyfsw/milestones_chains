@@ -8,7 +8,7 @@ if modules_dir not in sys.path: sys.path.append(modules_dir)
 from db_tables import *
 from graphs import *
 from worm_modules import *
-from service_set_up import *
+from directories import *
 from chains import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
@@ -32,7 +32,6 @@ s3_resource.Bucket(data_bucket).download_file(data_file_name, data_file_name)
 print('file {f} downloaded'.format(f=data_file_name))
 G = build_graph(data_file_name)
 Gnodes, Gedges = list(G.nodes()), G.edges()
-terminal_nodes = get_terminal_nodes(G)
 # Link types dictionary
 links = G.edges(data=True)
 links_types = {}
@@ -87,8 +86,6 @@ for index, root_successor in enumerate(root_successors):
     subG = G.subgraph(subGnodes)
     is_dag = nx.is_directed_acyclic_graph(subG)
     if is_dag:
-        # print(50*'#')
-        #print(root_successor, subG)
         sub_graph_file_name = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, sub_graph_file_name)
         run_paths += "python3 build_chains.py {s} {e} {t} {r} & "\

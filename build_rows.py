@@ -72,21 +72,20 @@ def chain_to_rows(index_chunk):
 			rows.append((task, chain_index, task_index, next_task, pair_edge_type))
 	chain_rows = []
 	for row in rows:
-		print('id:', id)
 		id = row[0]
+		#print('id:', id)
 		if id in md_ids:
 			row_md = list(metadata_duration[metadata_duration['ID'] == id].values[0])[1:]
-			print('row_md:', row_md)
+			#print('row_md:', row_md)
 			row = list(row) + row_md
 			row = tuple([str(e) for e in row])
 			chain_rows.append(row)
-		else:
-			print('{id} not in md'.format(id=id))
+		#else:
+		#	print('{id} not in md'.format(id=id))
 
 	results_rows = pd.DataFrame(chain_rows, columns=results_cols).drop_duplicates()
 	results_rows.to_parquet(results_file_name, index=False, compression='gzip')
 	return len(chain_rows)
-
 
 print('collecting and writing results rows')
 start = time.time()

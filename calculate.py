@@ -4,54 +4,41 @@ modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modu
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 from client_set_up import *
 
-parser = argparse.ArgumentParser()
-parser.add_argument('data_file_name')
-parser.add_argument('experiment')
-parser.add_argument('tasks_types')
-parser.add_argument('results')
-parser.add_argument('query')
-args = parser.parse_args()
-data_file_name = args.data_file_name
-experiment = args.experiment
-tasks_types = args.tasks_types
-results = args.results
-query = args.query
-print('build results args:', args)
-chains_file = '{e}_chains.parquet'.format(e=experiment)
+def run_calculation_process(data_file_name, experiment, tasks_types, results, query):
+    working_dir = os.getcwd()
+    data_path = os.path.join(working_dir, 'data', data_file_name)
+    chains_file = '{e}_chains.parquet'.format(e=experiment)
+    if experiment in os.listdir(working_dir):
+        shutil.rmtree(experiment)
+    os.mkdir(experiment)
+    # Upload data to an S3 bucket
+    S3_CLIENT.upload_file(data_path, data_bucket, data_file_name)
+    print('Data file uploaded to S3')
+    # Run calculation
+    process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r}'\
+    .format(f=data_file_name, e=experiment, t=tasks_types, r=results)
+    stdin, stdout, stderr = ssh.exec_command(process_statement)
+    if stderr.readlines():
+        print('Run attempt encountered error:\n', stderr.readlines())
+    print('Calculation finished')
+    # Stop compute instance
+    response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
+    print('Compute instance stopped')
 
-working_dir = os.getcwd()
-data_path = os.path.join(working_dir, 'data', data_file_name)
-if experiment in os.listdir(working_dir):
-    shutil.rmtree(experiment)
-os.mkdir(experiment)
-# Upload data to an S3 bucket
-S3_CLIENT.upload_file(data_path, data_bucket, data_file_name)
-print('Data file uploaded to S3')
-# Run calculation
-process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r}'\
-.format(f=data_file_name, e=experiment, t=tasks, r=results)
-stdin, stdout, stderr = ssh.exec_command(process_statement)
-if stderr.readlines():
-    print('Run attempt encountered error:\n', stderr.readlines())
-print('Calculation finished')
-# Stop compute instance
-response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
-print('Compute instance stopped')
+    # Prepare results
+    print('Preparing results')
+    S3_RESOURCE.Bucket(results_bucket).download_file(experiment, 'experiment_zipped')
+    if results == 'chains':
+        S3_RESOURCE.Bucket(results_bucket).download_file(chains_file, chains_file)
+    with ZipFile('experiment_zipped', 'r') as zipObj:
+        zipObj.extractall(path=experiment)
+    results_files = os.listdir(experiment)
+    if len(results_files) == 1:
+        file_path = os.path.join(experiment, results_files[0])
+        df = pd.read_parquet(file_path)
+        df.to_excel('{e}_results.xlsx'.format(e=experiment), index=False)
 
-# Prepare results
-print('Preparing results')
-S3_RESOURCE.Bucket(results_bucket).download_file(experiment, 'experiment_zipped')
-if results == 'chains':
-    S3_RESOURCE.Bucket(results_bucket).download_file(chains_file, 'experiment_zipped')
-with ZipFile('experiment_zipped', 'r') as zipObj:
-    zipObj.extractall(path=experiment)
-results_files = os.listdir(experiment)
-if len(results_files) == 1:
-    file_path = os.path.join(experiment, results_files[0])
-    df = pd.read_parquet(file_path)
-    df.to_excel('{e}_results.xlsx'.format(e=experiment), index=False)
+    if query == 'web':
+        pq.write_table(pq.ParquetDataset(experiment).read(), 'results.parquet', row_group_size=100000)
 
-if query == 'web':
-    pq.write_table(pq.ParquetDataset(experiment).read(), 'results.parquet', row_group_size=100000)
-
-print('The results have been downloaded to {e}'.format(e=experiment))
+    print('The results have been downloaded to {e}'.format(e=experiment))

@@ -1,5 +1,6 @@
 import os, sys, pathlib
 modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modules/')
+#modules_dir = './modules'
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 from client_set_up import *
 

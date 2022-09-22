@@ -107,7 +107,8 @@ if results == 'prt':
                    .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)
 # Return the results as chains
 else:
-    chains_path = os.path.join(run_dir_path, '{e}_chains.parquet'.format(e=experiment))
+    chains_file = '{e}_chains.parquet'.format(e=experiment)
+    chains_path = os.path.join(run_dir_path, chains_file)
     print('chains_path:', chains_path)
     chains_to_write = []
     chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
@@ -123,8 +124,8 @@ else:
     print(chains_df.head())
     chains_df.to_parquet(chains_path, index=False, compression='gzip')
     print('uploading chains result file')
-    s3_client.upload_file(chains_path, results_bucket, experiment)
+    s3_client.upload_file(chains_path, results_bucket, chains_file)
 
 # Delete run directory and files
-#if 'run_dir' in os.listdir(working_dir):
-	# shutil.rmtree(run_dir_path)
+if 'run_dir' in os.listdir(working_dir):
+    shutil.rmtree(run_dir_path)

@@ -34,24 +34,23 @@ chains = list(set((chains_df['chain'])))
 # chains = chains[:10000]
 print('{n1} chains'.format(n1=len(chains)))
 
-if results == 'chains':
-    chains_file = '{e}_chains.parquet'.format(e=experiment)
-    #chains_path = os.path.join(run_dir_path, chains_file)
-    print('chains_file:', chains_file)
-    chains_to_write = []
-    for index, chain in enumerate(chains):
-        tasks = chain.split(node_delimiter)
-        tasks = [nodes_decoder[t] for t in tasks]
-        chain_to_write = node_delimiter.join(tasks)
-        chain_index = 'C{i}'.format(i=str(index + 1))
-        chains_to_write.append((chain_index, chain_to_write))
-    chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
-    print(chains_df.head())
-    chains_df.to_parquet(chains_file, index=False, compression='gzip')
-    print('uploading chains result file')
-    s3_client.upload_file(chains_file, results_bucket, chains_file)
+chains_file = '{e}_chains.parquet'.format(e=experiment)
+print('chains_file:', chains_file)
+chains_to_write = []
+for index, chain in enumerate(chains):
+    tasks = chain.split(node_delimiter)
+    tasks = [nodes_decoder[t] for t in tasks]
+    chain_to_write = node_delimiter.join(tasks)
+    chain_index = 'C{i}'.format(i=str(index + 1))
+    chains_to_write.append((chain_index, chain_to_write))
+chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
+print(chains_df.head())
+chains_df.to_parquet(chains_file, index=False, compression='gzip')
+print('uploading chains result file')
+s3_client.upload_file(chains_file, results_bucket, chains_file)
+os.remove(chains_file)
 
-else:
+if results == 'prt':
 	# Tasks metadata
 	print('Generate tasks metadata')
 	subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
@@ -124,10 +123,11 @@ else:
 	for chunk_rows_count in executor.map(chain_to_rows, indexed_chains_chunks):
 		rows_count += chunk_rows_count
 
+	# Results file
+	print('combine, zip and upload results')
+	subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)
+
 print('build results started on', start_time)
 print('build results ended on', datetime.now().strftime("%H:%M:%S"))
 
-# Results file
-print('combine, zip and upload results')
-subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)
 

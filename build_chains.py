@@ -38,9 +38,6 @@ G = nx.read_edgelist(sub_graph_file_name, create_using=nx.DiGraph)
 Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]
 root_successors = tuple(G.successors(root_node))
-# scaffolds_set = 'scaffolds'
-# redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
-# redisClient.hset(scaffolds_set, 1, root_node)
 scaffolds = {1: root_node}
 scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=pid))
 np.save(scaffolds_dict, scaffolds)
@@ -77,7 +74,6 @@ while next_journeys_steps:
             chains_rows.append((cid, chain))
         # Update scaffolds
         else:
-            #redisClient.hset(scaffolds_set, cid, chain)
             scaffolds[cid] = chain
     np.save(scaffolds_dict, scaffolds)
 
@@ -106,18 +102,13 @@ while next_journeys_steps:
     next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
 
     # filter saturated scaffolds
-    #scaffolds_count = redisClient.hlen(scaffolds_set)
     scaffolds_count = len(scaffolds)
     next_journeys_steps_count = len(next_journeys_steps)
-    #print('{n1} scaffolds, {n2} next journeys steps, {n3} journey chains, {n4} chains'
-    #      .format(n1=scaffolds_count, n2=next_journeys_steps_count, n3=journey_chains_count, n4=chains_written_count))
 
-#redisClient.flushdb()
 # Write the remaning results
 if len(chains_rows) > 0:
     statement = insert_rows(db_name, chains_table, chains_cols, chains_rows)
     cur.execute(statement)
     conn.commit()
 conn.close()
-#print('build chains started on', start_time)
 print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))

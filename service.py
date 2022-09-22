@@ -113,7 +113,7 @@ else:
     chains = list(set((chains_df['chain'])))
     for index, chain in enumerate(chains):
         tasks = chain.split(node_delimiter)
-        tasks = [tasks_decoder[t] for t in tasks]
+        tasks = [nodes_decoder[t] for t in tasks]
         chain_to_write = node_delimiter.join(tasks)
         chain_index = 'C{i}'.format(i=str(index + 1))
         chains_to_write.append((chain_index, chain_to_write))

@@ -107,10 +107,12 @@ if results == 'prt':
                    .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)
 # Return the results as chains
 else:
-    chains_path = os.path.join(run_dir_path, 'chains.parquet')
+    chains_path = os.path.join(run_dir_path, '{e}_chains.parquet'.format(e=experiment))
+    print('chains_path:', chains_path)
     chains_to_write = []
     chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
     chains = list(set((chains_df['chain'])))
+    print('{n} chains to re-write'.format(n=len(chains)), chains[:10])
     for index, chain in enumerate(chains):
         tasks = chain.split(node_delimiter)
         tasks = [nodes_decoder[t] for t in tasks]
@@ -118,10 +120,11 @@ else:
         chain_index = 'C{i}'.format(i=str(index + 1))
         chains_to_write.append((chain_index, chain_to_write))
     chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
+    print(chains_df.head())
     chains_df.to_parquet(chains_path, index=False, compression='gzip')
     print('uploading chains result file')
     s3_client.upload_file(chains_path, results_bucket, experiment)
 
 # Delete run directory and files
-if 'run_dir' in os.listdir(working_dir):
-	shutil.rmtree(run_dir_path)
+#if 'run_dir' in os.listdir(working_dir):
+	# shutil.rmtree(run_dir_path)

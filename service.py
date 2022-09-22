@@ -117,7 +117,7 @@ else:
         chain_to_write = node_delimiter.join(tasks)
         chain_index = 'C{i}'.format(i=str(index + 1))
         chains_to_write.append((chain_index, chain_to_write))
-    chains_df = pd.DataFrame(chain_to_write, columns=['Chain_ID', 'Chain'])
+    chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
     chains_df.to_parquet(chains_path, index=False, compression='gzip')
     print('uploading chains result file')
     s3_client.upload_file(chains_path, results_bucket, experiment)

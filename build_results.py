@@ -122,7 +122,6 @@ if results == 'prt':
 	parquet_counter = 0
 	for chunk_rows_count in executor.map(chain_to_rows, indexed_chains_chunks):
 		rows_count += chunk_rows_count
-
 	# Results file
 	print('combine, zip and upload results')
 	subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)

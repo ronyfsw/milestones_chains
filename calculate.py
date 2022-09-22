@@ -1,7 +1,6 @@
-import os, sys, pathlib
-modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modules/')
-#modules_dir = './modules'
-if modules_dir not in sys.path: sys.path.append(modules_dir)
+# import os, sys, pathlib
+# modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modules/')
+# if modules_dir not in sys.path: sys.path.append(modules_dir)
 from client_set_up import *
 
 def run_calculation_process(data_file_name, experiment, tasks_types, results, query):
@@ -24,7 +23,6 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     # Stop compute instance
     response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
     print('Compute instance stopped')
-
     # Prepare results
     print('Preparing results')
     S3_RESOURCE.Bucket(results_bucket).download_file(experiment, 'experiment_zipped')
@@ -37,8 +35,6 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
         file_path = os.path.join(experiment, results_files[0])
         df = pd.read_parquet(file_path)
         df.to_excel('{e}_results.xlsx'.format(e=experiment), index=False)
-
     if query == 'web':
         pq.write_table(pq.ParquetDataset(experiment).read(), 'results.parquet', row_group_size=100000)
-
     print('The results have been downloaded to {e}'.format(e=experiment))

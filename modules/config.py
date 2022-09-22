@@ -6,20 +6,12 @@ modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 from libraries import *
 
-# Data
-wd = os.getcwd()
-experiment_id = 3
-partition_size_cutoff = 50
-fill_date = '1944-06-06'
-
 # Pipeline
+partition_size_cutoff = 50
 journey_chunk = 50000
+chains_chunk = 100000
 available_executors = 44
 node_delimiter = '<>'
-chain_delimiter ='<**>'
-
-# Build results
-chains_chunk = 100000
 
 # AWS
 profile_name = 'ds_sandbox'

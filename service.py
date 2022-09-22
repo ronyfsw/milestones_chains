@@ -103,27 +103,8 @@ print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
 # Return results in the tabular PRT format or as chains
 if results == 'prt':
-    subprocess.run("python3 build_rows.py {f} {e} {t}"
-                   .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)
-else:
-    chains_file = '{e}_chains.parquet'.format(e=experiment)
-    #chains_path = os.path.join(run_dir_path, chains_file)
-    print('chains_file:', chains_file)
-    chains_to_write = []
-    chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
-    chains = list(set((chains_df['chain'])))
-    print('{n} chains to re-write'.format(n=len(chains)), chains[:10])
-    for index, chain in enumerate(chains):
-        tasks = chain.split(node_delimiter)
-        tasks = [nodes_decoder[t] for t in tasks]
-        chain_to_write = node_delimiter.join(tasks)
-        chain_index = 'C{i}'.format(i=str(index + 1))
-        chains_to_write.append((chain_index, chain_to_write))
-    chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
-    print(chains_df.head())
-    chains_df.to_parquet(chains_file, index=False, compression='gzip')
-    print('uploading chains result file')
-    s3_client.upload_file(chains_file, results_bucket, chains_file)
+    subprocess.run("python3 build_results.py {f} {e} {t} {r}"
+                   .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
 
 # Delete run directory and files
 if 'run_dir' in os.listdir(working_dir):

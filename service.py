@@ -1,4 +1,6 @@
 # run statement: python service.py <file_name> <experiment_name> <'tdas'> <'prt'>
+import pandas as pd
+
 print('start')
 import os, sys, pathlib
 modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modules/')
@@ -98,9 +100,27 @@ run_paths = run_paths.rstrip(' &')
 subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
+
+# Return results in the tabular PRT format
 if results == 'prt':
     subprocess.run("python3 build_rows.py {f} {e} {t}"
                    .format(f=data_file_name, e=experiment, t=tasks_types), shell=True)
+# Return the results as chains
+else:
+    chains_path = os.path.join(run_dir_path, 'chains.parquet')
+    chains_to_write = []
+    chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
+    chains = list(set((chains_df['chain'])))
+    for index, chain in enumerate(chains):
+        tasks = chain.split(node_delimiter)
+        tasks = [tasks_decoder[t] for t in tasks]
+        chain_to_write = node_delimiter.join(tasks)
+        chain_index = 'C{i}'.format(i=str(index + 1))
+        chains_to_write.append((chain_index, chain_to_write))
+    chains_df = pd.DataFrame(chain_to_write, columns=['Chain_ID', 'Chain'])
+    chains_df.to_parquet(chains_path, index=False, compression='gzip')
+    print('uploading chains result file')
+    s3_client.upload_file(chains_path, results_bucket, experiment)
 
 # Delete run directory and files
 if 'run_dir' in os.listdir(working_dir):

@@ -73,15 +73,11 @@ def chain_to_rows(index_chunk):
 	chain_rows = []
 	for row in rows:
 		id = row[0]
-		#print('id:', id)
 		if id in md_ids:
 			row_md = list(metadata_duration[metadata_duration['ID'] == id].values[0])[1:]
-			#print('row_md:', row_md)
 			row = list(row) + row_md
 			row = tuple([str(e) for e in row])
 			chain_rows.append(row)
-		#else:
-		#	print('{id} not in md'.format(id=id))
 
 	results_rows = pd.DataFrame(chain_rows, columns=results_cols).drop_duplicates()
 	results_rows.to_parquet(results_file_name, index=False, compression='gzip')
@@ -114,11 +110,5 @@ print('build rows ended on', datetime.now().strftime("%H:%M:%S"))
 
 # Results file
 print('combine, zip and upload results')
-#pq.write_table(pq.ParquetDataset(chunks_path).read(), 'results.parquet', row_group_size=100000)
-#print('zip results')
-#os.system('zip {r} {f}'.format(f='results.parquet', r=zipped_results_file_name))
-#s3_client.upload_file(zipped_results_file_name, results_bucket, experiment)
-
-# Tasks metadata
 subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)
 

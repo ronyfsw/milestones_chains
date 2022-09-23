@@ -1,15 +1,19 @@
-# import os, sys, pathlib
-# modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modules/')
-# if modules_dir not in sys.path: sys.path.append(modules_dir)
 from client_set_up import *
 
 def run_calculation_process(data_file_name, experiment, tasks_types, results, query):
+    # Experiment directories
     working_dir = os.getcwd()
-    data_path = os.path.join(working_dir, 'data', data_file_name)
-    chains_file = '{e}_chains.parquet'.format(e=experiment)
     if experiment in os.listdir(working_dir):
         shutil.rmtree(experiment)
     os.mkdir(experiment)
+    data_path = os.path.join(working_dir, 'data', data_file_name)
+
+    # Experiment results file
+    spreadsheet = os.path.join(experiment, 'results.xlsx')
+    zipped_parquet_files = os.path.join(experiment, 'results.txt')
+    chains_file = os.path.join(experiment, 'chains.parquet')
+    chains_list = os.path.join(experiment, 'chains.txt')
+
     # Upload data to an S3 bucket
     S3_CLIENT.upload_file(data_path, data_bucket, data_file_name)
     print('Data file uploaded to S3')
@@ -25,16 +29,22 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     print('Compute instance stopped')
     # Prepare results
     print('Preparing results')
-    S3_RESOURCE.Bucket(results_bucket).download_file(experiment, 'experiment_zipped')
+    S3_RESOURCE.Bucket(results_bucket).download_file(experiment, 'tabular_result_files')
     if results == 'chains':
+        print('downloading chains parquet file')
         S3_RESOURCE.Bucket(results_bucket).download_file(chains_file, chains_file)
-    with ZipFile('experiment_zipped', 'r') as zipObj:
+        print('downloading chains list file')
+        S3_RESOURCE.Bucket(results_bucket).download_file(chains_list, chains_list)
+    with ZipFile('tabular_result_files', 'r') as zipObj:
         zipObj.extractall(path=experiment)
+    shutil.rmtree('tabular_result_files')
     results_files = os.listdir(experiment)
+    # Write the results to an MS Excel spreadsheet if the calculation produced less than 100K chains
     if len(results_files) == 1:
         file_path = os.path.join(experiment, results_files[0])
         df = pd.read_parquet(file_path)
-        df.to_excel('{e}_results.xlsx'.format(e=experiment), index=False)
+        df.to_excel(spreadsheet, index=False)
+    # Zip the parquet files if the user intends to use the web interface
     if query == 'web':
-        pq.write_table(pq.ParquetDataset(experiment).read(), 'results.parquet', row_group_size=100000)
+        pq.write_table(pq.ParquetDataset(experiment).read(), zipped_parquet_files, row_group_size=100000)
     print('The results have been downloaded to {e}'.format(e=experiment))

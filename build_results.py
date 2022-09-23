@@ -34,29 +34,39 @@ chains = list(set((chains_df['chain'])))
 # chains = chains[:10000]
 print('{n1} chains'.format(n1=len(chains)))
 
+# Tasks metadata
+print('Generate tasks metadata')
+subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
+print('Generate tasks metadata completed')
+metadata_duration = pd.read_excel('metadata_duration.xlsx')
+md_ids = list(metadata_duration['ID'])
+print('{n} ids in metadata_duration'.format(n=len(md_ids)))
+
 chains_file = '{e}_chains.parquet'.format(e=experiment)
+chains_list = '{e}_chains.txt'.format(e=experiment)
 print('chains_file:', chains_file)
 chains_to_write = []
 for index, chain in enumerate(chains):
     tasks = chain.split(node_delimiter)
     tasks = [nodes_decoder[t] for t in tasks]
+    tasks = [t for t in tasks if t in md_ids]
     chain_to_write = node_delimiter.join(tasks)
     chain_index = 'C{i}'.format(i=str(index + 1))
     chains_to_write.append((chain_index, chain_to_write))
+
+# Write chains to a parquet and text files
 chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
-print(chains_df.head())
 chains_df.to_parquet(chains_file, index=False, compression='gzip')
+chains = list(chains_df['Chain'])
+chains = '\n'.join(chains) + '\n'
+with open(chains_df, 'w') as f: f.write(chains)
 print('uploading chains result file')
-s3_client.upload_file(chains_file, results_bucket, chains_file)
-os.remove(chains_file)
+files = [chains_df, chains_list]
+for file in files:
+	s3_client.upload_file(file, results_bucket, file)
+	os.remove(file)
 
 if results == 'prt':
-	# Tasks metadata
-	print('Generate tasks metadata')
-	subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
-	print('Generate tasks metadata completed')
-	metadata_duration = pd.read_excel('metadata_duration.xlsx')
-
 	# Tasks to Rows
 	print('Tasks to Rows split')
 	def chain_to_rows(index_chunk):
@@ -114,8 +124,6 @@ if results == 'prt':
 	executor = ProcessPoolExecutor(available_executors)
 	results_rows = []
 	rows_count = 0
-	md_ids = list(metadata_duration['ID'])
-	print('{n} ids in metadata_duration'.format(n=len(md_ids)))
 	print('iterating chains')
 	start1 = time.time()
 	performance = []

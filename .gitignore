@@ -6,6 +6,8 @@ venv
 results
 config
 dev
+run_dir
+tabular_result_files
 *.txt
 *.xlsx
 *.npy

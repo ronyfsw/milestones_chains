@@ -6,15 +6,16 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     if experiment in os.listdir(working_dir):
         shutil.rmtree(experiment)
     os.mkdir(experiment)
+    chains_dir = os.path.join(experiment, 'chains')
     data_path = os.path.join(working_dir, 'data', data_file_name)
 
     # Experiment results file
     spreadsheet = os.path.join(experiment, 'results.xlsx')
     zipped_parquet_files = os.path.join(experiment, 'results.parquet')
     chains_file = os.path.join('chains.parquet')
-    chains_path = os.path.join(experiment, chains_file)
+    chains_path = os.path.join(chains_dir, chains_file)
     chains_list = os.path.join('chains.txt')
-    chains_list_path = os.path.join(experiment, chains_list)
+    chains_list_path = os.path.join(chains_dir, chains_list)
 
     # Upload data to an S3 bucket
     S3_CLIENT.upload_file(data_path, data_bucket, data_file_name)

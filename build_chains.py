@@ -26,9 +26,6 @@ experiment = args.experiment
 tasks_types = args.tasks_types
 results = args.results
 chains_table = '{e}_chains'.format(e=experiment)
-build_rows = False
-if results == 'prt': build_rows = True
-chains_table = '{e}_chains'.format(e=experiment)
 
 # Tasks
 tasks_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]

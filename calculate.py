@@ -10,9 +10,11 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
 
     # Experiment results file
     spreadsheet = os.path.join(experiment, 'results.xlsx')
-    zipped_parquet_files = os.path.join(experiment, 'results.txt')
-    chains_file = os.path.join(experiment, 'chains.parquet')
-    chains_list = os.path.join(experiment, 'chains.txt')
+    zipped_parquet_files = os.path.join(experiment, 'results.parquet')
+    chains_file = os.path.join('chains.parquet')
+    chains_path = os.path.join(experiment, chains_file)
+    chains_list = os.path.join('chains.txt')
+    chains_list_path = os.path.join(experiment, chains_list)
 
     # Upload data to an S3 bucket
     S3_CLIENT.upload_file(data_path, data_bucket, data_file_name)
@@ -32,9 +34,9 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     S3_RESOURCE.Bucket(results_bucket).download_file(experiment, 'tabular_result_files')
     if results == 'chains':
         print('downloading chains parquet file')
-        S3_RESOURCE.Bucket(results_bucket).download_file(chains_file, chains_file)
+        S3_RESOURCE.Bucket(results_bucket).download_file(chains_path, chains_path)
         print('downloading chains list file')
-        S3_RESOURCE.Bucket(results_bucket).download_file(chains_list, chains_list)
+        S3_RESOURCE.Bucket(results_bucket).download_file(chains_list_path, chains_list_path)
     with ZipFile('tabular_result_files', 'r') as zipObj:
         zipObj.extractall(path=experiment)
     shutil.rmtree('tabular_result_files')

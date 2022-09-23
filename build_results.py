@@ -44,6 +44,12 @@ print('{n} ids in metadata_duration'.format(n=len(md_ids)))
 
 chains_file = '{e}_chains.parquet'.format(e=experiment)
 chains_list = '{e}_chains.txt'.format(e=experiment)
+
+chains_file = os.path.join('chains.parquet')
+chains_path = os.path.join(experiment, chains_file)
+chains_list = os.path.join('chains.txt')
+chains_list_path = os.path.join(experiment, chains_list)
+
 print('chains_file:', chains_file)
 chains_to_write = []
 for index, chain in enumerate(chains):
@@ -61,10 +67,11 @@ chains = list(chains_df['Chain'])
 chains = '\n'.join(chains) + '\n'
 with open(chains_df, 'w') as f: f.write(chains)
 print('uploading chains result file')
-files = [chains_df, chains_list]
-for file in files:
-	s3_client.upload_file(file, results_bucket, file)
-	os.remove(file)
+s3_client.upload_file(chains_file, results_bucket, chains_path)
+os.remove(chains_file)
+s3_client.upload_file(chains_list, results_bucket, chains_list_path)
+os.remove(chains_list)
+
 
 if results == 'prt':
 	# Tasks to Rows

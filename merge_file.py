@@ -34,7 +34,7 @@ with ZipFile(zipped_results_file_name, 'w') as zip:
 print('zip results took {t} seconds'.format(t=time.time()-start))
 print('uploading zipped file to s3')
 start = time.time()
-print('uploading result file')
+print('uploading result file', zipped_results_file_name)
 experiment_path = os.path.join(experiment, experiment)
 s3_client.upload_file(zipped_results_file_name, results_bucket, experiment_path)
 print('merge and upload results ended on', datetime.now().strftime("%H:%M:%S"))

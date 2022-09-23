@@ -68,12 +68,8 @@ chains = '\n'.join(chains) + '\n'
 with open(chains_list, 'w') as f: f.write(chains)
 print('uploading chains result file')
 s3_client.upload_file(chains_file, results_bucket, chains_path)
-s3_client.upload_file(chains_file, results_bucket, chains_file)
-
 os.remove(chains_file)
 s3_client.upload_file(chains_list, results_bucket, chains_list_path)
-s3_client.upload_file(chains_list, results_bucket, chains_list)
-
 os.remove(chains_list)
 
 

@@ -42,7 +42,8 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
         print('downloading chains list file')
         S3_RESOURCE.Bucket(results_bucket).download_file(chains_list_path, chains_list_path)
     else:
-        S3_RESOURCE.Bucket(results_bucket).download_file(experiment, 'tabular_result_files')
+        experiment_path = os.path.join(experiment, experiment)
+        S3_RESOURCE.Bucket(results_bucket).download_file(experiment_path, 'tabular_result_files')
         with ZipFile('tabular_result_files', 'r') as zipObj:
             zipObj.extractall(path=experiment)
         shutil.rmtree('tabular_result_files')

@@ -63,9 +63,9 @@ for index, chain in enumerate(chains):
 # Write chains to a parquet and text files
 chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
 chains_df.to_parquet(chains_file, index=False, compression='gzip')
-chains = list(chains_df['Chain'])
-chains = '\n'.join(chains) + '\n'
-with open(chains_list, 'w') as f: f.write(chains)
+chains_to_write = list(chains_df['Chain'])
+chains_to_write = '\n'.join(chains_to_write) + '\n'
+with open(chains_list, 'w') as f: f.write(chains_to_write)
 print('uploading chains result file')
 s3_client.upload_file(chains_file, results_bucket, chains_path)
 os.remove(chains_file)
@@ -84,9 +84,9 @@ if results == 'prt':
 			chain_index, chain = index_chain
 			# Chain index
 			chain_index = 'C{i}'.format(i=str(chain_index + 1))
-			print('chain:', chain)
+			#print('chain:', chain)
 			tasks = chain.split(node_delimiter)
-			print('tasks:', tasks)
+			#rint('tasks:', tasks)
 			# chain: M
 			# tasks: ['M']
 			tasks = [nodes_decoder[t] for t in tasks]
@@ -127,7 +127,7 @@ if results == 'prt':
 	indices_chains = []
 	for index, chain in enumerate(chains):
 		indices_chains.append((index, chain))
-	print('indices_chains:', indices_chains[:5])
+	#print('indices_chains:', indices_chains[:5])
 	chunked_indices_chains = [indices_chains[i:i + chains_chunk] for i in range(0, len(indices_chains), chains_chunk)]
 	indexed_chains_chunks = []
 	for index, chunk in enumerate(chunked_indices_chains):

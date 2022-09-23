@@ -84,7 +84,9 @@ if results == 'prt':
 			chain_index, chain = index_chain
 			# Chain index
 			chain_index = 'C{i}'.format(i=str(chain_index + 1))
+			print('chain:', chain)
 			tasks = chain.split(node_delimiter)
+			print('tasks:', tasks)
 			tasks = [nodes_decoder[t] for t in tasks]
 			for index, task in enumerate(tasks):
 				# Task index

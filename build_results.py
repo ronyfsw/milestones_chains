@@ -87,6 +87,8 @@ if results == 'prt':
 			print('chain:', chain)
 			tasks = chain.split(node_delimiter)
 			print('tasks:', tasks)
+			# chain: M
+			# tasks: ['M']
 			tasks = [nodes_decoder[t] for t in tasks]
 			for index, task in enumerate(tasks):
 				# Task index
@@ -125,6 +127,7 @@ if results == 'prt':
 	indices_chains = []
 	for index, chain in enumerate(chains):
 		indices_chains.append((index, chain))
+	print('indices_chains:', indices_chains[:5])
 	chunked_indices_chains = [indices_chains[i:i + chains_chunk] for i in range(0, len(indices_chains), chains_chunk)]
 	indexed_chains_chunks = []
 	for index, chunk in enumerate(chunked_indices_chains):

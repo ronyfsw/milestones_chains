@@ -69,7 +69,7 @@ chains_to_write = list(chains_df['Chain'])
 chains_to_write = '\n'.join(chains_to_write) + '\n'
 with open(chains_list, 'w') as f: f.write(chains_to_write)
 file_names = [chains_file, chains_list]
-zipped_chain_files = '{e}_chains.zip'.format(e=experiment)
+zipped_chain_files = 'chains.zip'.format(e=experiment)
 with ZipFile(zipped_chain_files, 'w') as zip:
      for file_name in file_names:
         # print(file_name)

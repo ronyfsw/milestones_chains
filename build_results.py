@@ -69,11 +69,14 @@ chains_to_write = list(chains_df['Chain'])
 chains_to_write = '\n'.join(chains_to_write) + '\n'
 with open(chains_list, 'w') as f: f.write(chains_to_write)
 file_names = [chains_file, chains_list]
-with ZipFile('{e}_chains.zip'.format(e=experiment), 'w') as zip:
+zipped_chain_files = '{e}_chains.zip'.format(e=experiment)
+with ZipFile(zipped_chain_files, 'w') as zip:
      for file_name in file_names:
         # print(file_name)
         zip.write(file_name, arcname=file_name)
         os.remove(file_name)
+chains_path = os.path.join(experiment, zipped_chain_files)
+s3_client.upload_file(zipped_chain_files, results_bucket, chains_path)
 # print('uploading chains result file')
 # s3_client.upload_file(chains_file, results_bucket, chains_path)
 # os.remove(chains_file)

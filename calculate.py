@@ -36,17 +36,18 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     print('Compute instance stopped')
     # Prepare results
     print('Preparing results')
-    if results == 'chains':
-        print('downloading chains parquet file')
-        S3_RESOURCE.Bucket(results_bucket).download_file(chains_path, chains_path)
-        print('downloading chains list file')
-        S3_RESOURCE.Bucket(results_bucket).download_file(chains_list_path, chains_list_path)
-    else:
+    print('downloading chains parquet file')
+    print('chains_path:', chains_path)
+    print('chains_list_path:', chains_list_path)
+    S3_RESOURCE.Bucket(results_bucket).download_file(chains_path, chains_path)
+    print('downloading chains list file')
+    S3_RESOURCE.Bucket(results_bucket).download_file(chains_list_path, chains_list_path)
+    if results == 'prt':
         experiment_path = os.path.join(experiment, experiment)
         S3_RESOURCE.Bucket(results_bucket).download_file(experiment_path, 'tabular_result_files')
         with ZipFile('tabular_result_files', 'r') as zipObj:
             zipObj.extractall(path=experiment)
-        shutil.rmtree('tabular_result_files')
+        # shutil.rmtree('tabular_result_files')
         results_files = os.listdir(experiment)
         # Write the results to an MS Excel spreadsheet if the calculation produced less than 100K chains
         if len(results_files) == 1:

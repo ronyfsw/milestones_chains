@@ -49,8 +49,10 @@ chains_file = os.path.join('chains.parquet')
 chains_path = os.path.join(experiment, chains_file)
 chains_list = os.path.join('chains.txt')
 chains_list_path = os.path.join(experiment, chains_list)
-
-print('chains_file:', chains_file)
+print('chains list:', chains_list)
+print('chains file:', chains_file)
+print('chains_path:', chains_path)
+print('chains_list_path:', chains_list_path)
 chains_to_write = []
 for index, chain in enumerate(chains):
     tasks = chain.split(node_delimiter)

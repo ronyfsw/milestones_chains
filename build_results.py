@@ -68,12 +68,17 @@ chains_df.to_parquet(chains_file, index=False, compression='gzip')
 chains_to_write = list(chains_df['Chain'])
 chains_to_write = '\n'.join(chains_to_write) + '\n'
 with open(chains_list, 'w') as f: f.write(chains_to_write)
-print('uploading chains result file')
-s3_client.upload_file(chains_file, results_bucket, chains_path)
-os.remove(chains_file)
-s3_client.upload_file(chains_list, results_bucket, chains_list_path)
-os.remove(chains_list)
-
+file_names = [chains_file, chains_list]
+with ZipFile('{e}_chains.zip'.format(e=experiment), 'w') as zip:
+     for file_name in file_names:
+        # print(file_name)
+        zip.write(file_name, arcname=file_name)
+        os.remove(file_name)
+# print('uploading chains result file')
+# s3_client.upload_file(chains_file, results_bucket, chains_path)
+# os.remove(chains_file)
+# s3_client.upload_file(chains_list, results_bucket, chains_list_path)
+# os.remove(chains_list)
 
 if results == 'prt':
 	# Tasks to Rows
@@ -144,7 +149,8 @@ if results == 'prt':
 	parquet_counter = 0
 	for chunk_rows_count in executor.map(chain_to_rows, indexed_chains_chunks):
 		rows_count += chunk_rows_count
-	# Results file
+
+	# Merge results
 	print('combine, zip and upload results')
 	subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)
 

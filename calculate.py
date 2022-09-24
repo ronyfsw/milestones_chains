@@ -1,5 +1,6 @@
 from client_set_up import *
 
+
 def run_calculation_process(data_file_name, experiment, tasks_types, results, query):
     # Experiment directories
     working_dir = os.getcwd()
@@ -12,9 +13,9 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     # Experiment results file
     spreadsheet = os.path.join(experiment, 'results.xlsx')
     zipped_parquet_files = os.path.join(experiment, 'results.parquet')
-    chains_file = os.path.join('chains.parquet')
-    chains_path = os.path.join(chains_dir, chains_file)
-    chains_list = os.path.join('chains.txt')
+    chains_file = 'chains.parquet'
+    chains_path = os.path.join(experiment, chains_file)
+    chains_list = 'chains.txt'
     chains_list_path = os.path.join(chains_dir, chains_list)
 
     # Upload data to an S3 bucket
@@ -36,12 +37,16 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     print('Compute instance stopped')
     # Prepare results
     print('Preparing results')
-    print('downloading chains parquet file')
+    # print('chains list:', chains_list)
+    zipped_chain_files = '{e}_chains.zip'.format(e=experiment)
+    print('chains file:', zipped_chain_files)
     print('chains_path:', chains_path)
-    print('chains_list_path:', chains_list_path)
-    S3_RESOURCE.Bucket(results_bucket).download_file(chains_path, chains_path)
-    print('downloading chains list file')
-    S3_RESOURCE.Bucket(results_bucket).download_file(chains_list_path, chains_list_path)
+    # print('chains_list_path:', chains_list_path)
+    # print('downloading chains parquet file')
+    # S3_RESOURCE.Bucket(results_bucket).download_file(chains_path, chains_path)
+    # print('downloading chains list file')
+    # S3_RESOURCE.Bucket(results_bucket).download_file(chains_list_path, chains_list_path)
+    S3_RESOURCE.Bucket(results_bucket).download_file(zipped_chain_files, chains_path)
     if results == 'prt':
         experiment_path = os.path.join(experiment, experiment)
         S3_RESOURCE.Bucket(results_bucket).download_file(experiment_path, 'tabular_result_files')

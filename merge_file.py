@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('experiment')
 args = parser.parse_args()
 experiment = args.experiment
-zipped_results_file_name = '{e}_results.zip'.format(e=experiment)
+zipped_results_file_name = '{e}_prt.zip'.format(e=experiment)
 
 start_time = datetime.now().strftime("%H:%M:%S")
 print('merge and upload results started on', start_time)

@@ -1,5 +1,3 @@
-import pandas as pd
-
 from client_set_up import *
 
 def run_calculation_process(data_file_name, experiment, tasks_types, results, query):
@@ -9,9 +7,9 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
         shutil.rmtree(experiment)
     os.mkdir(experiment)
     data_path = os.path.join(working_dir, 'data', data_file_name)
-    chains_path = os.path.join(experiment, 'chains', 'chains.parquet')
+    chains_file = 'chains.parquet'
+    chains_path = os.path.join(experiment, chains_file)
     prt_path = os.path.join(experiment, 'prt')
-    prt_files_path = os.path.join(experiment, 'prt')
 
     # Experiment results file
     spreadsheet = os.path.join(experiment, 'results.xlsx')
@@ -36,13 +34,15 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     print('Compute instance stopped')
     # Prepare results
     print('Preparing results')
+    print('chains file', chains_file)
+    print('chains path', chains_path)
     S3_RESOURCE.Bucket(results_bucket).download_file(chains_path, chains_path)
     rows_count = 0
     if results == 'prt':
         S3_RESOURCE.Bucket(results_bucket).download_file(prt_path, 'prt')
         with ZipFile('prt', 'r') as zipObj:
-            zipObj.extractall(path=prt_files_path)
-        shutil.rmtree('prt')
+            zipObj.extractall(path=prt_path)
+        os.remove('prt')
         results_files = os.listdir(experiment)
         # Count rows
         for file in results_files:
@@ -61,7 +61,7 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     chains_df = pd.read_parquet(chains_path)
     chains_count = len(chains_df)
     print('The results have been downloaded to {e}'.format(e=experiment))
-    print('{c} chains written to chains.parquet'.format(c=chains_count))
+    print('{c} chains written to {f}'.format(c=chains_count, f='chains.parquet'))
     if rows_count > 0:
         print('{r} tasks rows written to parquet files in the prt sub-directory'.format(r=rows_count))
 

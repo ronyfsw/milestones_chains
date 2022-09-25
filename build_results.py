@@ -65,17 +65,6 @@ for index, chain in enumerate(chains):
 # Write chains to a parquet and text files
 chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
 chains_df.to_parquet(chains_file, index=False, compression='gzip')
-# chains_to_write = list(chains_df['Chain'])
-# chains_to_write = '\n'.join(chains_to_write) + '\n'
-# with open(chains_list, 'w') as f: f.write(chains_to_write)
-# file_names = [chains_file, chains_list]
-# zipped_chain_files = 'chains.zip'.format(e=experiment)
-# with ZipFile(zipped_chain_files, 'w') as zip:
-#      for file_name in file_names:
-#         # print(file_name)
-#         zip.write(file_name, arcname=file_name)
-#         os.remove(file_name)
-# chains_path = os.path.join(experiment, zipped_chain_files)
 chains_path = os.path.join(experiment, chains_file)
 s3_client.upload_file(chains_file, results_bucket, chains_path)
 

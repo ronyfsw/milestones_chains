@@ -42,17 +42,17 @@ metadata_duration = pd.read_excel('metadata_duration.xlsx')
 md_ids = list(metadata_duration['ID'])
 print('{n} ids in metadata_duration'.format(n=len(md_ids)))
 
-chains_file = '{e}_chains.parquet'.format(e=experiment)
-chains_list = '{e}_chains.txt'.format(e=experiment)
+#chains_file = '{e}_chains.parquet'.format(e=experiment)
+#chains_list = '{e}_chains.txt'.format(e=experiment)
 
-chains_file = os.path.join('chains.parquet')
+chains_file = 'chains.parquet'
 chains_path = os.path.join(experiment, 'chains', chains_file)
-chains_list = os.path.join('chains.txt')
-chains_list_path = os.path.join(experiment, 'chains', chains_list)
-print('chains list:', chains_list)
+#chains_list = os.path.join('chains.txt')
+#chains_list_path = os.path.join(experiment, 'chains', chains_list)
+#print('chains list:', chains_list)
 print('chains file:', chains_file)
 print('chains_path:', chains_path)
-print('chains_list_path:', chains_list_path)
+#print('chains_list_path:', chains_list_path)
 chains_to_write = []
 for index, chain in enumerate(chains):
     tasks = chain.split(node_delimiter)
@@ -65,23 +65,19 @@ for index, chain in enumerate(chains):
 # Write chains to a parquet and text files
 chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
 chains_df.to_parquet(chains_file, index=False, compression='gzip')
-chains_to_write = list(chains_df['Chain'])
-chains_to_write = '\n'.join(chains_to_write) + '\n'
-with open(chains_list, 'w') as f: f.write(chains_to_write)
-file_names = [chains_file, chains_list]
-zipped_chain_files = 'chains.zip'.format(e=experiment)
-with ZipFile(zipped_chain_files, 'w') as zip:
-     for file_name in file_names:
-        # print(file_name)
-        zip.write(file_name, arcname=file_name)
-        os.remove(file_name)
-chains_path = os.path.join(experiment, zipped_chain_files)
-s3_client.upload_file(zipped_chain_files, results_bucket, chains_path)
-# print('uploading chains result file')
-# s3_client.upload_file(chains_file, results_bucket, chains_path)
-# os.remove(chains_file)
-# s3_client.upload_file(chains_list, results_bucket, chains_list_path)
-# os.remove(chains_list)
+# chains_to_write = list(chains_df['Chain'])
+# chains_to_write = '\n'.join(chains_to_write) + '\n'
+# with open(chains_list, 'w') as f: f.write(chains_to_write)
+# file_names = [chains_file, chains_list]
+# zipped_chain_files = 'chains.zip'.format(e=experiment)
+# with ZipFile(zipped_chain_files, 'w') as zip:
+#      for file_name in file_names:
+#         # print(file_name)
+#         zip.write(file_name, arcname=file_name)
+#         os.remove(file_name)
+# chains_path = os.path.join(experiment, zipped_chain_files)
+chains_path = os.path.join(experiment, chains_file)
+s3_client.upload_file(chains_file, results_bucket, chains_path)
 
 if results == 'prt':
 	# Tasks to Rows

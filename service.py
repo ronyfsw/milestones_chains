@@ -9,7 +9,6 @@ if modules_dir not in sys.path: sys.path.append(modules_dir)
 #from modules.worm_modules import *
 from db_tables import *
 from graphs import *
-from worm_modules import *
 from directories import *
 from chains import *
 

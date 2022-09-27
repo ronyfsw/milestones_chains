@@ -6,7 +6,6 @@ modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 from libraries import *
 from db_tables import *
-from worm_modules import *
 from chains import *
 from config import *
 

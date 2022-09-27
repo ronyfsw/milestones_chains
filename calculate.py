@@ -32,17 +32,13 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
         print('Run attempt encountered error:\n', stderr.readlines())
     print('Calculation finished')
     # Stop compute instance
-    response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
-    print('Compute instance stopped')
+    # response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
+    # print('Compute instance stopped')
     # Prepare results
     print('Preparing results')
-    print('chains file', chains_file)
-    print('chains path', chains_path)
-    print('bucket chains path:', bucket_chains_path)
     S3_RESOURCE.Bucket(results_bucket).download_file(bucket_chains_path, chains_path)
     rows_count = 0
     if results == 'prt':
-        print('bucket_prt_path:', bucket_prt_path)
         S3_RESOURCE.Bucket(results_bucket).download_file(bucket_prt_path, 'prt')
         with ZipFile('prt', 'r') as zipObj:
             zipObj.extractall(path=prt_path)
@@ -68,4 +64,4 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     print('{c} chains written to {f}'.format(c=chains_count, f='chains.parquet'))
     if rows_count > 0:
         print('{r} tasks rows written to parquet files in the prt sub-directory'.format(r=rows_count))
-
+    return chains_count, rows_count

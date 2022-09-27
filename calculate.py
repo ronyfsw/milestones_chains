@@ -9,7 +9,9 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     data_path = os.path.join(working_dir, 'data', data_file_name)
     chains_file = 'chains.parquet'
     chains_path = os.path.join(experiment, chains_file)
+    bucket_chains_path = '{e}/{c}'.format(e=experiment, c=chains_file)
     prt_path = os.path.join(experiment, 'prt')
+    bucket_prt_path = '{e}/prt'.format(e=experiment)
 
     # Experiment results file
     spreadsheet = os.path.join(experiment, 'results.xlsx')
@@ -36,10 +38,12 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     print('Preparing results')
     print('chains file', chains_file)
     print('chains path', chains_path)
-    S3_RESOURCE.Bucket(results_bucket).download_file(chains_path, chains_path)
+    print('bucket chains path:', bucket_chains_path)
+    S3_RESOURCE.Bucket(results_bucket).download_file(bucket_chains_path, chains_path)
     rows_count = 0
     if results == 'prt':
-        S3_RESOURCE.Bucket(results_bucket).download_file(prt_path, 'prt')
+        print('bucket_prt_path:', bucket_prt_path)
+        S3_RESOURCE.Bucket(results_bucket).download_file(bucket_prt_path, 'prt')
         with ZipFile('prt', 'r') as zipObj:
             zipObj.extractall(path=prt_path)
         os.remove('prt')

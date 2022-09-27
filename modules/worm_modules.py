@@ -47,12 +47,10 @@ def growReproduce(map_or_step):
 	cid, chain, next_steps = None, None, None
 	process_id = map_or_step[0]
 	chain_key = map_or_step[1]
-	#print('**** chain key:', chain_key)
 	successors = map_or_step[2]
 	growth_node = successors[0]
 	pointers = successors[1:]
 
-	#previous_step_chain = redisClient.hget('scaffolds', chain_key)
 	scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=process_id))
 	scaffolds = np.load(scaffolds_dict, allow_pickle=True)[()]
 	previous_step_chain = scaffolds[chain_key]

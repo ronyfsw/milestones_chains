@@ -11,6 +11,7 @@ from db_tables import *
 from graphs import *
 from directories import *
 from chains import *
+from encoders import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 print('service started on', start_time)

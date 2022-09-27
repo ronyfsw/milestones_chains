@@ -39,7 +39,34 @@ def filter_tdas(id, chain, chain_nodes_types):
 		if chain_nodes_types[node] != 'TT_Task':
 			milestone_chain.append(node)
 	milestone_chain = node_delimiter.join(milestone_chain)
-	# if len(chain) >= 5:
-	# 	with open('ms_chains_check.txt', 'a') as f:
-	# 		f.write('chain: {c} | chain_dict:{d} | milestones:{m}'.format(c=str(chain), d=str(chain_nodes_types), m=str(milestone_chain)))
 	return (id, milestone_chain)
+
+
+def growReproduce(map_or_step):
+	cid, chain, next_steps = None, None, None
+	process_id = map_or_step[0]
+	chain_key = map_or_step[1]
+	successors = map_or_step[2]
+	growth_node = successors[0]
+	pointers = successors[1:]
+
+	scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=process_id))
+	scaffolds = np.load(scaffolds_dict, allow_pickle=True)[()]
+	previous_step_chain = scaffolds[chain_key]
+
+	if previous_step_chain:
+		# Growth
+		previous_step_chain = previous_step_chain.split(node_delimiter)
+		chain = previous_step_chain + [growth_node]
+		chain = node_delimiter.join(chain)
+		cid = encode_string(chain)
+
+		# Reproduction
+		next_steps = []
+		for pointer in pointers:
+			pointer = (pointer,)
+			next_step = (process_id, chain_key, pointer)
+			next_steps.append(next_step)
+		next_steps = tuple(next_steps)
+
+	return cid, chain, next_steps

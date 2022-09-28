@@ -55,8 +55,11 @@ for i in range(30):
     pids = open('process_ids.txt').read().split('\n')
     pids_count, unique_pids_count = len(pids), len(set(pids))
 
-    root_errors = terminal_errors = 0
+    # Terminal nodes
+    nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
     terminal_nodes = open(terminals_path).read().split('\n')
+    terminal_nodes = [nodes_decoder[n] for n in terminal_nodes]
+    root_errors = terminal_errors = 0
     print('terminal_nodes:', terminal_nodes)
     for chain in chains:
         print(chain)

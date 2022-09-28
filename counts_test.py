@@ -1,6 +1,8 @@
 import os
-
 from modules.config import *
+run_dir_path = os.path.join(os.getcwd(), 'run_dir')
+scaffolds_path1 = os.path.join(run_dir_path, 'scaffolds')
+sub_graphs_path1 = os.path.join(run_dir_path, 'sub_graphs')
 
 data_file_name = 'EMS_DCMA_DD_23.08.graphml'
 experiment = None
@@ -17,7 +19,10 @@ for i in range(30):
     chains_df = pd.read_parquet(chains_file)
     chains_count = len(chains_df)
     del chains_df
-    os.remove(chains_file)
+    # os.remove(chains_file)
+    scaffolds_files = os.listdir(scaffolds_path1)
+    sub_graphs_files = os.listdir(sub_graphs_path1)
+    scaffolds_count, sub_graphs_count = len(scaffolds_files), len(sub_graphs_files)
     # # Count rows
     # rows_count = 0
     # results_files = os.listdir(chunks_path)
@@ -30,7 +35,7 @@ for i in range(30):
     # del df
     # counts.append((i+1, chains_count, rows_count))
     # counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])
-    counts.append((i + 1, chains_count))
-    counts_df = pd.DataFrame(counts, columns=['run', 'chains'])
+    counts.append((i + 1, chains_count, sub_graphs_count, scaffolds_count))
+    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'sub_graphs', 'scaffolds'])
     print(counts_df)
-counts_df.to_excel('chains_rows_counts.xlsx', index=False)
+counts_df.to_excel('test_counts.xlsx', index=False)

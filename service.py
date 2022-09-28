@@ -103,7 +103,6 @@ print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
 # Return results in the tabular PRT format or as chains
-# if results == 'prt':
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"
                .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
 

@@ -11,7 +11,7 @@ from config import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 pid = os.getpid()
-print('build chains process {p} started on'.format(p=pid), start_time)
+# print('build chains process {p} started on'.format(p=pid), start_time)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('sub_graph_file_name')

@@ -67,3 +67,4 @@ for i in range(30):
     print(counts_df)
     counts_df.to_excel('test_counts.xlsx', index=False)
     os.remove('process_ids.txt')
+    shutil.rmtree('run_dir')

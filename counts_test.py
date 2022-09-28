@@ -25,9 +25,9 @@ for i in range(30):
     print('results_files:', results_files)
     for file in results_files:
         file_path = os.path.join(chunks_path, file)
-        print('file_path:', file_path)
         df = pd.read_parquet(file_path)
         rows_count += len(df)
+        print('{f} count ='.format(f=file), rows_count)
     del df
     counts.append((i+1, chains_count, rows_count))
     counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])

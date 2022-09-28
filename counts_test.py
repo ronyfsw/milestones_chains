@@ -62,7 +62,7 @@ for i in range(30):
         print(chain)
         tasks = chain.split(node_delimiter)
         chain_root, chain_terminal = tasks[0], tasks[-1]
-        print(chain_root, chain_terminal)
+        # print(chain_root, chain_terminal)
         if chain_root != root_node: root_errors += 1
         if chain_terminal not in terminal_nodes: terminal_errors += 1
     chains_count = len(chains)

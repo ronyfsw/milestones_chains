@@ -23,15 +23,13 @@ for i in range(30):
     os.remove(chains_file)
     # Count rows
     rows_count = 0
-    results_files = os.listdir(experiment)
+    results_files = os.listdir(chunks_path)
     print('results_files:', results_files)
     for file in results_files:
         file_path = os.path.join(experiment, file)
         df = pd.read_parquet(file_path)
         rows_count += len(df)
     del df
-    shutil.rmtree(experiment)
-    os.mkdir(experiment)
     counts.append((i+1, chains_count, rows_count))
     counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])
     print(counts_df)

@@ -33,7 +33,7 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     subprocess.run(process_statement, shell=True) ## test
     print('Calculation finished')
     # Stop compute instance
-    response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
+    # response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
     print('Compute instance stopped')
     # Prepare results
     print('Preparing results')
@@ -47,10 +47,12 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
         results_files = os.listdir(experiment)
         print('results_files:', results_files)
         # Count rows
+        print('Rows count')
         for file in results_files:
             file_path = os.path.join(experiment, file)
             df = pd.read_parquet(file_path)
             rows_count += len(df)
+            print('{f} count ='.format(f=file), rows_count)
         del df
         # Write the results to an MS Excel spreadsheet if the calculation produced less than 100K chains
         if len(results_files) == 1:

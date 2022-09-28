@@ -57,9 +57,12 @@ for i in range(30):
 
     root_errors = terminal_errors = 0
     terminal_nodes = open(terminals_path).read().split('\n')
+    print('terminal_nodes:', terminal_nodes)
     for chain in chains:
+        print(chain)
         tasks = chain.split(node_delimiter)
         chain_root, chain_terminal = tasks[0], tasks[-1]
+        print(chain_root, chain_terminal)
         if chain_root != root_node: root_errors += 1
         if chain_terminal not in terminal_nodes: terminal_errors += 1
     chains_count = len(chains)
@@ -85,7 +88,7 @@ for i in range(30):
     #counts.append((i + 1, chains_count, pids_count, unique_pids_count))
     #counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'pids_count', 'unique_pids_count'])
     counts.append((i + 1, chains_count, root_errors_rate, terminal_errors_rate))
-    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'terminal_errors_rate', 'terminal_errors_rate'])
+    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'root_errors_rate', 'terminal_errors_rate'])
 
     print(counts_df)
     counts_df.to_excel('test_counts.xlsx', index=False)

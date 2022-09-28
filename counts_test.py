@@ -26,7 +26,7 @@ for i in range(30):
     chains_df = pd.read_parquet(chains_file)
     chains_count = len(chains_df)
     file_name = os.path.join('runs_chains', 'chains_{n}'.format(n=str(chains_count)))
-    chains = list(chains_df.unique())
+    chains = list(chains_df['Chain'].unique())
     chains_df.to_parquet(file_name)
     
     del chains_df

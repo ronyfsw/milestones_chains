@@ -10,8 +10,6 @@ query = 'code'
 if not experiment: experiment = data_file_name.replace('.graphml', '').replace('.', '_')
 counts = []
 
-from calculate import *
-
 for i in range(30):
     print('run', i+1)
     subprocess.run("python3 service.py {f} {e} {t} {r}"
@@ -26,7 +24,8 @@ for i in range(30):
     results_files = os.listdir(chunks_path)
     print('results_files:', results_files)
     for file in results_files:
-        file_path = os.path.join(experiment, file)
+        file_path = os.path.join(chunks_path, file)
+        print('file_path:', file_path)
         df = pd.read_parquet(file_path)
         rows_count += len(df)
     del df

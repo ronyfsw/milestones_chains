@@ -4,7 +4,8 @@ from modules.config import *
 run_dir_path = os.path.join(os.getcwd(), 'run_dir')
 scaffolds_path1 = os.path.join(run_dir_path, 'scaffolds')
 sub_graphs_path1 = os.path.join(run_dir_path, 'sub_graphs')
-
+terminals_path = os.path.join(run_dir_path, 'terminal_nodes.txt')
+root_node = 'MI20-EMS-N2-60000'
 data_file_name = 'EMS_DCMA_DD_23.08.graphml'
 experiment = None
 tasks_types = 'milestones'
@@ -20,10 +21,12 @@ for i in range(30):
     print('run', i+1)
     subprocess.run("python3 service.py {f} {e} {t} {r}"
                    .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
+
     # Chains count
     chains_df = pd.read_parquet(chains_file)
     chains_count = len(chains_df)
     file_name = os.path.join('runs_chains', 'chains_{n}'.format(n=str(chains_count)))
+    chains = list(chains_df.unique())
     chains_df.to_parquet(file_name)
     
     del chains_df
@@ -51,6 +54,18 @@ for i in range(30):
 
     pids = open('process_ids.txt').read().split('\n')
     pids_count, unique_pids_count = len(pids), len(set(pids))
+
+    root_errors = terminal_errors = 0
+    terminal_nodes = open(terminals_path).read().split('\n')
+    for chain in chains:
+        tasks = chain.split(node_delimiter)
+        chain_root, chain_terminal = tasks[0], tasks[-1]
+        if chain_root != root_node: root_errors += 1
+        if chain_terminal not in terminal_nodes: terminal_errors += 1
+    chains_count = len(chains)
+    root_errors_rate = 100 * (root_errors / chains_count)
+    terminal_errors_rate = 100 * (terminal_errors / chains_count)
+
     # # Count rows
     # rows_count = 0
     # results_files = os.listdir(chunks_path)
@@ -65,10 +80,13 @@ for i in range(30):
     # counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])
     # counts.append((i + 1, chains_count, sub_graphs_count, scaffolds_count,\
     # mean_scaffolds, mean_nodes, mean_edges))
-    counts.append((i + 1, chains_count, pids_count, unique_pids_count))
     #counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'sub_graphs', 'scaffolds', \
     #                                          'mean_scaffolds', 'mean_nodes', 'mean_edges'])
-    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'pids_count', 'unique_pids_count'])
+    #counts.append((i + 1, chains_count, pids_count, unique_pids_count))
+    #counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'pids_count', 'unique_pids_count'])
+    counts.append((i + 1, chains_count, root_errors_rate, terminal_errors_rate))
+    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'terminal_errors_rate', 'terminal_errors_rate'])
+
     print(counts_df)
     counts_df.to_excel('test_counts.xlsx', index=False)
     os.remove('process_ids.txt')

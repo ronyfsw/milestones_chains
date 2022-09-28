@@ -54,8 +54,8 @@ isolates = graph_isolates(G)
 Gnodes, Gedges = list(G.nodes()), list(G.edges())
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 terminal_nodes = get_terminal_nodes(G)
-with open(os.path.join(run_dir_path,'terminal_nodes.txt'), 'w') as f:
-    f.write('\n'.join(terminal_nodes))
+with open(os.path.join(run_dir_path, 'terminal_nodes.txt'), 'w') as f:
+     f.write('\n'.join(terminal_nodes))
 
 # Nodes types dictionary
 nodes_types = {}

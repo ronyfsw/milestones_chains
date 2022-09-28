@@ -34,26 +34,26 @@ for i in range(30):
     
     del chains_df
     # os.remove(chains_file)
-    scaffolds_files = os.listdir(scaffolds_path1)
-    sub_graphs_files = os.listdir(sub_graphs_path1)
-    scaffolds_count, sub_graphs_count = len(scaffolds_files), len(sub_graphs_files)
-    scaffolds_sizes = []
-    for scaffolds_file in scaffolds_files:
-        scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
-        scaffold_dict = np.load(scaffold_path, allow_pickle=True)[()]
-        scaffolds_sizes.append(len(scaffold_dict))
-    mean_scaffolds = np.mean(np.array(scaffolds_sizes))
-
-        nodes_sizes, edges_sizes = [], []
-    for sub_graphs_file in sub_graphs_files:
-        sub_graph_path = os.path.join(sub_graphs_path, sub_graphs_file)
-        sub_graph = nx.read_edgelist(sub_graph_path, create_using=nx.DiGraph)
-        nodes_size = len(list(sub_graph.nodes()))
-        edges_size = len(list(sub_graph.edges()))
-        nodes_sizes.append(nodes_size)
-        edges_sizes.append(edges_size)
-    mean_nodes = np.mean(np.array(nodes_sizes))
-    mean_edges = np.mean(np.array(nodes_sizes))
+    # scaffolds_files = os.listdir(scaffolds_path1)
+    # sub_graphs_files = os.listdir(sub_graphs_path1)
+    # scaffolds_count, sub_graphs_count = len(scaffolds_files), len(sub_graphs_files)
+    # scaffolds_sizes = []
+    # for scaffolds_file in scaffolds_files:
+    #     scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
+    #     scaffold_dict = np.load(scaffold_path, allow_pickle=True)[()]
+    #     scaffolds_sizes.append(len(scaffold_dict))
+    # mean_scaffolds = np.mean(np.array(scaffolds_sizes))
+    #
+    # nodes_sizes, edges_sizes = [], []
+    # for sub_graphs_file in sub_graphs_files:
+    #     sub_graph_path = os.path.join(sub_graphs_path, sub_graphs_file)
+    #     sub_graph = nx.read_edgelist(sub_graph_path, create_using=nx.DiGraph)
+    #     nodes_size = len(list(sub_graph.nodes()))
+    #     edges_size = len(list(sub_graph.edges()))
+    #     nodes_sizes.append(nodes_size)
+    #     edges_sizes.append(edges_size)
+    # mean_nodes = np.mean(np.array(nodes_sizes))
+    # mean_edges = np.mean(np.array(nodes_sizes))
 
     pids = open('process_ids.txt').read().split('\n')
     pids_count, unique_pids_count = len(pids), len(set(pids))

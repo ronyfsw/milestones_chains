@@ -1,5 +1,8 @@
 import subprocess
 import time
+import pandas as pd
+from modules.config import *
+
 data_file_name = 'EMS_DCMA_DD_23.08.graphml'
 experiment = None
 tasks_types = 'milestones'
@@ -12,7 +15,18 @@ from calculate import *
 
 for i in range(30):
     print('run', i+1)
-    chains_count, rows_count = run_calculation_process(data_file_name, experiment, tasks_types, results, query)
+    process_statement = 'python3 service.py {f} {e} {t} {r}' \
+        .format(f=data_file_name, e=experiment, t=tasks_types, r=results)
+    # Chains count
+    chains_df = pd.read_parquet(chains_file)
+    chains_count = len(chains_df)
+    # Count rows
+    rows_count = 0
+    results_files = os.listdir(experiment)
+    for file in results_files:
+        file_path = os.path.join(experiment, file)
+        df = pd.read_parquet(file_path)
+        rows_count += len(df)
     counts.append((i+1, chains_count, rows_count))
     counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])
     print(counts_df)

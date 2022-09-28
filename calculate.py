@@ -25,18 +25,16 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     S3_CLIENT.put_object(Bucket=results_bucket, Key=(experiment + '/'))
 
     # Run calculation
-    #process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r}'\
-    #.format(f=data_file_name, e=experiment, t=tasks_types, r=results)
-    process_statement = 'python3 service.py {f} {e} {t} {r}' \
-        .format(f=data_file_name, e=experiment, t=tasks_types, r=results) ## test
-    #stdin, stdout, stderr = ssh.exec_command(process_statement)
-    # if stderr.readlines():
-    #     print('Run attempt encountered error:\n', stderr.readlines())
+    process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r}'\
+    .format(f=data_file_name, e=experiment, t=tasks_types, r=results)
+    stdin, stdout, stderr = ssh.exec_command(process_statement)
+    if stderr.readlines():
+        print('Run attempt encountered error:\n', stderr.readlines())
     subprocess.run(process_statement, shell=True) ## test
     print('Calculation finished')
     # Stop compute instance
-    # response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
-    # print('Compute instance stopped')
+    response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
+    print('Compute instance stopped')
     # Prepare results
     print('Preparing results')
     S3_RESOURCE.Bucket(results_bucket).download_file(bucket_chains_path, chains_path)

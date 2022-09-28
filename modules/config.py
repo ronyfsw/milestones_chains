@@ -12,6 +12,7 @@ journey_chunk = 50000
 chains_chunk = 100000
 available_executors = 44
 node_delimiter = '<>'
+chains_file = 'chains.parquet'
 
 # AWS
 profile_name = 'ds_sandbox'

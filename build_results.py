@@ -42,17 +42,7 @@ metadata_duration = pd.read_excel('metadata_duration.xlsx')
 md_ids = list(metadata_duration['ID'])
 print('{n} ids in metadata_duration'.format(n=len(md_ids)))
 
-#chains_file = '{e}_chains.parquet'.format(e=experiment)
-#chains_list = '{e}_chains.txt'.format(e=experiment)
-
-chains_file = 'chains.parquet'
 chains_path = os.path.join(experiment, 'chains', chains_file)
-#chains_list = os.path.join('chains.txt')
-#chains_list_path = os.path.join(experiment, 'chains', chains_list)
-#print('chains list:', chains_list)
-print('chains file:', chains_file)
-print('chains_path:', chains_path)
-#print('chains_list_path:', chains_list_path)
 chains_to_write = []
 for index, chain in enumerate(chains):
     tasks = chain.split(node_delimiter)

@@ -30,13 +30,12 @@ links_types = np.load(os.path.join(run_dir_path, 'links_types.npy'), allow_pickl
 nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 chains_table = '{e}_chains'.format(e=experiment)
 chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
-chains = list(set((chains_df['chain'])))
-# chains = chains[:10000]
+chains = list(chains_df['chain'].unique())
 print('{n1} chains'.format(n1=len(chains)))
 
 # Tasks metadata
 print('Generate tasks metadata')
-subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
+# subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
 print('Generate tasks metadata completed')
 metadata_duration = pd.read_excel('metadata_duration.xlsx')
 md_ids = list(metadata_duration['ID'])

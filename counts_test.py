@@ -44,6 +44,8 @@ for i in range(30):
     mean_nodes = np.mean(np.array(nodes_sizes))
     mean_edges = np.mean(np.array(nodes_sizes))
 
+    pids = open('process_ids.txt').read().split('\n')
+    pids_count, unique_pids_count = len(pids), len(set(pids))
     # # Count rows
     # rows_count = 0
     # results_files = os.listdir(chunks_path)
@@ -56,9 +58,11 @@ for i in range(30):
     # del df
     # counts.append((i+1, chains_count, rows_count))
     # counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])
-    counts.append((i + 1, chains_count, sub_graphs_count, scaffolds_count,\
-                   mean_scaffolds, mean_nodes, mean_edges))
-    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'sub_graphs', 'scaffolds', \
-                                              'mean_scaffolds', 'mean_nodes', 'mean_edges'])
+    # counts.append((i + 1, chains_count, sub_graphs_count, scaffolds_count,\
+    # mean_scaffolds, mean_nodes, mean_edges))
+    counts.append((i + 1, chains_count, pids_count, unique_pids_count))
+    #counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'sub_graphs', 'scaffolds', \
+    #                                          'mean_scaffolds', 'mean_nodes', 'mean_edges'])
+    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'pids_count', 'unique_pids_count'])
     print(counts_df)
-counts_df.to_excel('test_counts.xlsx', index=False)
+    counts_df.to_excel('test_counts.xlsx', index=False)

@@ -1,7 +1,5 @@
 import os
 
-import numpy as np
-
 from modules.config import *
 run_dir_path = os.path.join(os.getcwd(), 'run_dir')
 scaffolds_path1 = os.path.join(run_dir_path, 'scaffolds')
@@ -14,6 +12,10 @@ results = 'no'
 if not experiment: experiment = data_file_name.replace('.graphml', '').replace('.', '_')
 counts = []
 
+if 'runs_chains' in os.listdir():
+    shutil.rmtree('runs_chains')
+os.mkdir('runs_chains')
+
 for i in range(30):
     print('run', i+1)
     subprocess.run("python3 service.py {f} {e} {t} {r}"
@@ -21,6 +23,9 @@ for i in range(30):
     # Chains count
     chains_df = pd.read_parquet(chains_file)
     chains_count = len(chains_df)
+    file_name = os.path.join('runs_chains', 'chains_{n}'.format(n=str(chains_count)))
+    chains_df.to_parquet(file_name)
+    
     del chains_df
     # os.remove(chains_file)
     scaffolds_files = os.listdir(scaffolds_path1)

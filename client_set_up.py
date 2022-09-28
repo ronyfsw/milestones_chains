@@ -18,13 +18,13 @@ EC2_RESOURCE = boto3.resource('ec2', region_name=AWS_REGION)
 EC2_CLIENT = boto3.client('ec2', region_name=AWS_REGION)
 
 # Start compute instance
-# instance = EC2_RESOURCE.Instance(INSTANCE_ID)
-# instance.start()
-# print(f'Starting EC2 instance: {instance.id}')
-# instance.wait_until_running()
-# print(f'EC2 instance "{instance.id}" has been started')
-# # Connect to instance to run process
-# ssh = paramiko.SSHClient()
-# ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-# privkey = paramiko.RSAKey.from_private_key_file('ds_eu_west2_2.pem') # Works only with local pem file
-# ssh.connect(hostname=serviceIP, username='ubuntu', pkey=privkey)
+instance = EC2_RESOURCE.Instance(INSTANCE_ID)
+instance.start()
+print(f'Starting EC2 instance: {instance.id}')
+instance.wait_until_running()
+print(f'EC2 instance "{instance.id}" has been started')
+# Connect to instance to run process
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+privkey = paramiko.RSAKey.from_private_key_file('ds_eu_west2_2.pem') # Works only with local pem file
+ssh.connect(hostname=serviceIP, username='ubuntu', pkey=privkey)

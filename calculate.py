@@ -45,6 +45,7 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
             zipObj.extractall(path=prt_path)
         os.remove('prt')
         results_files = os.listdir(experiment)
+        print('results_files:', results_files)
         # Count rows
         for file in results_files:
             file_path = os.path.join(experiment, file)

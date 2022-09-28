@@ -17,6 +17,9 @@ if 'runs_chains' in os.listdir():
     shutil.rmtree('runs_chains')
 os.mkdir('runs_chains')
 
+if 'error_terminals.txt' in os.listdir():
+    os.remove('error_terminals.txt')
+
 for i in range(30):
     print('run', i+1)
     subprocess.run("python3 service.py {f} {e} {t} {r}"
@@ -41,7 +44,7 @@ for i in range(30):
         scaffolds_sizes.append(len(scaffold_dict))
     mean_scaffolds = np.mean(np.array(scaffolds_sizes))
 
-    nodes_sizes, edges_sizes = [], []
+        nodes_sizes, edges_sizes = [], []
     for sub_graphs_file in sub_graphs_files:
         sub_graph_path = os.path.join(sub_graphs_path, sub_graphs_file)
         sub_graph = nx.read_edgelist(sub_graph_path, create_using=nx.DiGraph)
@@ -56,21 +59,24 @@ for i in range(30):
     pids_count, unique_pids_count = len(pids), len(set(pids))
 
     # Terminal nodes
+    error_terminals = []
     nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
     terminal_nodes = open(terminals_path).read().split('\n')
     terminal_nodes = [nodes_decoder[n] for n in terminal_nodes]
     root_errors = terminal_errors = 0
     print('terminal_nodes:', terminal_nodes)
     for chain in chains:
-        print(chain)
         tasks = chain.split(node_delimiter)
         chain_root, chain_terminal = tasks[0], tasks[-1]
         # print(chain_root, chain_terminal)
         if chain_root != root_node: root_errors += 1
-        if chain_terminal not in terminal_nodes: terminal_errors += 1
+        if chain_terminal not in terminal_nodes:
+            terminal_errors += 1
+            error_terminals.append(chain_terminal)
     chains_count = len(chains)
     root_errors_rate = 100 * (root_errors / chains_count)
     terminal_errors_rate = 100 * (terminal_errors / chains_count)
+    with open('error_terminals.txt', 'a') as f: f.write('\n'.join(error_terminals))
 
     # # Count rows
     # rows_count = 0

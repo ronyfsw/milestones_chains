@@ -50,8 +50,8 @@ for index, chain in enumerate(chains):
     chain_to_write = node_delimiter.join(tasks)
     chains_to_write.append(chain_to_write)
 
-chains_to_write = list(set(chain_to_write))
-chains_to_write = [(c) for c in chain_to_write]
+chains_to_write = list(set(chains_to_write))
+chains_to_write = [(c) for c in chains_to_write]
 
 # Write chains to a parquet file
 chains_df = pd.DataFrame(chains_to_write, columns=['Chain'])

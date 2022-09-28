@@ -1,4 +1,7 @@
 import os
+
+import numpy as np
+
 from modules.config import *
 run_dir_path = os.path.join(os.getcwd(), 'run_dir')
 scaffolds_path1 = os.path.join(run_dir_path, 'scaffolds')
@@ -23,6 +26,24 @@ for i in range(30):
     scaffolds_files = os.listdir(scaffolds_path1)
     sub_graphs_files = os.listdir(sub_graphs_path1)
     scaffolds_count, sub_graphs_count = len(scaffolds_files), len(sub_graphs_files)
+    scaffolds_sizes = []
+    for scaffolds_file in scaffolds_files:
+        scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
+        scaffold_dict = np.load(scaffold_path, allow_pickle=True)[()]
+        scaffolds_sizes.append(len(scaffold_dict))
+    mean_scaffolds = np.mean(np.array(scaffolds_sizes))
+
+    nodes_sizes, edges_sizes = [], []
+    for sub_graphs_file in sub_graphs_files:
+        sub_graph_path = os.path.join(sub_graphs_path, sub_graphs_file)
+        sub_graph = nx.read_edgelist(sub_graph_path, create_using=nx.DiGraph)
+        nodes_size = len(list(sub_graph.nodes()))
+        edges_size = len(list(sub_graph.edges()))
+        nodes_sizes.append(nodes_size)
+        edges_sizes.append(edges_size)
+    mean_nodes = np.mean(np.array(nodes_sizes))
+    mean_edges = np.mean(np.array(nodes_sizes))
+
     # # Count rows
     # rows_count = 0
     # results_files = os.listdir(chunks_path)
@@ -35,7 +56,9 @@ for i in range(30):
     # del df
     # counts.append((i+1, chains_count, rows_count))
     # counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])
-    counts.append((i + 1, chains_count, sub_graphs_count, scaffolds_count))
-    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'sub_graphs', 'scaffolds'])
+    counts.append((i + 1, chains_count, sub_graphs_count, scaffolds_count,\
+                   mean_scaffolds, mean_nodes, mean_edges))
+    counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'sub_graphs', 'scaffolds', \
+                                              'mean_scaffolds', 'mean_nodes', 'mean_edges'])
     print(counts_df)
 counts_df.to_excel('test_counts.xlsx', index=False)

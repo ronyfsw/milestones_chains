@@ -107,4 +107,4 @@ if len(chains_rows) > 0:
     cur.execute(statement)
     conn.commit()
 conn.close()
-print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))
+# print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))

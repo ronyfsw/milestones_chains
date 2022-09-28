@@ -66,3 +66,4 @@ for i in range(30):
     counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'pids_count', 'unique_pids_count'])
     print(counts_df)
     counts_df.to_excel('test_counts.xlsx', index=False)
+    os.remove('process_ids.txt')

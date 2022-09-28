@@ -65,4 +65,3 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     print('{c} chains written to {f}'.format(c=chains_count, f='chains.parquet'))
     if rows_count > 0:
         print('{r} tasks rows written to parquet files in the prt sub-directory'.format(r=rows_count))
-    return chains_count, rows_count

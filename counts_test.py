@@ -1,3 +1,5 @@
+import os
+
 from modules.config import *
 
 data_file_name = 'EMS_DCMA_DD_23.08.graphml'
@@ -22,13 +24,15 @@ for i in range(30):
     # Count rows
     rows_count = 0
     results_files = os.listdir(experiment)
+    print('results_files:', results_files)
     for file in results_files:
         file_path = os.path.join(experiment, file)
         df = pd.read_parquet(file_path)
         rows_count += len(df)
     del df
     shutil.rmtree(experiment)
+    os.mkdir(experiment)
     counts.append((i+1, chains_count, rows_count))
     counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'rows_count'])
     print(counts_df)
-counts_df.to_excel('counts_df.xlsx', index=False)
+counts_df.to_excel('chains_rows_counts.xlsx', index=False)

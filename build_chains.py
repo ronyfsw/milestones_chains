@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 import sys
+
+import numpy as np
+
 home_dir = Path.home()
 modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
 if modules_dir not in sys.path: sys.path.append(modules_dir)
@@ -42,8 +45,11 @@ growth_tip = ['no tip']
 executor = ProcessPoolExecutor(available_executors)
 journey = chains_written_count = tasks_written_count = 0
 chains_rows = []
+journey_steps_sizes = []
 while next_journeys_steps:
+
     # Journey tracker values initiation
+    journey_steps_sizes.append(len(next_journeys_steps))
     journey_chains_count = overlap_count = journey_tasks_count = 0
     steps_chunk = next_journeys_steps[:journey_chunk]
     next_journeys_steps = next_journeys_steps[journey_chunk:]
@@ -51,12 +57,14 @@ while next_journeys_steps:
     steps_produced, maps_produced = [], []
     journey += 1
     next_count = len(steps_chunk)
-    if next_count <= available_executors:
-        executor = ProcessPoolExecutor(next_count)
+    #if next_count <= available_executors:
+    #    executor = ProcessPoolExecutor(next_count)
 
     # Build chains
     ids_chains = []
-    for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
+
+    #for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
+    for cid, chain, next_steps in map(growReproduce, steps_chunk):
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
@@ -101,10 +109,11 @@ while next_journeys_steps:
     scaffolds_count = len(scaffolds)
     next_journeys_steps_count = len(next_journeys_steps)
 
-# Write the remaning results
-if len(chains_rows) > 0:
-    statement = insert_rows(db_name, chains_table, chains_cols, chains_rows)
-    cur.execute(statement)
-    conn.commit()
+# Write the remaining results
+# if len(chains_rows) > 0:
+#     statement = insert_rows(db_name, chains_table, chains_cols, chains_rows)
+#     cur.execute(statement)
+#     conn.commit()
 conn.close()
+mean_step = np.mean(np.array(chains_written_count))
 # print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))

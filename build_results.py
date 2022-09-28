@@ -52,7 +52,7 @@ for index, chain in enumerate(chains):
     chain_index = 'C{i}'.format(i=str(index + 1))
     chains_to_write.append((chain_index, chain_to_write))
 
-# Write chains to a parquet and text files
+# Write chains to a parquet file
 chains_df = pd.DataFrame(chains_to_write, columns=['Chain_ID', 'Chain'])
 chains_df.to_parquet(chains_file, index=False, compression='gzip')
 chains_path = os.path.join(experiment, chains_file)

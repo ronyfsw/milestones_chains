@@ -55,8 +55,8 @@ for i in range(30):
     # mean_nodes = np.mean(np.array(nodes_sizes))
     # mean_edges = np.mean(np.array(nodes_sizes))
 
-    pids = open('process_ids.txt').read().split('\n')
-    pids_count, unique_pids_count = len(pids), len(set(pids))
+    # pids = open('process_ids.txt').read().split('\n')
+    # pids_count, unique_pids_count = len(pids), len(set(pids))
 
     # Terminal nodes
     error_terminals = []
@@ -76,6 +76,7 @@ for i in range(30):
     chains_count = len(chains)
     root_errors_rate = 100 * (root_errors / chains_count)
     terminal_errors_rate = 100 * (terminal_errors / chains_count)
+    print('*** error terminals ***\n', error_terminals)
     with open('error_terminals.txt', 'a') as f: f.write('\n'.join(error_terminals))
 
     # # Count rows

@@ -99,7 +99,7 @@ for index, root_successor in enumerate(root_successors):
         print('graph {i} is not dag'.format(i=index+1))
 
 # Run the pipeline in parallel on each of the subgraphs produced
-run_paths = run_paths.rstrip(' &')
+# run_paths = run_paths.rstrip(' &')
 p = subprocess.Popen(run_paths, shell=True)
 poll = p.poll()
 if poll:

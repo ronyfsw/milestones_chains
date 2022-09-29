@@ -71,7 +71,6 @@ redisClient.flushdb()
 successorsDB.flushdb()
 cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
 statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
-print(statement)
 cur.execute(statement)
 
 for Gnode in Gnodes:
@@ -81,6 +80,7 @@ for Gnode in Gnodes:
 ## Partitions
 # Sub graphs of the source program graph
 run_paths = ''
+run_paths = []
 chains = []
 print('{n} root_successors will be used to build sub-graphs'.format(n=len(root_successors)))
 for index, root_successor in enumerate(root_successors):
@@ -91,21 +91,25 @@ for index, root_successor in enumerate(root_successors):
     if is_dag:
         sub_graph_file_name = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, sub_graph_file_name)
-        run_paths += "python3 build_chains.py {s} {e} {t} {r} & "\
-            .format(s=sub_graph_file_name, e=experiment, t=tasks_types, r=results)
+        #run_paths += "python3 build_chains.py {s} {e} {t} {r} & "\
+        #    .format(s=sub_graph_file_name, e=experiment, t=tasks_types, r=results)
+        run_paths += ["python3", "build_chains.py", sub_graph_file_name,\
+                      experiment, tasks_types, results, " & "]
     else:
         print('graph {i} is not dag'.format(i=index+1))
 
 # Run the pipeline in parallel on each of the subgraphs produced
 run_paths = run_paths.rstrip(' &')
-subprocess.run(run_paths, shell=True)
-print('chains building started on', start_time)
-print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
+p = subprocess.Popen(run_paths, shell=True)
+poll = p.poll()
+if poll:
+    print('chains building started on', start_time)
+    print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
-# Return results in the tabular PRT format or as chains
-subprocess.run("python3 build_results.py {f} {e} {t} {r}"
-               .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
+    # Return results in the tabular PRT format or as chains
+    subprocess.run("python3 build_results.py {f} {e} {t} {r}"
+                   .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
 
-# Delete run directory and files
-# if 'run_dir' in os.listdir(working_dir):
-#    shutil.rmtree(run_dir_path)
+    # Delete run directory and files
+    # if 'run_dir' in os.listdir(working_dir):
+    #    shutil.rmtree(run_dir_path)

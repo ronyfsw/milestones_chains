@@ -17,8 +17,8 @@ if 'runs_chains' in os.listdir():
     shutil.rmtree('runs_chains')
 os.mkdir('runs_chains')
 
-if 'run_dir' in os.listdir():
-    shutil.rmtree('run_dir')
+#if 'run_dir' in os.listdir():
+#    shutil.rmtree('run_dir')
 
 if 'error_terminals.txt' in os.listdir():
     os.remove('error_terminals.txt')
@@ -101,7 +101,6 @@ for i in range(30):
     #counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'pids_count', 'unique_pids_count'])
     counts.append((i + 1, chains_count, root_errors_rate, terminal_errors_rate))
     counts_df = pd.DataFrame(counts, columns=['run', 'chains', 'root_errors_rate', 'terminal_errors_rate'])
-
     print(counts_df)
     counts_df.to_excel('test_counts.xlsx', index=False)
     #os.remove('process_ids.txt')

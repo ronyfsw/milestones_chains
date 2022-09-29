@@ -17,6 +17,9 @@ if 'runs_chains' in os.listdir():
     shutil.rmtree('runs_chains')
 os.mkdir('runs_chains')
 
+if 'runs_chains' in os.listdir():
+    shutil.rmtree('runs_chains')
+
 if 'error_terminals.txt' in os.listdir():
     os.remove('error_terminals.txt')
 
@@ -64,7 +67,6 @@ for i in range(30):
     terminal_nodes = open(terminals_path).read().split('\n')
     terminal_nodes = [nodes_decoder[n] for n in terminal_nodes]
     root_errors = terminal_errors = 0
-    print('terminal_nodes:', terminal_nodes)
     for chain in chains:
         tasks = chain.split(node_delimiter)
         chain_root, chain_terminal = tasks[0], tasks[-1]
@@ -102,5 +104,4 @@ for i in range(30):
 
     print(counts_df)
     counts_df.to_excel('test_counts.xlsx', index=False)
-    os.remove('process_ids.txt')
-    shutil.rmtree('run_dir')
+    #os.remove('process_ids.txt')

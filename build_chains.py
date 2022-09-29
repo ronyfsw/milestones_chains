@@ -14,7 +14,7 @@ from config import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 pid = os.getpid()
-print('build chains process {p} started on'.format(p=pid), start_time)
+#print('build chains process {p} started on'.format(p=pid), start_time)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('sub_graph_file_name')
@@ -116,6 +116,6 @@ while next_journeys_steps:
 #     conn.commit()
 conn.close()
 mean_step = np.mean(np.array(chains_written_count))
-print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))
-with open('process_ids.txt', 'a') as f:
-    f.write('{p}\n'.format(p=str(pid)))
+# print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))
+# with open('process_ids.txt', 'a') as f:
+#    f.write('{p}\n'.format(p=str(pid)))

@@ -79,7 +79,7 @@ for i in range(30):
     root_errors_rate = 100 * (root_errors / chains_count)
     terminal_errors_rate = 100 * (terminal_errors / chains_count)
     print('*** error terminals ***\n', error_terminals)
-    with open('error_terminals.txt', 'a') as f: f.write('\n'.join(error_terminals))
+    with open('error_terminals.txt', 'a') as f: f.write('\n'.join(error_terminals)+'\n')
 
     # # Count rows
     # rows_count = 0

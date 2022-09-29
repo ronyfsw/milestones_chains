@@ -17,8 +17,8 @@ if 'runs_chains' in os.listdir():
     shutil.rmtree('runs_chains')
 os.mkdir('runs_chains')
 
-if 'runs_chains' in os.listdir():
-    shutil.rmtree('runs_chains')
+if 'run_dir' in os.listdir():
+    shutil.rmtree('run_dir')
 
 if 'error_terminals.txt' in os.listdir():
     os.remove('error_terminals.txt')

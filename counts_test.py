@@ -25,7 +25,7 @@ if 'error_terminals.txt' in os.listdir():
 
 for i in range(30):
     print('run', i+1)
-    subprocess.run("python3 service.py {f} {e} {t} {r}"
+    subprocess.call("python3 service.py {f} {e} {t} {r}"
                    .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
     print('subprocess running service finished')
     # Chains count

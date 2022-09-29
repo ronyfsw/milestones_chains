@@ -103,6 +103,3 @@ print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"
                .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
-# Delete run directory and files
-if 'run_dir' in os.listdir(working_dir):
-    shutil.rmtree(run_dir_path)

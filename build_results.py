@@ -31,7 +31,6 @@ nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_p
 chains_table = '{e}_chains'.format(e=experiment)
 chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
 chains = list(chains_df['chain'].unique())
-print('{n1} chains read'.format(n1=len(chains)))
 
 # Tasks metadata
 print('Generate tasks metadata')
@@ -51,7 +50,7 @@ for index, chain in enumerate(chains):
     chains_to_write.append(chain_to_write)
 
 chains_to_write = list(set(chains_to_write))
-print('{n1} chains to write'.format(n1=len(chains_to_write)))
+print('{n1} chains identified, {n2} unique chains written'.format(n1=len(chains), n2=len(chains_to_write)))
 chains_to_write = [(c) for c in chains_to_write]
 
 # Write chains to a parquet file

@@ -47,7 +47,6 @@ journey = chains_written_count = tasks_written_count = 0
 chains_rows = []
 journey_steps_sizes = []
 while next_journeys_steps:
-
     # Journey tracker values initiation
     journey_steps_sizes.append(len(next_journeys_steps))
     journey_chains_count = overlap_count = journey_tasks_count = 0
@@ -62,7 +61,6 @@ while next_journeys_steps:
 
     # Build chains
     ids_chains = []
-
     #for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
     for cid, chain, next_steps in map(growReproduce, steps_chunk):
         if cid:

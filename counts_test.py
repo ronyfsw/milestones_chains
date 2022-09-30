@@ -1,5 +1,4 @@
 import os
-
 from modules.config import *
 run_dir_path = os.path.join(os.getcwd(), 'run_dir')
 scaffolds_path1 = os.path.join(run_dir_path, 'scaffolds')

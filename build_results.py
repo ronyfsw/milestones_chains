@@ -34,7 +34,7 @@ chains = list(chains_df['chain'].unique())
 
 # Tasks metadata
 print('Generate tasks metadata')
-# subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
+subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
 print('Generate tasks metadata completed')
 metadata_duration = pd.read_excel('metadata_duration.xlsx')
 md_ids = list(metadata_duration['ID'])

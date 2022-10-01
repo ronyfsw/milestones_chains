@@ -95,7 +95,7 @@ if results == 'prt':
 			#rint('tasks:', tasks)
 			# chain: M
 			# tasks: ['M']
-			tasks = [nodes_decoder[t] for t in tasks]
+			# tasks = [nodes_decoder[t] for t in tasks]
 			for index, task in enumerate(tasks):
 				# Task index
 				if tasks_types == 'tdas':

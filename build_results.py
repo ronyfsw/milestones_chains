@@ -50,10 +50,21 @@ for scaffolds_file in scaffolds_files:
     print('test file name:', test_path)
     with open(test_path, 'w') as f: f.write(result)
     chains += chains_to_keep
-a = len(chains)
-chains = list(set(chains))
-print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(chains)))
 chains = [(c) for c in chains]
+a = len(chains)
+encoded_chains = list(set(chains))
+print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(chains)))
+
+# Decode chains
+print('decode chains')
+chains = []
+for chain in encoded_chains:
+	encoded_tasks = chain.split(node_delimiter)
+	tasks = [nodes_decoder[t] for t in encoded_tasks]
+	chain = node_delimiter.join(tasks)
+	chains.append(chain)
+print('chains decoded')
+
 # Write chains to a parquet file
 chains_df = pd.DataFrame(chains, columns=['Chain'])
 chains_df.to_parquet(chains_file, index=False, compression='gzip')

@@ -34,6 +34,7 @@ nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_p
 chains = []
 scaffolds_files = os.listdir(scaffolds_path)
 scaffolds = {}
+filtering_dir = os.path.join(run_dir_path, 'filtering')
 for scaffolds_file in scaffolds_files:
     scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
     scaffold = np.load(scaffold_path, allow_pickle=True)[()]
@@ -41,8 +42,12 @@ for scaffolds_file in scaffolds_files:
     chains_to_keep = drop_chain_overlaps(scaffold_chains)
     print('{s}: {n1} of {n2} chains kept'.format(s=scaffolds_file,\
                                                  n1=len(chains_to_keep), n2=len(chains)))
+    result = 'Scaffold chains:\n{sc}Chains to keep:\n{ck}'\
+	    .format(sc='\n'.join(scaffold_chains), ck='\n'.join(chains_to_keep))
+    test_file_name = 'test_{f}.txt'.format(f=scaffolds_file.split('_')[0])
+    print('test file name:', test_file_name)
+    with open(test_file_name, 'w') as f: f.write(result)
     chains += chains_to_keep
-
 a = len(chains)
 chains = list(set(chains))
 print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(chains)))

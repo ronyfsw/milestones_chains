@@ -29,10 +29,6 @@ tasks_types = args.tasks_types
 results = args.results
 chains_table = '{e}_chains'.format(e=experiment)
 
-# Tasks
-tasks_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
-terminal_nodes = open(os.path.join(run_dir_path,'terminal_nodes.txt')).read().split('\n')
-nodes_types = np.load(os.path.join(run_dir_path, 'nodes_types.npy'), allow_pickle=True)[()]
 G = nx.read_edgelist(sub_graph_file_name, create_using=nx.DiGraph)
 Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]
@@ -44,7 +40,6 @@ next_journeys_steps = [(pid, 1, root_successors)]
 growth_tip = ['no tip']
 executor = ProcessPoolExecutor(available_executors)
 journey = chains_written_count = tasks_written_count = 0
-chains_rows = []
 journey_steps_sizes = []
 while next_journeys_steps:
     # Journey tracker values initiation
@@ -69,14 +64,7 @@ while next_journeys_steps:
 
     # Collect chains and write scaffolds
     for cid_chain in ids_chains:
-        cid, chain = cid_chain
-        # Update chains
-        growth_tip = chain.split(node_delimiter)[-1]
-        if growth_tip in terminal_nodes:
-            chains_rows.append((cid, chain))
-        # Update scaffolds
-        else:
-            scaffolds[cid] = chain
+        scaffolds[cid] = chain
     np.save(scaffolds_dict, scaffolds)
 
     # Update maps
@@ -91,15 +79,6 @@ while next_journeys_steps:
             maps_produced.append((pid, ids[index], growth_tip_successors))
     del ids
 
-    # Write chains
-    if len(chains_rows) > 0:
-        statement = insert_rows(db_name, chains_table, chains_cols, chains_rows)
-        cur.execute(statement)
-        conn.commit()
-        journey_chains_count = len(chains_rows)
-        chains_written_count += journey_chains_count
-        chains_rows = []
-
     # Collect and prepare next journey steps
     next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
 
@@ -107,13 +86,4 @@ while next_journeys_steps:
     scaffolds_count = len(scaffolds)
     next_journeys_steps_count = len(next_journeys_steps)
 
-# Write the remaining results
-# if len(chains_rows) > 0:
-#     statement = insert_rows(db_name, chains_table, chains_cols, chains_rows)
-#     cur.execute(statement)
-#     conn.commit()
-conn.close()
-mean_step = np.mean(np.array(chains_written_count))
 # print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))
-# with open('process_ids.txt', 'a') as f:
-#    f.write('{p}\n'.format(p=str(pid)))

@@ -28,38 +28,39 @@ print('build results args:', args)
 # Tasks and Links
 links_types = np.load(os.path.join(run_dir_path, 'links_types.npy'), allow_pickle=True)[()]
 nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
-chains_table = '{e}_chains'.format(e=experiment)
-chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
-chains = list(chains_df['chain'].unique())
 
-# Tasks metadata
-print('Generate tasks metadata')
-subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
-print('Generate tasks metadata completed')
-metadata_duration = pd.read_excel('metadata_duration.xlsx')
-md_ids = list(metadata_duration['ID'])
-print('{n} ids in metadata_duration'.format(n=len(md_ids)))
+# Chains from scaffolds
+chains = []
+scaffolds_files = os.listdir(scaffolds_path)
+scaffolds = {}
+for scaffolds_file in scaffolds_files:
+    scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
+    scaffold = np.load(scaffold_path, allow_pickle=True)[()]
+    scaffold_chains = list(scaffold.values())
+    chains_to_keep = drop_chain_overlaps(scaffold_chains)
+    print('{s}: {n1} of {n2} chains kept'.format(s=scaffolds_file,\
+                                                 n1=len(chains_to_keep), n2=len(chains)))
+    chains += chains_to_keep
 
-chains_path = os.path.join(experiment, 'chains', chains_file)
-chains_to_write = []
-for index, chain in enumerate(chains):
-    tasks = chain.split(node_delimiter)
-    tasks = [nodes_decoder[t] for t in tasks]
-    tasks = [t for t in tasks if t in md_ids]
-    chain_to_write = node_delimiter.join(tasks)
-    chains_to_write.append(chain_to_write)
-
-chains_to_write = list(set(chains_to_write))
-print('{n1} chains identified, {n2} unique chains written'.format(n1=len(chains), n2=len(chains_to_write)))
-chains_to_write = [(c) for c in chains_to_write]
-
+a = len(chains)
+chains = list(set(chains))
+print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(chains)))
+chains = [(c) for c in chains]
 # Write chains to a parquet file
-chains_df = pd.DataFrame(chains_to_write, columns=['Chain'])
+chains_df = pd.DataFrame(chains, columns=['Chain'])
 chains_df.to_parquet(chains_file, index=False, compression='gzip')
 chains_path = os.path.join(experiment, chains_file)
 s3_client.upload_file(chains_file, results_bucket, chains_path)
 
 if results == 'prt':
+	# Tasks metadata
+	print('Generate tasks metadata')
+	subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
+	print('Generate tasks metadata completed')
+	metadata_duration = pd.read_excel('metadata_duration.xlsx')
+	md_ids = list(metadata_duration['ID'])
+	print('{n} ids in metadata_duration'.format(n=len(md_ids)))
+
 	# Tasks to Rows
 	print('Tasks to Rows split')
 	def chain_to_rows(index_chunk):

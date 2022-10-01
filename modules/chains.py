@@ -37,17 +37,15 @@ def growReproduce(map_or_step):
 
 def drop_chain_overlaps(chains):
 	if chains:
-		try:
-			chains.sort(key=len)
-			small = []
-			for index1, chain1 in enumerate(chains):
-				if ((chain1 not in small) & (index1 < len(chains)-2)):
-					for index2, chain2 in enumerate(chains):
-						if ((chain1 != chain2) & (chain1 in chain2)):
-							small.append(chain1)
-							chains = list(set(chains).difference(set(small)))
-							break
-			small = list(set(small))
-			return [c for c in chains if c not in small]
-		except TypeError as e:
-			print('error {e} in chains: {c}'.format(e=e, c=chains))
+		chains = [c for c in chains if c]
+		chains.sort(key=len)
+		small = []
+		for index1, chain1 in enumerate(chains):
+			if ((chain1 not in small) & (index1 < len(chains)-2)):
+				for index2, chain2 in enumerate(chains):
+					if ((chain1 != chain2) & (chain1 in chain2)):
+						small.append(chain1)
+						chains = list(set(chains).difference(set(small)))
+						break
+		small = list(set(small))
+		return [c for c in chains if c not in small]

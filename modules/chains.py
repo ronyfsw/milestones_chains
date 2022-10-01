@@ -17,9 +17,8 @@ def growReproduce(map_or_step):
 
 	scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=process_id))
 	scaffolds = np.load(scaffolds_dict, allow_pickle=True)[()]
-	previous_step_chain = scaffolds[chain_key]
-
-	if previous_step_chain:
+	if chain_key in list(scaffolds.keys()):
+		previous_step_chain = scaffolds[chain_key]
 		# Growth
 		previous_step_chain = previous_step_chain.split(node_delimiter)
 		chain = previous_step_chain + [growth_node]

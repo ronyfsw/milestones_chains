@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 import os
 import sys
@@ -37,6 +38,8 @@ scaffolds = {}
 filtering_dir = os.path.join(run_dir_path, 'filtering')
 os.mkdir(filtering_dir)
 for scaffolds_file in scaffolds_files:
+    start = time.time()
+    print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffolds_file)))
     scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
     scaffold = np.load(scaffold_path, allow_pickle=True)[()]
     scaffold_chains = list(scaffold.values())
@@ -44,10 +47,10 @@ for scaffolds_file in scaffolds_files:
     chains_to_keep = drop_chain_overlaps(scaffold_chains)
     print('{s}: {n1} of {n2} chains kept'.format(s=scaffolds_file,\
                                                  n1=len(chains_to_keep), n2=len(chains)))
+    print('filtering took', round(time.time()-start))
     result = 'Scaffold chains:\n{sc}\n--------\nChains to keep:\n{ck}'\
 	    .format(sc='\n'.join(scaffold_chains), ck='\n'.join(chains_to_keep))
     test_path = os.path.join(filtering_dir, 'test_{f}.txt'.format(f=scaffolds_file.split('_')[1]))
-    print('test file name:', test_path)
     with open(test_path, 'w') as f: f.write(result)
     chains += chains_to_keep
 chains = [(c) for c in chains]

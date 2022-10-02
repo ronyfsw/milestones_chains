@@ -100,12 +100,24 @@ p = subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
+print('Scaffolds count checkpoint')
 scaffolds_count = len(os.listdir(scaffolds_path))
 print('scaffolds_count:', scaffolds_count)
 while scaffolds_count < len(root_successors):
     time.sleep(5)
     scaffolds_count = len(os.listdir(scaffolds_path))
     print('scaffolds_count:', scaffolds_count)
+
+print('Scaffolds chains count checkpoint')
+scaffolds_chains_counts = []
+for i in range(3):
+    time.sleep(5)
+    scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
+print('scaffolds_chains_counts:', scaffolds_chains_counts)
+while(np.mean(scaffolds_chains_counts[-3:]) != scaffolds_chains_counts[-3]):
+    time.sleep(5)
+    scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
+    print('scaffolds_chains_counts:', scaffolds_chains_counts)
 
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"

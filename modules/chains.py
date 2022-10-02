@@ -48,3 +48,13 @@ def drop_chain_overlaps(chains):
                 break
         if chain1 not in exclude: keep.append(chain1)
     return keep
+
+def count_scaffolds_chains(scaffolds_path):
+	scaffold_chains_count = 0
+	scaffolds_files = os.listdir(scaffolds_path)
+	for scaffolds_file in scaffolds_files:
+		scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
+		scaffold = np.load(scaffold_path, allow_pickle=True)[()]
+		scaffold_chains_count += len(scaffold)
+	return scaffold_chains_count
+

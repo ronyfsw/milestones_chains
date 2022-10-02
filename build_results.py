@@ -37,12 +37,14 @@ scaffolds_files = os.listdir(scaffolds_path)
 scaffolds = {}
 filtering_dir = os.path.join(run_dir_path, 'filtering')
 os.mkdir(filtering_dir)
+scaffold_chains_count = 0
 for scaffolds_file in scaffolds_files:
     start = time.time()
     scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
     scaffold = np.load(scaffold_path, allow_pickle=True)[()]
     scaffold_chains = list(scaffold.values())
     scaffold_chains = list(set([c for c in scaffold_chains if c]))
+    scaffold_chains_count += len(scaffold_chains)
     print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffold_chains)))
     chains_to_keep = drop_chain_overlaps(scaffold_chains)
     print('{s}: {n1} of {n2} chains kept'.format(s=scaffolds_file,\
@@ -56,6 +58,7 @@ for scaffolds_file in scaffolds_files:
 chains = [(c) for c in chains]
 a = len(chains)
 encoded_chains = list(set(chains))
+print('{n1} unique scaffold_chains prior to filtering'.format(n1=len(scaffold_chains)))
 print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(chains)))
 
 # Decode chains

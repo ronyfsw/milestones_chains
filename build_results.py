@@ -39,9 +39,9 @@ filtering_dir = os.path.join(run_dir_path, 'filtering')
 os.mkdir(filtering_dir)
 for scaffolds_file in scaffolds_files:
     start = time.time()
-    print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffolds_file)))
     scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
     scaffold = np.load(scaffold_path, allow_pickle=True)[()]
+    print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffold)))
     scaffold_chains = list(scaffold.values())
     scaffold_chains = [c for c in scaffold_chains if c]
     chains_to_keep = drop_chain_overlaps(scaffold_chains)

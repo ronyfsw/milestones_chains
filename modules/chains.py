@@ -38,11 +38,8 @@ def growReproduce(map_or_step):
 def drop_chain_overlaps(chains):
     chains = list(set([c for c in chains if c]))
     chains.sort(key=len)
-    c = 0
     exclude, keep = [], []
     while chains:
-        c += 1
-        print(c)
         chain1 = chains[0]
         chains.remove(chain1)
         for chain2 in chains:

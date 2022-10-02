@@ -36,14 +36,19 @@ def growReproduce(map_or_step):
 	return cid, chain, next_steps
 
 def drop_chain_overlaps(chains):
-	chains.sort(key=len)
-	small = []
-	for index1, chain1 in enumerate(chains):
-		if ((chain1 not in small) & (index1 < len(chains)-1)):
-			for index2, chain2 in enumerate(chains):
-				if ((chain1 != chain2) & (chain1 in chain2) & (chain2 not in small)):
-					small.append(chain1)
-					break
-	small = list(set(small))
-	keep = [c for c in chains if c not in small]
-	return keep
+    chains = list(set([c for c in chains if c]))
+    chains.sort(key=len)
+    print('{n1} chains, {n2} unique chains'.format(n2=len(chains), n1=n1))
+    c = 0
+    exclude, keep = [], []
+    while chains:
+        c += 1
+        print(c)
+        chain1 = chains[0]
+        chains.remove(chain1)
+        for chain2 in chains:
+            if chain1 in chain2:
+                exclude.append(chain1)
+                break
+        if chain1 not in exclude: keep.append(chain1)
+    return keep

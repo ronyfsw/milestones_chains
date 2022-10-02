@@ -42,7 +42,7 @@ for scaffolds_file in scaffolds_files:
     scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
     scaffold = np.load(scaffold_path, allow_pickle=True)[()]
     scaffold_chains = list(scaffold.values())
-    scaffold_chains = [c for c in scaffold_chains if c]
+    scaffold_chains = list(set([c for c in scaffold_chains if c]))
     print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffold_chains)))
     chains_to_keep = drop_chain_overlaps(scaffold_chains)
     print('{s}: {n1} of {n2} chains kept'.format(s=scaffolds_file,\

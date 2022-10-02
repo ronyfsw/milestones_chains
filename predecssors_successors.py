@@ -11,10 +11,6 @@ if not experiment: experiment = data_file_name.replace('.graphml', '').replace('
 source = pd.read_excel(source_path)
 source_pairs = dict(zip(source['predecessor'], source['successors']))
 
-G = build_graph(data_file_name)
-Gedges = list(G.edges())
-edges_count = len(Gedges)
-
 chains_df = pd.read_parquet(chains_file)
 chains = list(chains_df['Chain'].unique())
 chains_count = len(chains_df)

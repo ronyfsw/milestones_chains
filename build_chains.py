@@ -56,14 +56,13 @@ while next_journeys_steps:
 
     # Build chains
     ids_chains = []
-    #for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
-    for cid, chain, next_steps in map(growReproduce, steps_chunk):
+    for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
 
     # Collect chains and write scaffolds
-    for cid_chain in ids_chains:
+    for cid, chain in ids_chains:
         scaffolds[cid] = chain
     np.save(scaffolds_dict, scaffolds)
 

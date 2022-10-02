@@ -69,7 +69,7 @@ print('chains decoded')
 chains_df = pd.DataFrame(chains, columns=['Chain'])
 chains_df.to_parquet(chains_file, index=False, compression='gzip')
 chains_path = os.path.join(experiment, chains_file)
-s3_client.upload_file(chains_file, results_bucket, chains_path)
+S3_CLIENT.upload_file(chains_file, results_bucket, chains_path)
 
 if results == 'prt':
 	# Tasks metadata

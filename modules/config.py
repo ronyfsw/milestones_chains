@@ -10,7 +10,7 @@ from libraries import *
 partition_size_cutoff = 50
 journey_chunk = 50000
 chains_chunk = 100000
-available_executors = 44
+available_executors = 10
 node_delimiter = '<>'
 chains_file = 'chains.parquet'
 
@@ -19,8 +19,8 @@ profile_name = 'ds_sandbox'
 results_bucket = 'chainsresults'
 data_bucket = 'programsdatabucket'
 session = boto3.session.Session(profile_name=profile_name)
-s3_client = session.client('s3')
-s3_resource = session.resource('s3')
+S3_CLIENT = session.client('s3')
+S3_RESOURCE = session.resource('s3')
 key_file_name = 'ds_eu_west2_2.pem'
 resultsIP = '172.31.10.240'
 
@@ -35,6 +35,7 @@ url = 'http://{ip}:{port}/cluster_analysis/api/v0.1/milestones'.format(ip=servic
 
 # Paths
 working_dir = os.getcwd()
+data_path = os.path.join(working_dir, 'data')
 run_dir_path = os.path.join(working_dir, 'run_dir')
 chunks_path = os.path.join(run_dir_path, 'chunks')
 sub_graphs_path = os.path.join(run_dir_path, 'sub_graphs')

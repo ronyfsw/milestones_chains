@@ -6,7 +6,7 @@ venv
 results
 config
 dev
-run_dir
+run_dir*
 tabular_result_files
 *.txt
 *.xlsx

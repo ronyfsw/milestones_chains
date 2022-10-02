@@ -31,7 +31,7 @@ chains_table = '{e}_chains'.format(e=experiment)
 executor = ProcessPoolExecutor(available_executors)
 
 # Data
-s3_resource.Bucket(data_bucket).download_file(data_file_name, data_file_name)
+S3_RESOURCE.Bucket(data_bucket).download_file(data_file_name, data_file_name)
 print('file {f} downloaded'.format(f=data_file_name))
 G = build_graph(data_file_name)
 Gnodes, Gedges = list(G.nodes()), G.edges()

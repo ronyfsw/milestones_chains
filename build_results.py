@@ -59,7 +59,7 @@ chains = [(c) for c in chains]
 a = len(chains)
 encoded_chains = list(set(chains))
 print('{n1} unique scaffold_chains prior to filtering'.format(n1=scaffold_chains_count))
-print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(chains)))
+print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(encoded_chains)))
 
 # Decode chains
 print('decode chains')

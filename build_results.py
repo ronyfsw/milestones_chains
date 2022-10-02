@@ -32,7 +32,7 @@ links_types = np.load(os.path.join(run_dir_path, 'links_types.npy'), allow_pickl
 nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 
 # Chains from scaffolds
-chains = []
+chains, scaffolds_chains = [], []
 scaffolds_files = os.listdir(scaffolds_path)
 scaffolds = {}
 filtering_dir = os.path.join(run_dir_path, 'filtering')
@@ -44,6 +44,7 @@ for scaffolds_file in scaffolds_files:
     scaffold = np.load(scaffold_path, allow_pickle=True)[()]
     scaffold_chains = list(scaffold.values())
     scaffold_chains = list(set([c for c in scaffold_chains if c]))
+    scaffolds_chains += scaffold_chains
     scaffold_chains_count += len(scaffold_chains)
     # print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffold_chains)))
     chains_to_keep = drop_chain_overlaps(scaffold_chains)
@@ -55,6 +56,12 @@ for scaffolds_file in scaffolds_files:
     test_path = os.path.join(filtering_dir, 'test_{f}.txt'.format(f=scaffolds_file.split('_')[1]))
     with open(test_path, 'w') as f: f.write(result)
     chains += chains_to_keep
+
+scaffolds_chains = [(c) for c in scaffolds_chains]
+chains_df = pd.DataFrame(scaffolds_chains, columns=['Chain'])
+chains_df.to_parquet('scaffolds_chains.parquet', index=False, compression='gzip')
+
+
 chains = [(c) for c in chains]
 a = len(chains)
 encoded_chains = list(set(chains))

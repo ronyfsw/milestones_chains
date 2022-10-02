@@ -12,7 +12,6 @@ data_file_name = os.path.join(data_path, args.data_file_name)
 print('Data:', data_file_name)
 print('chains_file:', chains_file)
 
-
 # Data
 G = build_graph(data_file_name)
 Gedges = list(G.edges())
@@ -28,7 +27,6 @@ print('First milestone:', root_node)
 for node in terminal_nodes:
     terminal_predecessors = list(G.predecessors(node))
     print(node, len(terminal_predecessors), terminal_predecessors)
-
 
 # Chain results
 chains_df = pd.read_parquet(chains_file)

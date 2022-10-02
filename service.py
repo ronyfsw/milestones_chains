@@ -110,11 +110,11 @@ while scaffolds_count < len(root_successors):
 
 print('Scaffolds chains count checkpoint')
 scaffolds_chains_counts = []
-for i in range(3):
+for i in range(4):
     time.sleep(5)
     scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
 print('scaffolds_chains_counts:', scaffolds_chains_counts)
-while(np.mean(scaffolds_chains_counts[-3:]) != scaffolds_chains_counts[-3]):
+while(np.mean(scaffolds_chains_counts[-4:]) != scaffolds_chains_counts[-4]):
     time.sleep(5)
     scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
     print('scaffolds_chains_counts:', scaffolds_chains_counts)

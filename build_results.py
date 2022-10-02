@@ -41,12 +41,12 @@ for scaffolds_file in scaffolds_files:
     start = time.time()
     scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
     scaffold = np.load(scaffold_path, allow_pickle=True)[()]
-    print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffold)))
     scaffold_chains = list(scaffold.values())
     scaffold_chains = [c for c in scaffold_chains if c]
+    print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffold_chains)))
     chains_to_keep = drop_chain_overlaps(scaffold_chains)
     print('{s}: {n1} of {n2} chains kept'.format(s=scaffolds_file,\
-                                                 n1=len(chains_to_keep), n2=len(chains)))
+                                                 n1=len(chains_to_keep), n2=len(scaffold_chains)))
     print('filtering took', round(time.time()-start))
     result = 'Scaffold chains:\n{sc}\n--------\nChains to keep:\n{ck}'\
 	    .format(sc='\n'.join(scaffold_chains), ck='\n'.join(chains_to_keep))

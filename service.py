@@ -96,9 +96,10 @@ for index, root_successor in enumerate(root_successors):
 
 # Run the pipeline in parallel on each of the subgraphs produced
 run_paths = run_paths.rstrip(' &')
-subprocess.run(run_paths, shell=True)
+p = subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
+p.wait()
 
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"

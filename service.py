@@ -103,9 +103,9 @@ print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 scaffolds_count = len(os.listdir(scaffolds_path))
 print('scaffolds_count:', scaffolds_count)
 while scaffolds_count < len(root_successors):
-    print('scaffolds_count:', scaffolds_count)
-    time.sleep(2)
+    time.sleep(5)
     scaffolds_count = len(os.listdir(scaffolds_path))
+    print('scaffolds_count:', scaffolds_count)
 
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"

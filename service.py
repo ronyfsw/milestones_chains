@@ -99,8 +99,14 @@ run_paths = run_paths.rstrip(' &')
 p = subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
-p.wait()
+
+scaffolds_count = len(os.listdir(scaffolds_path))
+print('scaffolds_count:', scaffolds_count)
+while scaffolds_count < root_successors:
+    print('scaffolds_count:', scaffolds_count)
+    time.sleep(2)
+    scaffolds_count = len(os.listdir(scaffolds_path))
 
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"
-               .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
+               .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)git

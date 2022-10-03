@@ -2,17 +2,16 @@ import os
 from modules.config import *
 from modules.graphs import *
 
-# chains_file arguments
-# parser = argparse.ArgumentParser()
-# parser.add_argument('chains_file')
-# parser.add_argument('data_file_name')
-# args = parser.parse_args()
-# chains_file = args.chains_file
-# data_file_name = args.data_file_name
-data_file_name = 'EMS_DCMA_DD_23.08.graphml'
+# Run arguments: data and chains file name
+parser = argparse.ArgumentParser()
+parser.add_argument('chains_file_name')
+parser.add_argument('data_file_name')
+args = parser.parse_args()
+chains_file_name = args.chains_file_name
+data_file_name = args.data_file_name
 data_file_name = os.path.join(data_path, data_file_name)
 print('Data:', data_file_name)
-print('chains_file:', chains_file)
+print('chains_file_name:', chains_file_name)
 
 # Data
 G = build_graph(data_file_name)
@@ -29,7 +28,7 @@ print('{n} isolates'.format(n=len(isolates)))
 print('First milestone:', root_node)
 
 # Chain results
-chains_df = pd.read_parquet(chains_file)
+chains_df = pd.read_parquet(chains_file_name)
 chains = list(chains_df['Chain'].unique())
 chains_count = len(chains_df)
 print('{n} chains identified'.format(n=len(isolates)))

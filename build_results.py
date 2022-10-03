@@ -48,9 +48,6 @@ for scaffolds_file in scaffolds_files:
     scaffold_chains_count += len(scaffold_chains)
     # print('filtering {f} with {n} chains'.format(f=scaffolds_file, n=len(scaffold_chains)))
     chains_to_keep = drop_chain_overlaps(scaffold_chains)
-    # print('{s}: {n1} of {n2} chains kept'.format(s=scaffolds_file,\
-    #                                             n1=len(chains_to_keep), n2=len(scaffold_chains)))
-    # print('filtering took', round(time.time()-start))
     result = 'Scaffold chains:\n{sc}\n--------\nChains to keep:\n{ck}'\
 	    .format(sc='\n'.join(scaffold_chains), ck='\n'.join(chains_to_keep))
     test_path = os.path.join(filtering_dir, 'test_{f}.txt'.format(f=scaffolds_file.split('_')[1]))
@@ -61,12 +58,10 @@ scaffolds_chains = [(c) for c in scaffolds_chains]
 chains_df = pd.DataFrame(scaffolds_chains, columns=['Chain'])
 chains_df.to_parquet('scaffolds_chains.parquet', index=False, compression='gzip')
 
-
 chains = [(c) for c in chains]
-a = len(chains)
 encoded_chains = list(set(chains))
 print('{n1} unique scaffold_chains prior to filtering'.format(n1=scaffold_chains_count))
-print('{n1} chains identified, {n2} unique chains written'.format(n1=a, n2=len(encoded_chains)))
+print('{n2} unique chains written'.format(n2=len(encoded_chains)))
 
 # Decode chains
 print('decode chains')
@@ -168,5 +163,3 @@ if results == 'prt':
 
 print('build results started on', start_time)
 print('build results ended on', datetime.now().strftime("%H:%M:%S"))
-
-

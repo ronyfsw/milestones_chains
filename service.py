@@ -55,7 +55,7 @@ print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 
 # Isolated nodes
 isolates = graph_isolates(G)
-print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs:'.format(n=len(isolates)))
+print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs'.format(n=len(isolates)))
 
 # Tasks in sub graphs that are disconnected from the root
 sub_graphs = [sg for sg in list(nx.connected_components(G.to_undirected())) if len(sg)>1]
@@ -68,7 +68,7 @@ for sub_graph in sub_graphs:
 print('The graph contains {n1} subgraphs connected to the root and {n2} subgraphs which are disconnected from the root'
       .format(n1=len(c1), n2=len(c2)))
 sub_graphs_nodes = list(set(sub_graphs_nodes))
-print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs:'
+print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs'
       .format(n=len(sub_graphs_nodes)))
 
 # Terminal nodes list for validation
@@ -119,24 +119,19 @@ p = subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
-print('Scaffolds count checkpoint')
+print('Scaffolds and chains count checkpoint')
 scaffolds_count = len(os.listdir(scaffolds_path))
-print('scaffolds_count:', scaffolds_count)
 while scaffolds_count < len(root_successors):
     time.sleep(5)
     scaffolds_count = len(os.listdir(scaffolds_path))
-    print('scaffolds_count:', scaffolds_count)
 
-print('Scaffolds chains count checkpoint')
 scaffolds_chains_counts = []
 for i in range(4):
     time.sleep(5)
     scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
-print('scaffolds_chains_counts:', scaffolds_chains_counts)
 while(np.mean(scaffolds_chains_counts[-4:]) != scaffolds_chains_counts[-4]):
     time.sleep(5)
     scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
-    print('scaffolds_chains_counts:', scaffolds_chains_counts)
 
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"

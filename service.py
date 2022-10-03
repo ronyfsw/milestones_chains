@@ -50,10 +50,29 @@ G = nx.relabel_nodes(G, nodes_encoder)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 root_node = list(nx.topological_sort(G))[0]
 root_successors = list(G.successors(root_node))
-isolates = graph_isolates(G)
 Gnodes, Gedges = list(G.nodes()), list(G.edges())
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
-terminal_nodes = get_terminal_nodes(G)
+
+# Isolated nodes
+isolates = graph_isolates(G)
+print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs:'.format(n=len(isolates)))
+
+# Tasks in sub graphs that are disconnected from the root
+sub_graphs = [sg for sg in list(nx.connected_components(G.to_undirected())) if len(sg)>1]
+c1, c2, sub_graphs_nodes = [], [], []
+for sub_graph in sub_graphs:
+    if root_node in sub_graph: c1.append(len(sub_graph))
+    else:
+        c2.append(len(sub_graph))
+        sub_graphs_nodes += list(sub_graph)
+print('The graph contains {n1} subgraphs connected to the root and {n2} subgraphs which are disconnected from the root'
+      .format(n1=len(c1), n2=len(c2)))
+sub_graphs_nodes = list(set(sub_graphs_nodes))
+print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs:'
+      .format(n=len(sub_graphs_nodes)))
+
+# Terminal nodes list for validation
+terminal_nodes = [n for n in get_terminal_nodes(G) if n not in sub_graphs_nodes]
 with open(os.path.join(run_dir_path, 'terminal_nodes.txt'), 'w') as f:
      f.write('\n'.join(terminal_nodes))
 
@@ -82,7 +101,7 @@ for Gnode in Gnodes:
 run_paths = ''
 print('{n} root_successors will be used to build sub-graphs'.format(n=len(root_successors)))
 for index, root_successor in enumerate(root_successors):
-    nodes_to_drop = [s for s in root_successors if s != root_successor] + isolates
+    nodes_to_drop = [s for s in root_successors if s != root_successor] + isolates + sub_graphs_nodes
     subGnodes = [n for n in Gnodes if n not in nodes_to_drop]
     subG = G.subgraph(subGnodes)
     is_dag = nx.is_directed_acyclic_graph(subG)

@@ -137,3 +137,6 @@ while(np.mean(scaffolds_chains_counts[-4:]) != scaffolds_chains_counts[-4]):
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {f} {e} {t} {r}"
                .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
+
+# Delete data from working directory
+os.remove(data_file_name)

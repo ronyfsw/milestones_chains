@@ -73,6 +73,7 @@ print('{n} tasks will be excluded from the analysis as they reside in the discon
 
 # Terminal nodes list for validation
 terminal_nodes = [n for n in get_terminal_nodes(G) if n not in sub_graphs_nodes]
+terminal_nodes = [nodes_decoder[n] for n in terminal_nodes]
 with open(os.path.join(run_dir_path, 'terminal_nodes.txt'), 'w') as f:
      f.write('\n'.join(terminal_nodes))
 

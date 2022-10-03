@@ -55,15 +55,13 @@ print('{e} chains ({p}%) do not end with a terminal task of the program'.format(
 #if terminal_errors >0: print('The terminal node errors are:', error_terminals)
 missing_terminals = list(set(terminal_nodes).difference(set(chains_terminals)))
 chains_terminals = list(set(chains_terminals))
-#print('{n} chains terminals:'.format(n=len(chains_terminals)), chains_terminals)
 print('{n} missing terminals:'.format(n=len(missing_terminals)), missing_terminals)
 missing_terminals_predecessors = []
 if missing_terminals:
-     print('{n} missing terminals:'.format(n=len(missing_terminals)))
-     for node in missing_terminals:
-         missing_terminals_predecessors += list(G.predecessors(node))
-
-print('missing_terminals_predecessors:', missing_terminals_predecessors)
+     print('{n} missing terminals:'.format(n=len(missing_terminals)), missing_terminals)
+     #for node in missing_terminals:
+     #    missing_terminals_predecessors += list(G.predecessors(node))
+     # print('missing_terminals_predecessors:', missing_terminals_predecessors)
 
 print('----------------------------')
 print('Successors-Predecessor Pairs')
@@ -71,7 +69,6 @@ ps_errors = pairs_count = 0
 ps_errors = []
 for chain in chains:
     tasks = chain.split(node_delimiter)
-    #tasks = [nodes_decoder[t] for t in tasks]
     for index, task in enumerate(tasks):
         if index < len(tasks)-1:
             chain_successor = tasks[index+1]
@@ -79,15 +76,10 @@ for chain in chains:
             pairs_count += 1
             if chain_pair not in Gedges:
                 ps_errors.append((task, chain_successor))
-                # print(30*'-')
-                # print((task, chain_successor))
-                # print(chain)
+
 ps_errors = list(set(ps_errors))
 ps_errors_count = len(ps_errors)
 ps_errors_rate = 100 * (ps_errors_count / pairs_count)
 print('{e} task pairs in the chains, comprising ({p}%) of the tasks pairs, are not paired as successor-predecessor in the data'
       .format(e=ps_errors_count, p=ps_errors_rate))
 if ps_errors_count > 0: print('The error pairs are:', ps_errors)
-
-# for Gedge in Gedges:
-

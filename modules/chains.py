@@ -12,24 +12,27 @@ def growReproduce(map_or_step):
 	process_id = map_or_step[0]
 	chain_key = map_or_step[1]
 	successors = map_or_step[2]
-	growth_node = successors[0]
-	pointers = successors[1:]
+	growth_tip = successors[0]
+	initiators = successors[1:]
 
 	scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=process_id))
 	scaffolds = np.load(scaffolds_dict, allow_pickle=True)[()]
 	if chain_key in list(scaffolds.keys()):
 		previous_step_chain = scaffolds[chain_key]
+		
 		# Growth
+		# An extention of a chain produced in previous step using of the growth tip successors
 		previous_step_chain = previous_step_chain.split(node_delimiter)
-		chain = previous_step_chain + [growth_node]
+		chain = previous_step_chain + [growth_tip]
 		chain = node_delimiter.join(chain)
 		cid = encode_string(chain)
 
 		# Reproduction
+		# Chain initiations from the growth-tip successors that were not exploited for growth
 		next_steps = []
-		for pointer in pointers:
-			pointer = (pointer,)
-			next_step = (process_id, chain_key, pointer)
+		for initiator in initiators:
+			initiator = (initiator,)
+			next_step = (process_id, chain_key, initiator)
 			next_steps.append(next_step)
 		next_steps = tuple(next_steps)
 

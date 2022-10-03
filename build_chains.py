@@ -1,7 +1,7 @@
+import re
 from pathlib import Path
 import os
 import sys
-
 import numpy as np
 
 home_dir = Path.home()
@@ -34,6 +34,7 @@ Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]
 root_successors = tuple(G.successors(root_node))
 scaffolds = {1: root_node}
+pid = re.findall('\d{1,}', sub_graph_file_name)[0]
 scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=pid))
 np.save(scaffolds_dict, scaffolds)
 next_journeys_steps = [(pid, 1, root_successors)]

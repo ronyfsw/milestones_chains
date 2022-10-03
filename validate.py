@@ -19,7 +19,7 @@ Gedges = list(G.edges())
 edges_count = len(Gedges)
 isolates = graph_isolates(G)
 terminal_nodes = get_terminal_nodes(G)
-nodes_decoder = np.load(os.path.join('nodes_decoder.npy'), allow_pickle=True)[()]
+nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 root_node = list(nx.topological_sort(G))[0]
 Gnodes, Gedges = list(G.nodes()), list(G.edges())
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))

@@ -18,7 +18,7 @@ G = build_graph(data_file_name)
 Gedges = list(G.edges())
 edges_count = len(Gedges)
 isolates = graph_isolates(G)
-terminal_nodes = get_terminal_nodes(G)
+terminal_nodes = open(os.path.join(run_dir_path, 'terminal_nodes.txt')).read().split('\n')
 nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 root_node = list(nx.topological_sort(G))[0]
 Gnodes, Gedges = list(G.nodes()), list(G.edges())

@@ -5,7 +5,7 @@ home_dir = Path.home()
 modules_dir = os.path.join(home_dir, 'services/milestones_chains/modules/')
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 from config import *
-from encoders import *
+from tasks import *
 
 def growReproduce(map_or_step):
 	cid, chain, next_steps = None, None, None

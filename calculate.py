@@ -1,7 +1,32 @@
-from modules.client_set_up import *
+from modules.config import *
 
-def run_calculation_process(data_file_name, experiment, tasks_types, results, query):
-    # Experiment directories
+def run_calculation_process(instance_name, data_file_name, experiment, tasks_types, results, query):
+
+    ## Compute instance
+    # Set up
+    INSTANCE_IPs = {'service': '172.31.15.123', 'service_dev': '172.31.20.61'}
+    INSTANCE_IDs = {'service': 'i-0586e11281d4b02a2', 'service_dev': 'i-0249408ea16bc730b'}
+    INSTANCE_IP = INSTANCE_IPs[instance_name]
+    INSTANCE_ID = INSTANCE_IDs[instance_name]
+    AWS_REGION = "eu-west-2"
+    EC2_RESOURCE = boto3.resource('ec2', region_name=AWS_REGION)
+    EC2_CLIENT = boto3.client('ec2', region_name=AWS_REGION)
+
+    # Start
+    instance = EC2_RESOURCE.Instance(INSTANCE_ID)
+    instance.start()
+    print('EC2 instance {n} {id} started'.format(n=instance_name, id=INSTANCE_ID))
+    instance.wait_until_running()
+    print('The instance is running')
+
+    # SSH Connector
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    privkey = paramiko.RSAKey.from_private_key_file('ds_eu_west2_2.pem')  # Worked only with local pem file
+    ssh.connect(hostname=INSTANCE_IP, username='ubuntu', pkey=privkey)
+
+    ## Calculation
+    # Directories, files and paths
     working_dir = os.getcwd()
     if experiment in os.listdir(working_dir):
         shutil.rmtree(experiment)
@@ -12,8 +37,6 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     bucket_chains_path = '{e}/{c}'.format(e=experiment, c=chains_file)
     prt_path = os.path.join(experiment, 'prt')
     bucket_prt_path = '{e}/prt'.format(e=experiment)
-
-    # Experiment results file
     spreadsheet = os.path.join(experiment, 'results.xlsx')
     zipped_parquet_files = os.path.join(experiment, 'results.parquet')
 
@@ -31,16 +54,18 @@ def run_calculation_process(data_file_name, experiment, tasks_types, results, qu
     stdin, stdout, stderr = ssh.exec_command(process_statement)
     if len(stderr.readlines()) > 0:
         print('Run attempt encountered error:', stderr.readlines())
-
     print('Calculation finished')
+
     # Stop compute instance
     response = EC2_CLIENT.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
-    print('Compute instance stopped')
+    print('EC2 instance stopped')
+
     # Prepare results
     print('Preparing results')
     S3_RESOURCE.Bucket(results_bucket).download_file(bucket_chains_path, chains_path)
     rows_count = 0
     if results == 'prt':
+        print('results_bucket, bucket_prt_path:', results_bucket, bucket_prt_path)
         S3_RESOURCE.Bucket(results_bucket).download_file(bucket_prt_path, 'prt')
         with ZipFile('prt', 'r') as zipObj:
             zipObj.extractall(path=prt_path)

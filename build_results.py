@@ -156,6 +156,7 @@ if results == 'prt':
 	file_names, file_paths = os.listdir(chunks_path), {}
 	for file_name in file_names:
 		file_paths[file_name] = os.path.join(chunks_path, file_name)
+	zipped_results_file_name = '{e}_prt.zip'.format(e=experiment)
 	with ZipFile(zipped_results_file_name, 'w') as zip:
 		for file_name, file_path in file_paths.items():
 			zip.write(file_path, arcname=file_name)

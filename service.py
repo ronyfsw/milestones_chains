@@ -10,7 +10,7 @@ if modules_dir not in sys.path: sys.path.append(modules_dir)
 from graphs import *
 from directories import *
 from chains import *
-from encoders import *
+from tasks import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 print('service started on', start_time)

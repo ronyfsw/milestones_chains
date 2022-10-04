@@ -89,7 +89,7 @@ def run_calculation_process(instance_name, data_file_name, experiment, tasks_typ
             del df
         # Zip the parquet files if the user intends to use the web interface
         if query == 'web':
-            pq.write_table(pq.ParquetDataset(experiment).read(), zipped_parquet_files, row_group_size=100000)
+            pq.write_table(pq.ParquetDataset(prt_path).read(), zipped_parquet_files, row_group_size=100000)
     chains_df = pd.read_parquet(chains_path)
     chains_count = len(chains_df)
     print('{c} chains written to {f}'.format(c=chains_count, f='chains.parquet'))

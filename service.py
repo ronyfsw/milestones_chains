@@ -7,7 +7,6 @@ modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modu
 if modules_dir not in sys.path: sys.path.append(modules_dir)
 
 #from modules.worm_modules import *
-from db_tables import *
 from graphs import *
 from directories import *
 from chains import *

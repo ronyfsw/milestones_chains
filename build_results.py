@@ -8,7 +8,6 @@ if modules_dir not in sys.path: sys.path.append(modules_dir)
 from libraries import *
 from graphs import *
 from config import *
-from db_tables import *
 from chains import *
 
 start_time = datetime.now().strftime("%H:%M:%S")

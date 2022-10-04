@@ -87,11 +87,7 @@ for node_data in nodes_data:
 np.save(os.path.join(run_dir_path, 'nodes_types.npy'), nodes_types)
 
 # Refresh results tables and databases
-redisClient.flushdb()
 successorsDB.flushdb()
-cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
-statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
-cur.execute(statement)
 
 for Gnode in Gnodes:
 	if Gnode not in isolates:

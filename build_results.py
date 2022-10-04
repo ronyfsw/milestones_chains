@@ -154,7 +154,14 @@ if results == 'prt':
 
 	# Merge results
 	print('combine, zip and upload results')
-	subprocess.run("python3 merge_file.py {e}".format(e=experiment), shell=True)
+	file_names, file_paths = os.listdir(chunks_path), {}
+	for file_name in file_names:
+		file_paths[file_name] = os.path.join(chunks_path, file_name)
+	with ZipFile(zipped_results_file_name, 'w') as zip:
+		for file_name, file_path in file_paths.items():
+			zip.write(file_path, arcname=file_name)
+	experiment_path = os.path.join(experiment, 'prt')
+	S3_CLIENT.upload_file(zipped_results_file_name, results_bucket, experiment_path)
 
 print('build results started on', start_time)
 print('build results ended on', datetime.now().strftime("%H:%M:%S"))

@@ -1,4 +1,4 @@
-from client_set_up import *
+from modules.client_set_up import *
 
 def run_calculation_process(data_file_name, experiment, tasks_types, results, query):
     # Experiment directories

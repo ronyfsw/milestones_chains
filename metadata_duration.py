@@ -1,10 +1,11 @@
-import pandas as pd
+import os, sys, pathlib
+modules_dir = os.path.join(pathlib.Path.home(), 'services/milestones_chains/modules/')
+if modules_dir not in sys.path: sys.path.append(modules_dir)
 
-from modules.libraries import *
-from modules.parsers import *
-from modules.evaluate import *
-from modules.graphs import *
-from modules.config import *
+from libraries import *
+from tasks import *
+from graphs import *
+from config import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('data_file_name')

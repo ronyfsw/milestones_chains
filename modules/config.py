@@ -14,7 +14,8 @@ available_executors = 10
 node_delimiter = '<>'
 chains_file = 'chains.parquet'
 num_executors = 40
-
+results_cols = ['ID', 'ChainID', 'TaskID', 'NeighbourID', 'Dependency', 'TaskType', 'Label',
+                'PlannedStart', 'PlannedEnd', 'ActualStart', 'ActualEnd', 'Float1', 'Status', 'File', 'planned_duration', 'actual_duration']
 # AWS
 profile_name = 'ds_sandbox'
 results_bucket = 'chainsresults'

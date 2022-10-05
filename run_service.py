@@ -64,7 +64,6 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     S3_CLIENT.put_object(Bucket=results_bucket, Key=(experiment + '/'))
 
     # Run calculation
-    stdin, stdout, stderr = ssh.exec_command('pwd')
     process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r}'\
     .format(f=data_file_name, e=experiment, t=tasks_types, r=results)
     stdin, stdout, stderr = ssh.exec_command(process_statement)

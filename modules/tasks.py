@@ -85,7 +85,7 @@ def encode_string(text_string):
 	return key
 
 def tasks_rows(index_chunk):
-    chunk_index, indices_chains, metadata_duration = index_chunk
+    chunk_index, indices_chains, metadata_duration, chunks_path = index_chunk
     md_ids = list(metadata_duration['ID'])
     print('{n} ids in metadata_duration'.format(n=len(md_ids)))
     results_file_name = os.path.join(chunks_path, 'results_copy_{c}.parquet'.format(c=chunk_index))

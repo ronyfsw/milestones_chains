@@ -87,7 +87,7 @@ if results == 'prt':
 	chunked_indices_chains = [indices_chains[i:i + chains_chunk] for i in range(0, len(indices_chains), chains_chunk)]
 	indexed_chains_chunks = []
 	for index, chunk in enumerate(chunked_indices_chains):
-		indexed_chains_chunks.append((index, chunk))
+		indexed_chains_chunks.append((index, chunk, metadata_duration))
 	print('indices_chains prep duration = {t}'.format(t=time.time()-start))
 	results_rows = []
 	rows_count = 0

@@ -10,25 +10,25 @@ def build_graph(file_path):
     '''
     Build a directed graph of a .graphml file
     '''
-	# Graph
-	G = nx.read_graphml(file_path)
-	G = nx.DiGraph(G)
-	return G
+    # Graph
+    # G = nx.read_graphml(file_path)
+    # G = nx.DiGraph(G)
+    # return G
 
 def graph_isolates(G):
     '''
     Identify isolate nodes (degree = 0) in an input graph
     '''
-	nodes_degrees = dict(G.degree())
-	return [n for n in list(nodes_degrees.keys()) if nodes_degrees[n] == 0]
+    nodes_degrees = dict(G.degree())
+    return [n for n in list(nodes_degrees.keys()) if nodes_degrees[n] == 0]
 
 def get_terminal_nodes(G):
     '''
     Build a list of the terminal nodes (no successors) of an input graph
     '''
-	Gnodes = list(G.nodes())
-	isolates = graph_isolates(G)
-	return [n for n in Gnodes if ((G.out_degree(n) == 0) & (n not in isolates))]
+    Gnodes = list(G.nodes())
+    isolates = graph_isolates(G)
+    return [n for n in Gnodes if ((G.out_degree(n) == 0) & (n not in isolates))]
 
 def parse_graphml(file_name, graphml_str, headers):
     '''

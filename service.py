@@ -87,7 +87,6 @@ np.save(os.path.join(run_dir_path, 'nodes_types.npy'), nodes_types)
 
 # Refresh results tables and databases
 successorsDB.flushdb()
-
 for Gnode in Gnodes:
 	if Gnode not in isolates:
 		successorsDB.set(Gnode, ','.join(list(G.successors(Gnode))))

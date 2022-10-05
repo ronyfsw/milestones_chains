@@ -83,3 +83,45 @@ def encode_string(text_string):
 	random_letters = '{a}{b}{c}'.format(a=random.choice(chars), b=random.choice(chars), c=random.choice(chars))
 	key = random_letters + str(key)
 	return key
+
+def tasks_rows(index_chunk, metadata_duration):
+    md_ids = list(metadata_duration['ID'])
+    print('{n} ids in metadata_duration'.format(n=len(md_ids)))
+    chunk_index, indices_chains = index_chunk
+    results_file_name = os.path.join(chunks_path, 'results_copy_{c}.parquet'.format(c=chunk_index))
+    rows = []
+    for index_chain in indices_chains:
+        chain_index, chain = index_chain
+        chain_index = 'C{i}'.format(i=str(chain_index + 1))
+        tasks = chain.split(node_delimiter)
+        for index, task in enumerate(tasks):
+            # Task index
+            if tasks_types == 'tdas':
+                task_index = 'T{i}'.format(i=str(index+1))
+            else:
+                task_index = 'M{i}'.format(i=str(index+1))
+            task_index = chain_index+task_index
+            if index <= (len(tasks) - 2):
+                next_task = tasks[index + 1]
+            else:
+                next_task = None
+            if next_task:
+                try:
+                    pair_edge_type = links_types[(task, next_task)]
+                except KeyError:
+                    pair_edge_type = None
+            else:
+                pair_edge_type = None
+            rows.append((task, chain_index, task_index, next_task, pair_edge_type))
+    chain_rows = []
+    for row in rows:
+        id = row[0]
+        if id in md_ids:
+            row_md = list(metadata_duration[metadata_duration['ID'] == id].values[0])[1:]
+            row = list(row) + row_md
+            row = tuple([str(e) for e in row])
+            chain_rows.append(row)
+
+    results_rows = pd.DataFrame(chain_rows, columns=results_cols).drop_duplicates()
+    results_rows.to_parquet(results_file_name, index=False, compression='gzip')
+    return len(chain_rows)

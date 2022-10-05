@@ -88,7 +88,7 @@ if results == 'prt':
 	indexed_chains_chunks = []
 	for chunk_index, chunk in enumerate(chunked_indices_chains):
 		indexed_chains_chunks.append((chunk_index, chunk, metadata_duration, tasks_types, \
-		                              chunks_path, node_delimiter, results_cols))
+		                              chunks_path, node_delimiter, results_cols, links_types))
 	print('indices_chains prep duration = {t}'.format(t=time.time()-start))
 	results_rows = []
 	rows_count = 0

@@ -110,6 +110,7 @@ for index, root_successor in enumerate(root_successors):
 
 # Run the pipeline in parallel on each of the subgraphs produced
 run_paths = run_paths.rstrip(' &')
+print('run_paths statement:', run_paths)
 p = subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))

@@ -1,6 +1,22 @@
 from modules.config import *
 
-def run_calculation_process(instance_name, data_file_name, experiment, tasks_types, results, query):
+def service_manager(instance_name, data_file_name, experiment, tasks_types, results, query):
+
+    '''
+    Start the compute instance, upload the data to S3, execute the service,
+    stop the compute instances and then download the reuslts
+    :param instance_name(str): The name of the EC2 instance running the service
+    :param data_file_name(str): The name of the data file as stored in the .data directory
+    :param experiment(str): The name of the experiment/run (default: The file name)
+    :param tasks_types(str): The task types to include in the results ('tdas', 'milestones').
+    If 'tdas' is given the chains will include both tdas and milestones
+    :param results(str): The types of results to produce ('chains', 'prt'). If 'chains' is given,
+    only the chains will be produced, and if 'prt' is given the chains will also be produced in
+    the tabular prt format.
+    :param query(str): The anticipated mode of querying the results ('web', 'script'). The recommended mode
+    is using a script but if 'web' is given, the results will be zipped in way that will allow them to
+    be queried by the web-shell of DuckDB
+    '''
 
     ## Compute instance
     # Set up

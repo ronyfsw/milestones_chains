@@ -51,12 +51,12 @@ while next_journeys_steps:
     steps_produced, maps_produced = [], []
     journey += 1
     next_count = len(steps_chunk)
-    #if next_count <= available_executors:
-    #    executor = ProcessPoolExecutor(next_count)
+    if next_count <= available_executors:
+       executor = ProcessPoolExecutor(next_count)
 
     # Build chains
     ids_chains = []
-    for cid, chain, next_steps in map(growReproduce, steps_chunk):
+    for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps

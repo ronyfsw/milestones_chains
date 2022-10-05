@@ -9,6 +9,7 @@ from libraries import *
 def infer_dt_format(dt):
     '''
     Infer the format of dt string to use as parameter in pd.to_datetime
+    :param dt(str): A sample of a single date from the dates column for which the format is to be inferred
     '''
     dt_format = "%a %b %d %H:%M:%S %Z %Y"
     seps = ['/', '-']
@@ -85,11 +86,16 @@ def encode_string(text_string):
 	return key
 
 def tasks_rows(index_chunk):
+    '''
+    Transform a tasks chain into the a tasks based table (prt format)
+    :param index_chunk: A chunk of the chains and the metadata files to be used in
+    transforing and writing them in a prt format
+    '''
     chunk_index, indices_chains, metadata_duration, tasks_types,\
     chunks_path, node_delimiter, results_cols, links_types = index_chunk
     md_ids = list(metadata_duration['ID'])
     print('{n} ids in metadata_duration'.format(n=len(md_ids)))
-    results_file_name = os.path.join(chunks_path, 'results_copy_{c}.parquet'.format(c=chunk_index))
+    results_file_path = os.path.join(chunks_path, 'results_copy_{c}.parquet'.format(c=chunk_index))
     rows = []
     for index_chain in indices_chains:
         chain_index, chain = index_chain
@@ -124,5 +130,5 @@ def tasks_rows(index_chunk):
             chain_rows.append(row)
 
     results_rows = pd.DataFrame(chain_rows, columns=results_cols).drop_duplicates()
-    results_rows.to_parquet(results_file_name, index=False, compression='gzip')
+    results_rows.to_parquet(results_file_path, index=False, compression='gzip')
     return len(chain_rows)

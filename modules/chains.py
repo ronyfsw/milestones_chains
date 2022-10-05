@@ -8,6 +8,13 @@ from config import *
 from tasks import *
 
 def growReproduce(map_or_step):
+	'''
+	Extend chains and build the maps for the chains to be built in the next iteration
+	:param map_or_step: The chain's next step instructions including the build_chains process
+	building the chains, the chain key to identify the chain in the scaffolds, and the successors to
+	use in extending the chains, or in building the guides for the next steps
+
+	'''
 	cid, chain, next_steps = None, None, None
 	process_id = map_or_step[0]
 	chain_key = map_or_step[1]
@@ -38,7 +45,10 @@ def growReproduce(map_or_step):
 
 	return cid, chain, next_steps
 
+
 def drop_chain_overlaps(chains):
+	# Filter a list of chains of short chains that are included in longer chains
+	# If chains = [A-B, A-B-C] only A-B-C will be included in the filtered version (keep)
     chains = list(set([c for c in chains if c]))
     chains.sort(key=len)
     exclude, keep = [], []
@@ -53,6 +63,9 @@ def drop_chain_overlaps(chains):
     return keep
 
 def count_scaffolds_chains(scaffolds_path):
+	'''
+	Count the chains in each of the scaffold dictionaries built
+	'''
 	scaffold_chains_count = 0
 	scaffolds_files = os.listdir(scaffolds_path)
 	for scaffolds_file in scaffolds_files:

@@ -35,8 +35,6 @@ nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_p
 chains = []
 scaffolds_files = os.listdir(scaffolds_path)
 scaffolds = {}
-filtering_dir = os.path.join(run_dir_path, 'filtering')
-os.mkdir(filtering_dir)
 scaffold_chains_count = 0
 for scaffolds_file in scaffolds_files:
     start = time.time()

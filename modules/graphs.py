@@ -10,10 +10,9 @@ def build_graph(file_path):
     '''
     Build a directed graph of a .graphml file
     '''
-    # Graph
-    # G = nx.read_graphml(file_path)
-    # G = nx.DiGraph(G)
-    # return G
+    G = nx.read_graphml(file_path)
+    G = nx.DiGraph(G)
+    return G
 
 def graph_isolates(G):
     '''

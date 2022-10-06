@@ -10,7 +10,7 @@ from libraries import *
 partition_size_cutoff = 50
 journey_chunk = 50000
 chains_chunk = 100000
-available_executors = 10
+available_executors = 40
 node_delimiter = '<>'
 chains_file = 'chains.parquet'
 num_executors = 40

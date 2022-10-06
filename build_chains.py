@@ -81,8 +81,3 @@ while next_journeys_steps:
     # Collect and prepare next journey steps
     next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
 
-    # filter saturated scaffolds
-    scaffolds_count = len(scaffolds)
-    next_journeys_steps_count = len(next_journeys_steps)
-
-# print('build chains {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))

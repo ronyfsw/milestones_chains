@@ -52,7 +52,7 @@ root_successors = list(G.successors(root_node))
 Gnodes, Gedges = list(G.nodes()), list(G.edges())
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
 
-# Isolated nodes
+# Isolate nodes
 isolates = graph_isolates(G)
 print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs'.format(n=len(isolates)))
 
@@ -119,7 +119,6 @@ scaffolds_count = len(os.listdir(scaffolds_path))
 while scaffolds_count < len(root_successors):
     time.sleep(5)
     scaffolds_count = len(os.listdir(scaffolds_path))
-
 scaffolds_chains_counts = []
 for i in range(4):
     time.sleep(5)

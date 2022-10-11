@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:schemLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<key id="d0" attr.name="color" attr.type="string" for="node">
+  <default>black</default>
+</key>
+<key id="d1" attr.name="weight" attr.type="double" for="edge">
+  <default>1.0</default>
+</key>
+<key id="d2" attr.name="color" attr.type="string" for="edge">
+  <default>black</default>
+</key>
+<key id="Label" attr.name="Label" attr.type="string" for="node" />
+<key id="TaskType" attr.name="TaskType" attr.type="string" for="node" />
+<key id="PlannedStart" attr.name="PlannedStart" attr.type="string" for="node" />
+<key id="PlannedEnd" attr.name="PlannedEnd" attr.type="string" for="node" />
+<key id="ActualStart" attr.name="ActualStart" attr.type="string" for="node" />
+<key id="ActualEnd" attr.name="ActualEnd" attr.type="string" for="node" />
+<key id="Status" attr.name="Status" attr.type="string" for="node" />
+<key id="Float" attr.name="Float" attr.type="integer" for="node" />
+<key id="r" attr.name="r" attr.type="integer" for="node" />
+<key id="g" attr.name="g" attr.type="integer" for="node" />
+<key id="b" attr.name="b" attr.type="integer" for="node" />
+<key id="Constraint" attr.name="Constraint" attr.type="string" for="node" />
+<key id="ConstraintDate" attr.name="ConstraintDate" attr.type="string" for="node" />
+<key id="edgelabel" attr.name="edgelabel" attr.type="string" for="edge" />
+<key id="Dependency" attr.name="Dependency" attr.type="string" for="edge" />
+<key id="DependencyLag" attr.name="DependencyLag" attr.type="integer" for="edge" />
+<graph id="Graph" edgedefault="directed">
+  <node id="A1000">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">04/10/2022</data>
+    <data key="PlannedEnd">10/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <node id="A1010">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">11/10/2022</data>
+    <data key="PlannedEnd">17/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <node id="A1020">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">11/10/2022</data>
+    <data key="PlannedEnd">17/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <node id="A1030">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">11/10/2022</data>
+    <data key="PlannedEnd">17/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <node id="A1040">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">18/10/2022</data>
+    <data key="PlannedEnd">24/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <node id="A1050">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">18/10/2022</data>
+    <data key="PlannedEnd">24/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <node id="A1060">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">18/10/2022</data>
+    <data key="PlannedEnd">24/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <node id="A1070">
+    <data key="d0">black</data>
+    <data key="Label">New Activity</data>
+    <data key="TaskType">TT_Task</data>
+    <data key="PlannedStart">04/10/2022</data>
+    <data key="PlannedEnd">10/10/2022</data>
+    <data key="Float">0</data>
+    <data key="Status">TK_NotStart</data>
+  </node>
+  <edge id="A1000-A1010" source="A1000" target="A1010">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1000-A1020" source="A1000" target="A1020">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1000-A1030" source="A1000" target="A1030">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1010-A1040" source="A1010" target="A1040">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1020-A1050" source="A1020" target="A1050">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1030-A1060" source="A1030" target="A1060">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1070-A1010" source="A1070" target="A1010">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1070-A1020" source="A1070" target="A1020">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+  <edge id="A1070-A1030" source="A1070" target="A1030">
+    <data key="Dependency">FS</data>
+    <data key="DependencyLag">0</data>
+  </edge>
+</graph>
+</graphml>

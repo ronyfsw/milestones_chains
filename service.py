@@ -34,6 +34,9 @@ S3_RESOURCE.Bucket(data_bucket).download_file(data_file_name, data_file_name)
 print('file {f} downloaded'.format(f=data_file_name))
 G = build_graph(data_file_name)
 Gnodes, Gedges = list(G.nodes()), G.edges()
+print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
+print('nodes:', Gnodes)
+print('edges:', Gedges)
 # Link types dictionary
 links = G.edges(data=True)
 links_types = {}
@@ -50,8 +53,6 @@ Gnodes, Gedges = list(G.nodes()), G.edges()
 root_node = list(nx.topological_sort(G))[0]
 root_successors = list(G.successors(root_node))
 Gnodes, Gedges = list(G.nodes()), list(G.edges())
-print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
-
 # Isolate nodes
 isolates = graph_isolates(G)
 print('{n} tasks will be excluded from the analysis as they reside in the disconnected sub graphs'.format(n=len(isolates)))

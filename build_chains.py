@@ -13,7 +13,7 @@ from config import *
 
 start_time = datetime.now().strftime("%H:%M:%S")
 pid = os.getpid()
-#print('build chains process {p} started on'.format(p=pid), start_time)
+print('build chains process {p} started on'.format(p=pid), start_time)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('sub_graph_file_name')
@@ -34,7 +34,7 @@ root_node = Gsort[0]
 root_successors = tuple(G.successors(root_node))
 scaffolds = {1: root_node}
 pid = re.findall('\d{1,}', sub_graph_file_name)[0]
-scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=pid))
+scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=str(pid)))
 np.save(scaffolds_dict, scaffolds)
 next_journeys_steps = [(pid, 1, root_successors)]
 growth_tip = ['no tip']
@@ -80,4 +80,5 @@ while next_journeys_steps:
 
     # Collect and prepare next journey steps
     next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
+    print('process {p} | {n} next journey chains'.format(p=str(pid), n=str(len(next_journeys_steps))))
 

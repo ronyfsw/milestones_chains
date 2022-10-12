@@ -1,8 +1,8 @@
 import os
 import numpy as np
 run_dir_path = os.path.join(os.getcwd(), 'run_dir')
-scaffolds_path1 = os.path.join(run_dir_path, 'scaffolds')
-scaffolds_files = os.listdir(scaffolds_path1)
+scaffolds_path = os.path.join(run_dir_path, 'scaffolds')
+scaffolds_files = os.listdir(scaffolds_path)
 scaffolds_count = len(scaffolds_files)
 nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 

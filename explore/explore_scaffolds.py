@@ -1,5 +1,6 @@
 import os
 import numpy as np
+node_delimiter = '<>'
 run_dir_path = os.path.join(os.getcwd(), 'run_dir')
 scaffolds_path = os.path.join(run_dir_path, 'scaffolds')
 scaffolds_files = os.listdir(scaffolds_path)

@@ -24,7 +24,6 @@ for scaffolds_file in scaffolds_files:
 
     tasks_per_chain = round(tasks_count/chains_count)
     results.append([scaffolds_file, chains_count, tasks_per_chain])
-    print(results)
-    results_df = pd.DataFrame(results, columns=['scaffolds_file, chains_count, tasks_per_chain'])
+    results_df = pd.DataFrame(results, columns=['scaffolds_file', 'chains_count', 'tasks_per_chain'])
     print(results_df)
     results_df.to_excel('explore_scaffolds.xlsx', index=False)

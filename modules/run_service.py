@@ -38,7 +38,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     # SSH Connector
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    privkey = paramiko.RSAKey.from_private_key_file('ds_eu_west2_2.pem')  # Worked only with local pem file
+    privkey = paramiko.RSAKey.from_private_key_file('../ds_eu_west2_2.pem')  # Worked only with local pem file
     ssh.connect(hostname=INSTANCE_IP, username='ubuntu', pkey=privkey)
 
     ## Calculation
@@ -47,8 +47,8 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     if experiment in os.listdir(working_dir):
         shutil.rmtree(experiment)
     os.mkdir(experiment)
-    data_path = os.path.join(working_dir, 'data', data_file_name)
-    chains_file = 'chains.parquet'
+    data_path = os.path.join(working_dir, '../data', data_file_name)
+    chains_file = '../chains.parquet'
     chains_path = os.path.join(experiment, chains_file)
     bucket_chains_path = '{e}/{c}'.format(e=experiment, c=chains_file)
     prt_path = os.path.join(experiment, 'prt')

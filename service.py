@@ -16,6 +16,7 @@ start_time = datetime.now().strftime("%H:%M:%S")
 print('service started on', start_time)
 
 parser = argparse.ArgumentParser()
+parser.add_argument('instance_name')
 parser.add_argument('data_file_name')
 parser.add_argument('experiment')
 parser.add_argument('tasks_types')
@@ -23,6 +24,7 @@ parser.add_argument('results')
 parser.add_argument('build_chains_version')
 args = parser.parse_args()
 print('args:', args)
+instance_name = args.instance_name
 data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
@@ -35,6 +37,12 @@ executor = ProcessPoolExecutor(available_executors)
 redisClient.flushdb()
 successorsDB.flushdb()
 chains_table = '{e}_chains'.format(e=experiment)
+
+INSTANCE_IP = INSTANCE_IPs[instance_name]
+conn_params = {'host': INSTANCE_IP, 'user': db_user, 'password': db_password, 'database': db_name}
+conn = mysql.connect(**conn_params)
+cur = conn.cursor()
+cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
 statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
 print(statement)

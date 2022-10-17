@@ -20,11 +20,8 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
 
     ## Compute instance
     # Set up
-    INSTANCE_IPs = {'service': '172.31.15.123', 'service_dev': '172.31.20.61'}
-    INSTANCE_IDs = {'service': 'i-0586e11281d4b02a2', 'service_dev': 'i-0249408ea16bc730b'}
     INSTANCE_IP = INSTANCE_IPs[instance_name]
     INSTANCE_ID = INSTANCE_IDs[instance_name]
-    AWS_REGION = "eu-west-2"
     EC2_RESOURCE = boto3.resource('ec2', region_name=AWS_REGION)
     EC2_CLIENT = boto3.client('ec2', region_name=AWS_REGION)
 
@@ -64,8 +61,8 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     S3_CLIENT.put_object(Bucket=results_bucket, Key=(experiment + '/'))
 
     # Run calculation
-    process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r} {v}'\
-    .format(f=data_file_name, e=experiment, t=tasks_types, r=results, v=build_chains_version)
+    process_statement = 'cd services/milestones_chains && python3 service.py {i} {f} {e} {t} {r} {v}'\
+    .format(i=instance_name, f=data_file_name, e=experiment, t=tasks_types, r=results, v=build_chains_version)
     stdin, stdout, stderr = ssh.exec_command(process_statement)
     if len(stderr.readlines()) > 0:
         print('Run attempt encountered error:', stderr.readlines())

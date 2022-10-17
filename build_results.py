@@ -20,6 +20,7 @@ parser.add_argument('experiment')
 parser.add_argument('tasks_types')
 parser.add_argument('results')
 args = parser.parse_args()
+instance_name = args.instance_name
 data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
@@ -42,8 +43,7 @@ chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=c
 chains = list(set((chains_df['chain'])))
 chains = [(c) for c in chains]
 encoded_chains = list(set(chains))
-print('{n1} unique scaffold_chains prior to filtering'.format(n1=scaffold_chains_count))
-print('{n2} unique chains written'.format(n2=len(encoded_chains)))
+print('{n1} unique scaffold_chains prior to filtering'.format(n1=chains))
 
 # Decode chains
 print('decode chains')

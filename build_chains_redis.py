@@ -24,7 +24,6 @@ sub_graph_file_path = args.sub_graph_file_path
 experiment = args.experiment
 chains_table = '{e}_chains'.format(e=experiment)
 
-
 # Subgraph data
 G = nx.read_edgelist(sub_graph_file_path, create_using=nx.DiGraph)
 Gsort = list(nx.topological_sort(G))
@@ -33,6 +32,7 @@ root_successors = tuple(G.successors(root_node))
 terminal_nodes = open(os.path.join(run_dir_path, 'terminal_nodes.txt')).read().split('\n')
 
 # Initialize the next journey steps
+pid = os.getpid()
 redisClient.hset('scaffolds', 1, root_node)
 next_journeys_steps = [(pid, 1, root_successors)]
 growth_tip = ['no tip']
@@ -110,6 +110,6 @@ if len(chains_rows) > 0:
     chains_written_count += journey_chains_count
     chains_rows = []
 
-print('{p} finished'.format(p=os.getpid()))
+print('{p} finished'.format(p=pid))
 print('pipeline started on', start_time)
 print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))

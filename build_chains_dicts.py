@@ -77,3 +77,6 @@ while next_journeys_steps:
     next_journeys_steps = next_journeys_steps + steps_produced + maps_produced
     print('process {p} | {n} next journey chains'.format(p=str(pid), n=str(len(next_journeys_steps))))
 
+print('{p} finished'.format(p=pid))
+print('pipeline started on', start_time)
+print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))

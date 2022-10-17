@@ -34,6 +34,8 @@ build_chains_version = args.build_chains_version
 chains_table = '{e}_chains'.format(e=experiment)
 executor = ProcessPoolExecutor(available_executors)
 
+print('build_chains version to run:', build_chains_version)
+
 # Refresh results tables and databases
 redisClient.flushdb()
 successorsDB.flushdb()

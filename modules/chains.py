@@ -7,7 +7,7 @@ if modules_dir not in sys.path: sys.path.append(modules_dir)
 from config import *
 from tasks import *
 
-def growReproduce(map_or_step):
+def growReproduce_dicts(map_or_step):
 	'''
 	Extend chains and build the maps for the chains to be built in the next iteration
 	:param map_or_step: The chain's next step instructions including the build_chains process
@@ -45,6 +45,31 @@ def growReproduce(map_or_step):
 
 	return cid, chain, next_steps
 
+def growReproduce_redis(map_or_step):
+	cid, chain, next_steps = None, None, None
+	chain_key = map_or_step[0]
+	successors = map_or_step[1]
+	growth_tip = successors[0]
+	initiators = successors[1:]
+
+	previous_step_chain = redisClient.hget('scaffolds', chain_key)
+
+	if previous_step_chain:
+		# Growth
+		previous_step_chain = previous_step_chain.split(node_delimiter)
+		chain = previous_step_chain + [growth_tip]
+		chain = node_delimiter.join(chain)
+		cid = encode_string(chain)
+
+		# Reproduction
+		next_steps = []
+		for pointer in initiators:
+			pointer = (pointer,)
+			next_step = (chain_key, pointer)
+			next_steps.append(next_step)
+		next_steps = tuple(next_steps)
+
+	return cid, chain, next_steps
 
 def drop_chain_overlaps(chains):
 	# Filter a list of chains of short chains that are included in longer chains

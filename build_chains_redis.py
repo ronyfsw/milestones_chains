@@ -55,7 +55,7 @@ while next_journeys_steps:
     # Build chains
     ids_chains = []
     print('*** steps_chunk:', steps_chunk)
-    for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
+    for cid, chain, next_steps in executor.map(growReproduce_redis, steps_chunk):
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps

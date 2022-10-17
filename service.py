@@ -135,7 +135,16 @@ p = subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
-# print('Scaffolds and chains count checkpoint')
+print('Scaffolds/ chains count checkpoint')
+if build_chains_version == 'redis_scaffolds':
+    scaffolds_chains_counts = []
+    for i in range(4):
+        time.sleep(5)
+        scaffolds_chains_counts.append(redisClient.hlen('scaffolds'))
+    while(np.mean(scaffolds_chains_counts[-4:]) != scaffolds_chains_counts[-4]):
+        time.sleep(5)
+        scaffolds_chains_counts.append(redisClient.hlen('scaffolds'))
+
 # scaffolds_count = len(os.listdir(scaffolds_path))
 # while scaffolds_count < len(root_successors):
 #     time.sleep(5)

@@ -45,7 +45,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
         shutil.rmtree(experiment)
     os.mkdir(experiment)
     data_path = os.path.join(working_dir, 'data', data_file_name)
-    chains_file = '../chains.parquet'
+    chains_file = 'chains.parquet'
     chains_path = os.path.join(experiment, chains_file)
     bucket_chains_path = '{e}/{c}'.format(e=experiment, c=chains_file)
     prt_path = os.path.join(experiment, 'prt')
@@ -74,6 +74,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
 
     # Prepare results
     print('Preparing results')
+    print('bucket_chains_path, chains_path:', bucket_chains_path, chains_path)
     S3_RESOURCE.Bucket(results_bucket).download_file(bucket_chains_path, chains_path)
     rows_count = 0
     if results == 'prt':

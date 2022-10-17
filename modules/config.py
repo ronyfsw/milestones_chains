@@ -19,7 +19,7 @@ results_cols = ['ID', 'ChainID', 'TaskID', 'NeighbourID', 'Dependency', 'TaskTyp
 
 ## AWS
 # EC2 Instances
-INSTANCE_IPs = {'service': '172.31.15.123', 'service_dev': '172.31.20.61'}
+INSTANCE_IPs = {'services': '172.31.15.123', 'services_dev': '172.31.20.61'}
 INSTANCE_IDs = {'service': 'i-0586e11281d4b02a2', 'service_dev': 'i-0249408ea16bc730b'}
 AWS_REGION = "eu-west-2"
 

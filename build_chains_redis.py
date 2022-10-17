@@ -80,7 +80,7 @@ while next_journeys_steps:
         growth_tip_successors = successorsDB.get(tip)
         if growth_tip_successors:
             growth_tip_successors = tuple(growth_tip_successors.split(','))
-            maps_produced.append((ids[index], growth_tip_successors))
+            maps_produced.append((pid, ids[index], growth_tip_successors))
     del ids
 
     # Write chains

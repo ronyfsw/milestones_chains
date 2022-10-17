@@ -1,6 +1,6 @@
 from modules.config import *
 
-def service_manager(instance_name, data_file_name, experiment, tasks_types, results, query):
+def service_manager(instance_name, data_file_name, experiment, tasks_types, results, query, build_chains_version):
 
     '''
     Start the compute instance, upload the data to S3, execute the service,
@@ -38,7 +38,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     # SSH Connector
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    privkey = paramiko.RSAKey.from_private_key_file('../ds_eu_west2_2.pem')  # Worked only with local pem file
+    privkey = paramiko.RSAKey.from_private_key_file('ds_eu_west2_2.pem')  # Worked only with local pem file
     ssh.connect(hostname=INSTANCE_IP, username='ubuntu', pkey=privkey)
 
     ## Calculation
@@ -47,7 +47,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     if experiment in os.listdir(working_dir):
         shutil.rmtree(experiment)
     os.mkdir(experiment)
-    data_path = os.path.join(working_dir, '../data', data_file_name)
+    data_path = os.path.join(working_dir, 'data', data_file_name)
     chains_file = '../chains.parquet'
     chains_path = os.path.join(experiment, chains_file)
     bucket_chains_path = '{e}/{c}'.format(e=experiment, c=chains_file)
@@ -64,8 +64,8 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     S3_CLIENT.put_object(Bucket=results_bucket, Key=(experiment + '/'))
 
     # Run calculation
-    process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r}'\
-    .format(f=data_file_name, e=experiment, t=tasks_types, r=results)
+    process_statement = 'cd services/milestones_chains && python3 service.py {f} {e} {t} {r} {v}'\
+    .format(f=data_file_name, e=experiment, t=tasks_types, r=results, v=build_chains_version)
     stdin, stdout, stderr = ssh.exec_command(process_statement)
     if len(stderr.readlines()) > 0:
         print('Run attempt encountered error:', stderr.readlines())

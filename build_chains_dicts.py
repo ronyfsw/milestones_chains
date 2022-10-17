@@ -16,24 +16,19 @@ pid = os.getpid()
 print('build chains process {p} started on'.format(p=pid), start_time)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('sub_graph_file_name')
+parser.add_argument('sub_graph_file_path')
 parser.add_argument('experiment')
-parser.add_argument('tasks_types')
-parser.add_argument('results')
 args = parser.parse_args()
-# print('args:', args)
-sub_graph_file_name = args.sub_graph_file_name
+sub_graph_file_path = args.sub_graph_file_path
 experiment = args.experiment
-tasks_types = args.tasks_types
-results = args.results
 chains_table = '{e}_chains'.format(e=experiment)
 
-G = nx.read_edgelist(sub_graph_file_name, create_using=nx.DiGraph)
+G = nx.read_edgelist(sub_graph_file_path, create_using=nx.DiGraph)
 Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]
 root_successors = tuple(G.successors(root_node))
 scaffolds = {1: root_node}
-pid = re.findall('\d{1,}', sub_graph_file_name)[0]
+pid = re.findall('\d{1,}', sub_graph_file_path)[0]
 scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=str(pid)))
 np.save(scaffolds_dict, scaffolds)
 next_journeys_steps = [(pid, 1, root_successors)]

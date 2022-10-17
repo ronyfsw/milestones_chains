@@ -31,21 +31,9 @@ executor = ProcessPoolExecutor(available_executors)
 links_types = np.load(os.path.join(run_dir_path, 'links_types.npy'), allow_pickle=True)[()]
 nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 
-# Longest chains from scaffolds
-chains = []
-scaffolds_files = os.listdir(scaffolds_path)
-scaffolds = {}
-scaffold_chains_count = 0
-for scaffolds_file in scaffolds_files:
-    start = time.time()
-    scaffold_path = os.path.join(scaffolds_path, scaffolds_file)
-    scaffold = np.load(scaffold_path, allow_pickle=True)[()]
-    scaffold_chains = list(scaffold.values())
-    scaffold_chains = list(set([c for c in scaffold_chains if c]))
-    scaffold_chains_count += len(scaffold_chains)
-    chains_to_keep = drop_chain_overlaps(scaffold_chains)
-    chains += chains_to_keep
-
+# Chain results
+chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
+chains = list(set((chains_df['chain'])))
 chains = [(c) for c in chains]
 encoded_chains = list(set(chains))
 print('{n1} unique scaffold_chains prior to filtering'.format(n1=scaffold_chains_count))

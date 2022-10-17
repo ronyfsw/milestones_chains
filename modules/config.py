@@ -34,4 +34,5 @@ scaffolds_path = os.path.join(run_dir_path, 'scaffolds')
 
 ## Databases and connectors
 # Redis
+redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
 successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)

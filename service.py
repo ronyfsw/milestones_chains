@@ -20,14 +20,25 @@ parser.add_argument('data_file_name')
 parser.add_argument('experiment')
 parser.add_argument('tasks_types')
 parser.add_argument('results')
+parser.add_argument('build_chains_version')
 args = parser.parse_args()
 print('args:', args)
 data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
 results = args.results
+build_chains_version = args.build_chains_version
 chains_table = '{e}_chains'.format(e=experiment)
 executor = ProcessPoolExecutor(available_executors)
+
+# Refresh results tables and databases
+redisClient.flushdb()
+successorsDB.flushdb()
+chains_table = '{e}_chains'.format(e=experiment)
+cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
+statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
+print(statement)
+cur.execute(statement)
 
 # Data
 S3_RESOURCE.Bucket(data_bucket).download_file(data_file_name, data_file_name)
@@ -102,10 +113,11 @@ for index, root_successor in enumerate(root_successors):
     subG = G.subgraph(subGnodes)
     is_dag = nx.is_directed_acyclic_graph(subG)
     if is_dag:
-        sub_graph_file_name = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
-        nx.write_edgelist(subG, sub_graph_file_name)
-        run_paths += "python3 build_chains.py {s} {e} {t} {r} & "\
-           .format(s=sub_graph_file_name, e=experiment, t=tasks_types, r=results)
+        sub_graph_file_path = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
+        nx.write_edgelist(subG, sub_graph_file_path)
+        if build_chains_version == 'redis_scaffolds': build_chains_script = 'build_chains_redis'
+        else: build_chains_script = 'build_chains_dicts'
+        run_paths += "python3 {bcs}.py {s} {e} & ".format(bcs=build_chains_script, s=sub_graph_file_path, e=experiment)
     else:
         print('graph {i} is not dag'.format(i=index+1))
 

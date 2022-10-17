@@ -60,7 +60,8 @@ while next_journeys_steps:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
     #print('steps_produced in process {p}:'.format(p=pid), steps_produced)
-    # Write chain scaffolds
+
+    # Write chains and scaffolds
     for cid_chain in ids_chains:
         cid, chain = cid_chain
         # Update chains

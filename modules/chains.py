@@ -49,12 +49,14 @@ def growReproduce_dicts(map_or_step):
 # next_journeys_steps = [(pid, 1, root_successors)]
 def growReproduce_redis(map_or_step):
 	cid, chain, next_steps = None, None, None
+	process_id = map_or_step[0]
 	chain_key = map_or_step[1]
 	successors = map_or_step[2]
 	growth_tip = successors[0]
 	initiators = successors[1:]
 
-	previous_step_chain = redisClient.hget('scaffolds', chain_key)
+
+previous_step_chain = redisClient.hget('scaffolds', chain_key)
 
 	if previous_step_chain:
 		# Growth

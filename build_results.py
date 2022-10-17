@@ -66,10 +66,8 @@ if results == 'prt':
 	subprocess.run("python3 metadata_duration.py {f} {t}".format(f=data_file_name, t=tasks_types), shell=True)
 	print('Generate tasks metadata completed')
 	metadata_duration = pd.read_excel('metadata_duration.xlsx')
-
 	# Tasks to Rows
 	print('Tasks to Rows split')
-
 	print('collecting and writing results rows')
 	start = time.time()
 	indices_chains = []
@@ -89,7 +87,6 @@ if results == 'prt':
 	parquet_counter = 0
 	for chunk_rows_count in executor.map(tasks_rows, indexed_chains_chunks):
 		rows_count += chunk_rows_count
-
 	# Merge results
 	print('combine, zip and upload results')
 	file_names, file_paths = os.listdir(chunks_path), {}

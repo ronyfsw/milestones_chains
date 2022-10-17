@@ -49,7 +49,6 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     chains_path = os.path.join(experiment, chains_file)
     bucket_chains_path = '{e}/{c}'.format(e=experiment, c=chains_file)
     prt_path = os.path.join(experiment, 'prt')
-    bucket_prt_path = '{e}/prt'.format(e=experiment)
     spreadsheet = os.path.join(experiment, 'results.xlsx')
     zipped_parquet_files = os.path.join(experiment, 'results.parquet')
 
@@ -78,16 +77,18 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     S3_RESOURCE.Bucket(results_bucket).download_file(bucket_chains_path, chains_path)
     rows_count = 0
     if results == 'prt':
-        print('results_bucket, bucket_prt_path:', results_bucket, bucket_prt_path)
-        S3_RESOURCE.Bucket(results_bucket).download_file(bucket_prt_path, 'prt')
+        print('results_bucket, prt_path:', results_bucket, prt_path)
+        S3_RESOURCE.Bucket(results_bucket).download_file(prt_path, 'prt')
         with ZipFile('prt', 'r') as zipObj:
             zipObj.extractall(path=prt_path)
         os.remove('prt')
-        results_files = os.listdir(experiment)
+
         # Write the results to an MS Excel spreadsheet if the calculation produced less than 100K chains
-        prt_files_count = len(os.listdir(prt_path))
+        prt_files = os.listdir(prt_path)
+        print('prt_files:', prt_files)
+        prt_files_count = len(prt_files)
         if prt_files_count == 1:
-            file_path = os.path.join(experiment, results_files[0])
+            file_path = os.path.join(experiment, prt_files[0])
             df = pd.read_parquet(file_path)
             df.to_excel(spreadsheet, index=False)
         results_files = os.listdir(experiment)

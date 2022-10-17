@@ -34,14 +34,13 @@ terminal_nodes = open(os.path.join(run_dir_path, 'terminal_nodes.txt')).read().s
 
 # Initialize the next journey steps
 redisClient.hset('scaffolds', 1, root_node)
-next_journeys_steps = [(1, root_successors)]
+next_journeys_steps = [(pid, 1, root_successors)]
 growth_tip = ['no tip']
 executor = ProcessPoolExecutor(available_executors)
 journey = chains_written_count = tasks_written_count = 0
 chains_rows = []
 while next_journeys_steps:
     journey_chains_count = journey_tasks_count = 0
-
     # Journey tracker values initiation
     journey_chains_count = overlap_count = 0
     steps_chunk = next_journeys_steps[:journey_chunk]
@@ -72,7 +71,7 @@ while next_journeys_steps:
         else:
             redisClient.hset('scaffolds', cid, chain)
 
-    # Update maps
+    # Update maps redis version
     ids = [i[0] for i in ids_chains]
     chains = [i[1] for i in ids_chains]
     growth_tips = [chain.split(node_delimiter)[-1] for chain in chains]

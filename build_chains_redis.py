@@ -59,7 +59,7 @@ while next_journeys_steps:
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
-    print('steps_produced:', steps_produced)
+    print('steps_produced in process {p}:'.format(p=pid), steps_produced)
     # Write chain scaffolds
     for cid_chain in ids_chains:
         cid, chain = cid_chain
@@ -81,7 +81,7 @@ while next_journeys_steps:
         if growth_tip_successors:
             growth_tip_successors = tuple(growth_tip_successors.split(','))
             maps_produced.append((pid, ids[index], growth_tip_successors))
-    print('maps_produced:', maps_produced)
+    print('maps_produced in process {p}:'.format(p=pid), maps_produced)
     del ids
 
     # Write chains

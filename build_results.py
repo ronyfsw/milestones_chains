@@ -43,7 +43,6 @@ chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=c
 chains = list(set((chains_df['chain'])))
 chains = [(c) for c in chains]
 encoded_chains = list(set(chains))
-print('{n1} unique scaffold_chains prior to filtering'.format(n1=chains))
 
 # Decode chains
 print('decode chains')
@@ -102,6 +101,7 @@ if results == 'prt':
 			zip.write(file_path, arcname=file_name)
 	experiment_path = os.path.join(experiment, 'prt')
 	S3_CLIENT.upload_file(zipped_results_file_name, results_bucket, experiment_path)
+	print('{n1} chains | {n2} rows'.format(n1=len(chains), n2=rows_count))
 
 print('build results started on', start_time)
 print('build results ended on', datetime.now().strftime("%H:%M:%S"))

@@ -55,8 +55,6 @@ print('file {f} downloaded'.format(f=data_file_name))
 G = build_graph(data_file_name)
 Gnodes, Gedges = list(G.nodes()), G.edges()
 print('Graph with {n} nodes and {e} edges'.format(n=len(Gnodes), e=len(Gedges)))
-print('nodes:', Gnodes)
-print('edges:', Gedges)
 # Link types dictionary
 links = G.edges(data=True)
 links_types = {}

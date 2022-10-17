@@ -45,10 +45,12 @@ def growReproduce_dicts(map_or_step):
 
 	return cid, chain, next_steps
 
+# steps_chunk = [(39265, 1, ('196.4',))]
+# next_journeys_steps = [(pid, 1, root_successors)]
 def growReproduce_redis(map_or_step):
 	cid, chain, next_steps = None, None, None
-	chain_key = map_or_step[0]
-	successors = map_or_step[1]
+	chain_key = map_or_step[1]
+	successors = map_or_step[2]
 	growth_tip = successors[0]
 	initiators = successors[1:]
 

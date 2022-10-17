@@ -45,6 +45,7 @@ INSTANCE_IP = INSTANCE_IPs[instance_name]
 conn_params = {'host': INSTANCE_IP, 'user': db_user, 'password': db_password, 'database': db_name}
 conn = mysql.connect(**conn_params)
 cur = conn.cursor()
+
 cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 cur.execute("DROP TABLE IF EXISTS {db}.{t}".format(db=db_name, t=chains_table))
 statement = build_create_table_statement(db_name, chains_table, chains_cols_types)
@@ -124,7 +125,7 @@ for index, root_successor in enumerate(root_successors):
         nx.write_edgelist(subG, sub_graph_file_path)
         if build_chains_version == 'redis_scaffolds': build_chains_script = 'build_chains_redis'
         else: build_chains_script = 'build_chains_dicts'
-        run_paths += "python3 {bcs}.py {s} {e} & ".format(bcs=build_chains_script, s=sub_graph_file_path, e=experiment)
+        run_paths += "python3 {bcs}.py {i} {s} {e} & ".format(i=instance_name, bcs=build_chains_script, s=sub_graph_file_path, e=experiment)
     else:
         print('graph {i} is not dag'.format(i=index+1))
 

@@ -17,12 +17,18 @@ print('pipeline started on', start_time)
 
 # Run arguments
 parser = argparse.ArgumentParser()
+parser.add_argument('instance_name')
 parser.add_argument('sub_graph_file_path')
 parser.add_argument('experiment')
 args = parser.parse_args()
 sub_graph_file_path = args.sub_graph_file_path
 experiment = args.experiment
 chains_table = '{e}_chains'.format(e=experiment)
+instance_name = args.instance_name
+INSTANCE_IP = INSTANCE_IPs[instance_name]
+conn_params = {'host': INSTANCE_IP, 'user': db_user, 'password': db_password, 'database': db_name}
+conn = mysql.connect(**conn_params)
+cur = conn.cursor()
 
 # Subgraph data
 G = nx.read_edgelist(sub_graph_file_path, create_using=nx.DiGraph)

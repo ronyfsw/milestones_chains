@@ -33,6 +33,17 @@ sub_graphs_path = os.path.join(run_dir_path, 'sub_graphs')
 scaffolds_path = os.path.join(run_dir_path, 'scaffolds')
 
 ## Databases and connectors
+# MySQL
+user, password, db_name = 'rony', 'exp8546$fs', 'MCdb'
+server_db_params = {'Local': {'host': 'localhost', 'user': user, 'password': password, 'database': db_name},\
+                    'Remote': {'host': serviceIP, 'user': user, 'password': password, 'database': db_name}}
+conn_params = server_db_params[serviceLocation]
+conn = mysql.connect(**conn_params)
+cur = conn.cursor()
+cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+chains_cols_types = {'id': 'TEXT', 'chain': 'TEXT'}
+chains_cols = list(chains_cols_types.keys())
+
 # Redis
 redisClient = redis.Redis(host='localhost', port=6379, db=3, decode_responses=True)
 successorsDB = redis.Redis(host='localhost', port=6379, db=4, decode_responses=True)

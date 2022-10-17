@@ -88,7 +88,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
         print('prt_files:', prt_files)
         prt_files_count = len(prt_files)
         if prt_files_count == 1:
-            file_path = os.path.join(experiment, prt_files[0])
+            file_path = os.path.join(prt_path, prt_files[0])
             df = pd.read_parquet(file_path)
             df.to_excel(spreadsheet, index=False)
         results_files = os.listdir(experiment)

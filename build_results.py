@@ -14,6 +14,7 @@ start_time = datetime.now().strftime("%H:%M:%S")
 print('build results started on', start_time)
 
 parser = argparse.ArgumentParser()
+parser.add_argument('instance_name')
 parser.add_argument('data_file_name')
 parser.add_argument('experiment')
 parser.add_argument('tasks_types')
@@ -32,6 +33,11 @@ links_types = np.load(os.path.join(run_dir_path, 'links_types.npy'), allow_pickl
 nodes_decoder = np.load(os.path.join(run_dir_path, 'nodes_decoder.npy'), allow_pickle=True)[()]
 
 # Chain results
+INSTANCE_IP = INSTANCE_IPs[instance_name]
+conn_params = {'host': INSTANCE_IP, 'user': db_user, 'password': db_password, 'database': db_name}
+conn = mysql.connect(**conn_params)
+cur = conn.cursor()
+chains_table = '{e}_chains'.format(e=experiment)
 chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
 chains = list(set((chains_df['chain'])))
 chains = [(c) for c in chains]

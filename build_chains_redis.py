@@ -21,10 +21,10 @@ parser.add_argument('instance_name')
 parser.add_argument('sub_graph_file_path')
 parser.add_argument('experiment')
 args = parser.parse_args()
+instance_name = args.instance_name
 sub_graph_file_path = args.sub_graph_file_path
 experiment = args.experiment
 chains_table = '{e}_chains'.format(e=experiment)
-instance_name = args.instance_name
 INSTANCE_IP = INSTANCE_IPs[instance_name]
 conn_params = {'host': INSTANCE_IP, 'user': db_user, 'password': db_password, 'database': db_name}
 conn = mysql.connect(**conn_params)
@@ -119,5 +119,5 @@ if len(chains_rows) > 0:
     chains_rows = []
 
 print('{p} finished'.format(p=pid))
-print('pipeline started on', start_time)
-print('pipeline ended on', datetime.now().strftime("%H:%M:%S"))
+print('pipeline {p} started on'.format(p=pid), start_time)
+print('pipeline {p} ended on'.format(p=pid), datetime.now().strftime("%H:%M:%S"))

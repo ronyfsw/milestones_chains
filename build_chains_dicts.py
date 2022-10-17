@@ -15,18 +15,29 @@ start_time = datetime.now().strftime("%H:%M:%S")
 pid = os.getpid()
 print('build chains process {p} started on'.format(p=pid), start_time)
 
+# Run arguments
 parser = argparse.ArgumentParser()
+parser.add_argument('instance_name')
 parser.add_argument('sub_graph_file_path')
 parser.add_argument('experiment')
 args = parser.parse_args()
 sub_graph_file_path = args.sub_graph_file_path
 experiment = args.experiment
 chains_table = '{e}_chains'.format(e=experiment)
+instance_name = args.instance_name
+INSTANCE_IP = INSTANCE_IPs[instance_name]
+conn_params = {'host': INSTANCE_IP, 'user': db_user, 'password': db_password, 'database': db_name}
+conn = mysql.connect(**conn_params)
+cur = conn.cursor()
 
+# Subgraph data
 G = nx.read_edgelist(sub_graph_file_path, create_using=nx.DiGraph)
 Gsort = list(nx.topological_sort(G))
 root_node = Gsort[0]
 root_successors = tuple(G.successors(root_node))
+terminal_nodes = open(os.path.join(run_dir_path, 'terminal_nodes.txt')).read().split('\n')
+
+# Initialize scaffold
 scaffolds = {1: root_node}
 pid = re.findall('\d{1,}', sub_graph_file_path)[0]
 scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=str(pid)))
@@ -56,10 +67,13 @@ while next_journeys_steps:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
 
+
+
     # Collect chains and write scaffolds
     for cid, chain in ids_chains:
         scaffolds[cid] = chain
     np.save(scaffolds_dict, scaffolds)
+
 
     # Update maps
     ids = [i[0] for i in ids_chains]

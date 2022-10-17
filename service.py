@@ -135,22 +135,22 @@ p = subprocess.run(run_paths, shell=True)
 print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
-print('Scaffolds and chains count checkpoint')
-scaffolds_count = len(os.listdir(scaffolds_path))
-while scaffolds_count < len(root_successors):
-    time.sleep(5)
-    scaffolds_count = len(os.listdir(scaffolds_path))
-scaffolds_chains_counts = []
-for i in range(4):
-    time.sleep(5)
-    scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
-while(np.mean(scaffolds_chains_counts[-4:]) != scaffolds_chains_counts[-4]):
-    time.sleep(5)
-    scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
+# print('Scaffolds and chains count checkpoint')
+# scaffolds_count = len(os.listdir(scaffolds_path))
+# while scaffolds_count < len(root_successors):
+#     time.sleep(5)
+#     scaffolds_count = len(os.listdir(scaffolds_path))
+# scaffolds_chains_counts = []
+# for i in range(4):
+#     time.sleep(5)
+#     scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
+# while(np.mean(scaffolds_chains_counts[-4:]) != scaffolds_chains_counts[-4]):
+#     time.sleep(5)
+#     scaffolds_chains_counts.append([count_scaffolds_chains(scaffolds_path)])
 
 # Return results in the tabular PRT format or as chains
-subprocess.run("python3 build_results.py {f} {e} {t} {r}"
-               .format(f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
+subprocess.run("python3 build_results.py {i} {f} {e} {t} {r}"
+               .format(i=instance_name, f=data_file_name, e=experiment, t=tasks_types, r=results), shell=True)
 
 # Delete data from working directory
 os.remove(data_file_name)

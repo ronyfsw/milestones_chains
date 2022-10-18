@@ -22,7 +22,6 @@ parser.add_argument('data_file_name')
 parser.add_argument('experiment')
 parser.add_argument('tasks_types')
 parser.add_argument('results')
-parser.add_argument('build_chains_version')
 args = parser.parse_args()
 print('args:', args)
 instance_name = args.instance_name
@@ -30,11 +29,8 @@ data_file_name = args.data_file_name
 experiment = args.experiment
 tasks_types = args.tasks_types
 results = args.results
-build_chains_version = args.build_chains_version
 chains_table = '{e}_chains'.format(e=experiment)
 executor = ProcessPoolExecutor(available_executors)
-
-print('build_chains version to run:', build_chains_version)
 
 # Refresh results tables and databases
 redisClient.flushdb()
@@ -134,14 +130,13 @@ print('chains building started on', start_time)
 print('chains building ended on', datetime.now().strftime("%H:%M:%S"))
 
 print('Scaffolds/ chains count checkpoint')
-if build_chains_version == 'redis_scaffolds':
-    scaffolds_chains_counts = []
-    for i in range(4):
-        time.sleep(5)
-        scaffolds_chains_counts.append(redisClient.hlen('scaffolds'))
-    while(np.mean(scaffolds_chains_counts[-4:]) != scaffolds_chains_counts[-4]):
-        time.sleep(5)
-        scaffolds_chains_counts.append(redisClient.hlen('scaffolds'))
+chains_counts = []
+for i in range(4):
+    time.sleep(5)
+    chains_counts.append(redisClient.hlen('scaffolds'))
+while(np.mean(chains_counts[-4:]) != chains_counts[-4]):
+    time.sleep(5)
+    chains_counts.append(redisClient.hlen('scaffolds'))
 
 # Return results in the tabular PRT format or as chains
 subprocess.run("python3 build_results.py {i} {f} {e} {t} {r}"

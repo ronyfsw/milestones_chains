@@ -1,6 +1,6 @@
 from modules.config import *
 
-def service_manager(instance_name, data_file_name, experiment, tasks_types, results, query, build_chains_version):
+def service_manager(instance_name, data_file_name, experiment, tasks_types, results, query):
 
     '''
     Start the compute instance, upload the data to S3, execute the service,
@@ -63,8 +63,8 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     S3_CLIENT.put_object(Bucket=results_bucket, Key=(experiment + '/'))
 
     # Run calculation
-    process_statement = 'cd services/milestones_chains && python3 service.py {i} {f} {e} {t} {r} {v}'\
-    .format(i=instance_name, f=data_file_name, e=experiment, t=tasks_types, r=results, v=build_chains_version)
+    process_statement = 'cd services/milestones_chains && python3 service.py {i} {f} {e} {t} {r}'\
+    .format(i=instance_name, f=data_file_name, e=experiment, t=tasks_types, r=results)
     stdin, stdout, stderr = ssh.exec_command(process_statement)
     if len(stderr.readlines()) > 0:
         print('Run attempt encountered error:', stderr.readlines())

@@ -123,9 +123,7 @@ for index, root_successor in enumerate(root_successors):
     if is_dag:
         sub_graph_file_path = os.path.join(sub_graphs_path, 'sub_graph_{i}.edgelist'.format(i=index+1))
         nx.write_edgelist(subG, sub_graph_file_path)
-        if build_chains_version == 'redis_scaffolds': build_chains_script = 'build_chains_redis'
-        else: build_chains_script = 'build_chains_dicts'
-        run_paths += "python3 {bcs}.py {i} {s} {e} & ".format(i=instance_name, bcs=build_chains_script, s=sub_graph_file_path, e=experiment)
+        run_paths += "python3 build_chains.py {i} {s} {e} & ".format(i=instance_name, s=sub_graph_file_path, e=experiment)
     else:
         print('graph {i} is not dag'.format(i=index+1))
 

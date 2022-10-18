@@ -41,12 +41,6 @@ cur = conn.cursor()
 chains_table = '{e}_chains'.format(e=experiment)
 chains_df = pd.read_sql('SELECT * FROM MCdb.{ct}'.format(ct=chains_table), con=conn)
 chains = list(set((chains_df['chain'])))
-filter_start = time.time()
-print('{n1} chains produced'.format(n1=len(chains)))
-print('filter chains')
-chains = drop_chain_overlaps(chains)
-print('{n1} chains remained'.format(n1=len(chains)))
-print('chains filtering took {t} seconds'.format(t=round(time.time()-filter_start)))
 
 chains = [(c) for c in chains]
 encoded_chains = list(set(chains))

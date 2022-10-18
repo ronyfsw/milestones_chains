@@ -100,6 +100,10 @@ if results == 'prt':
 	experiment_path = os.path.join(experiment, 'prt')
 	S3_CLIENT.upload_file(zipped_results_file_name, results_bucket, experiment_path)
 	print('{n1} chains | {n2} rows'.format(n1=len(chains), n2=rows_count))
-
+	# Remove run files and results
+	os.remove(zipped_results_file_name)
+	os.remove('metadata_duration.xlsx')
+os.remove(chains_file)
+shutil.rmtree(run_dir_path)
 print('build results started on', start_time)
 print('build results ended on', datetime.now().strftime("%H:%M:%S"))

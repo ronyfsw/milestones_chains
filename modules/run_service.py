@@ -55,6 +55,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     spreadsheet = os.path.join(experiment, 'results.xlsx')
     zipped_parquet_files = os.path.join(experiment, 'results.parquet')
 
+
     # Upload data to an S3 bucket
     S3_CLIENT.upload_file(data_path, data_bucket, data_file_name)
     print('Data file uploaded to S3')
@@ -76,11 +77,9 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
 
     # Prepare results
     print('Preparing results')
-    print('bucket_chains_path, chains_path:', bucket_chains_path, chains_path)
     S3_RESOURCE.Bucket(results_bucket).download_file(bucket_chains_path, chains_path)
     rows_count = 0
     if results == 'prt':
-        print('results_bucket, prt_path:', results_bucket, prt_path)
         S3_RESOURCE.Bucket(results_bucket).download_file(prt_path, 'prt')
         with ZipFile('prt', 'r') as zipObj:
             zipObj.extractall(path=prt_path)
@@ -113,5 +112,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     if rows_count > 0:
         print('{r} tasks rows written to {c} parquet files in the prt sub-directory'
               .format(c=prt_files_count, r=rows_count))
+
+    # Remove result files from instance
     print('service started on', start_time)
     print('service ended on', datetime.now().strftime("%H:%M:%S"))

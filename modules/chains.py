@@ -7,47 +7,7 @@ if modules_dir not in sys.path: sys.path.append(modules_dir)
 from config import *
 from tasks import *
 
-def growReproduce_dicts(map_or_step):
-	'''
-	Extend chains and build the maps for the chains to be built in the next iteration
-	:param map_or_step: The chain's next step instructions including the build_chains process
-	building the chains, the chain key to identify the chain in the scaffolds, and the successors to
-	use in extending the chains, or in building the guides for the next steps
-
-	'''
-	cid, chain, next_steps = None, None, None
-	process_id = map_or_step[0]
-	chain_key = map_or_step[1]
-	successors = map_or_step[2]
-	growth_tip = successors[0]
-	initiators = successors[1:]
-
-	scaffolds_dict = os.path.join(scaffolds_path, 'scaffolds_{p}.npy'.format(p=process_id))
-	scaffolds = np.load(scaffolds_dict, allow_pickle=True)[()]
-	if chain_key in list(scaffolds.keys()):
-		previous_step_chain = scaffolds[chain_key]
-		
-		# Growth
-		# An extention of a chain produced in previous step using of the growth tip successors
-		previous_step_chain = previous_step_chain.split(node_delimiter)
-		chain = previous_step_chain + [growth_tip]
-		chain = node_delimiter.join(chain)
-		cid = encode_string(chain)
-
-		# Reproduction
-		# Chain initiations from the growth-tip successors that were not exploited for growth
-		next_steps = []
-		for initiator in initiators:
-			initiator = (initiator,)
-			next_step = (process_id, chain_key, initiator)
-			next_steps.append(next_step)
-		next_steps = tuple(next_steps)
-
-	return cid, chain, next_steps
-
-# steps_chunk = [(39265, 1, ('196.4',))]
-# next_journeys_steps = [(pid, 1, root_successors)]
-def growReproduce_redis(map_or_step):
+def growReproduce(map_or_step):
 	cid, chain, next_steps = None, None, None
 	process_id = map_or_step[0]
 	chain_key = map_or_step[1]

@@ -60,12 +60,10 @@ while next_journeys_steps:
 
     # Build chains
     ids_chains = []
-    #print('*** steps_chunk:', steps_chunk)
-    for cid, chain, next_steps in executor.map(growReproduce_redis, steps_chunk):
+    for cid, chain, next_steps in executor.map(growReproduce, steps_chunk):
         if cid:
             ids_chains.append((cid, chain))
             steps_produced += next_steps
-    #print('steps_produced in process {p}:'.format(p=pid), steps_produced)
 
     # Write chains and scaffolds
     for cid_chain in ids_chains:
@@ -88,7 +86,6 @@ while next_journeys_steps:
         if growth_tip_successors:
             growth_tip_successors = tuple(growth_tip_successors.split(','))
             maps_produced.append((pid, ids[index], growth_tip_successors))
-    #print('maps_produced in process {p}:'.format(p=pid), maps_produced)
     del ids
 
     # Write chains

@@ -18,6 +18,9 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     be queried by the web-shell of DuckDB
     '''
 
+    start_time = datetime.now().strftime("%H:%M:%S")
+    print('service started on', start_time)
+
     ## Compute instance
     # Set up
     INSTANCE_IP = INSTANCE_IPs[instance_name]
@@ -108,4 +111,7 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     chains_count = len(chains_df)
     print('{c} chains written to {f}'.format(c=chains_count, f='chains.parquet'))
     if rows_count > 0:
-        print('{r} tasks rows written to parquet files in the prt sub-directory'.format(r=rows_count))
+        print('{r} tasks rows written to {c} parquet files in the prt sub-directory'
+              .format(c=prt_files_count, r=rows_count))
+    print('service started on', start_time)
+    print('service ended on', datetime.now().strftime("%H:%M:%S"))

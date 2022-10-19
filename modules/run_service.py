@@ -52,9 +52,9 @@ def service_manager(instance_name, data_file_name, experiment, tasks_types, resu
     chains_path = os.path.join(experiment, chains_file)
     bucket_chains_path = '{e}/{c}'.format(e=experiment, c=chains_file)
     prt_path = os.path.join(experiment, 'prt')
+    print('prt_path:', prt_path)
     spreadsheet = os.path.join(experiment, 'results.xlsx')
     zipped_parquet_files = os.path.join(experiment, 'results.parquet')
-
 
     # Upload data to an S3 bucket
     S3_CLIENT.upload_file(data_path, data_bucket, data_file_name)
